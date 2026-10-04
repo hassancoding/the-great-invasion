@@ -1,0 +1,10 @@
+{
+  "name": "The Great Invasion",
+  "short_name": "Great Invasion",
+  "description": "Expand your nation. Defend your borders. Conquer the map.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e17",
+  "theme_color": "#0a0e17",
+  "orientation": "portrait-primary"
+}
