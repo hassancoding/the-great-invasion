@@ -4,7 +4,11 @@
 
 Expand your nation. Defend your borders. Conquer the map.
 
-## Play
+## Play Live
+
+**https://the-great-invasion.vercel.app**
+
+## Local Development
 
 ```bash
 npm install
@@ -15,12 +19,12 @@ Open http://localhost:3000
 
 ## Stack
 
-- Next.js 15
+- Next.js 15.5.7
 - React 18
 - TypeScript
 - Tailwind CSS 3
 - HTML5 Canvas map
-- Web Audio API (no asset files)
+- Web Audio API (zero-asset SFX)
 
 ## Features
 
@@ -40,12 +44,11 @@ Open http://localhost:3000
 - PWA manifest + service worker
 - SEO metadata (Open Graph, Twitter)
 
-## Deploy (Vercel)
-
-1. Push this folder to GitHub
-2. Import the repo in Vercel
-3. Deploy
-
 ## Game loop
 
 PLAY → claim adjacent territories → rivals expand → score rises with streaks → time runs out → results → share / play again
+
+## Deploy
+
+Connected to Vercel via GitHub (`hassancoding/the-great-invasion`).
+Push to `main` triggers production deploy.
