@@ -5,17 +5,468 @@
 :root {
   --background: #0a0e17;
   --foreground: #f8fafc;
+  --line: rgba(255,255,255,.12);
+  --panel: rgba(7,12,18,.78);
+  --accent: #e8c25a;
 }
 
-html, body {
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
   background: var(--background);
   color: var(--foreground);
   overscroll-behavior: none;
   -webkit-tap-highlight-color: transparent;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  position: fixed;
+  inset: 0;
+}
+
+button,
+canvas {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.game-shell {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #0a0e17;
+  touch-action: none;
+}
+
+.game-shell > div:first-child {
+  position: absolute;
+  inset: 0;
+}
+
+.game-canvas {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: crosshair;
+  outline: none;
+}
+
+.hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.mission-card {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  width: min(390px, calc(100vw - 44px));
+  padding: 16px 18px;
+  background: linear-gradient(135deg, rgba(5,10,15,.88), rgba(9,17,22,.68));
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 14px 40px rgba(0,0,0,.28);
+}
+
+.mission-kicker,
+.logo-small,
+.eyebrow {
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .18em;
+}
+
+.mission-title {
+  margin-top: 5px;
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+
+.mission-copy {
+  margin: 9px 0 0;
+  color: rgba(255,255,255,.72);
+  line-height: 1.5;
+  text-transform: none;
+  letter-spacing: .01em;
+}
+
+.objective {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.objective-label {
+  color: rgba(255,255,255,.45);
+  font-size: 9px;
+}
+
+.objective-text {
+  margin-top: 4px;
+  color: #fff;
+  font-weight: 800;
+  font-size: 11px;
+}
+
+.top-right {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.status-chip {
+  padding: 7px 10px;
+  min-width: 155px;
+  background: rgba(6,11,16,.76);
+  border: 1px solid var(--line);
+  color: rgba(255,255,255,.58);
+  text-align: right;
+  backdrop-filter: blur(8px);
+}
+
+.status-chip span {
+  margin-left: 7px;
+  color: #fff;
+  font-weight: 900;
+}
+
+.compass {
+  position: absolute;
+  top: 23px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 170px;
+  padding: 8px 14px;
+  text-align: center;
+  background: rgba(6,11,16,.64);
+  border: 1px solid var(--line);
+  color: rgba(255,255,255,.72);
+  backdrop-filter: blur(8px);
+}
+
+.compass-line {
+  height: 1px;
+  margin-top: 7px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent);
+}
+
+.crosshair {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translate(-50%, -50%);
+  opacity: .85;
+}
+
+.crosshair::before,
+.crosshair::after {
+  content: "";
+  position: absolute;
+  background: rgba(255,255,255,.9);
+}
+
+.crosshair::before {
+  left: 8px;
+  top: 1px;
+  width: 2px;
+  height: 16px;
+}
+
+.crosshair::after {
+  left: 1px;
+  top: 8px;
+  width: 16px;
+  height: 2px;
+}
+
+.bottom-left {
+  position: absolute;
+  left: 22px;
+  bottom: 22px;
+  width: 300px;
+  padding: 14px 16px;
+  background: rgba(6,11,16,.78);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+}
+
+.health-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.health-value {
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.health-label {
+  color: rgba(255,255,255,.5);
+  font-size: 9px;
+}
+
+.bar,
+.capture-bar {
+  height: 5px;
+  margin-top: 8px;
+  overflow: hidden;
+  background: rgba(255,255,255,.1);
+}
+
+.bar i,
+.capture-bar i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width .12s linear;
+}
+
+.stamina {
+  margin-top: 9px;
+  color: rgba(255,255,255,.55);
+  font-size: 9px;
+}
+
+.ammo {
+  margin-top: 13px;
+  padding-top: 11px;
+  border-top: 1px solid var(--line);
+}
+
+.ammo-main {
+  font-size: 38px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.ammo-main small {
+  font-size: 15px;
+  color: rgba(255,255,255,.48);
+}
+
+.weapon {
+  margin-top: 5px;
+  color: rgba(255,255,255,.55);
+  font-size: 9px;
+}
+
+.bottom-center {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  width: min(420px, 42vw);
+  transform: translateX(-50%);
+}
+
+.capture {
+  padding: 12px 14px;
+  background: rgba(6,11,16,.78);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+}
+
+.capture-title {
+  color: rgba(255,255,255,.78);
+  font-size: 10px;
+}
+
+.squad-panel {
+  position: absolute;
+  right: 22px;
+  bottom: 22px;
+  width: 260px;
+  padding: 13px 15px;
+  background: rgba(6,11,16,.78);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+}
+
+.squad-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  color: rgba(255,255,255,.58);
+  font-size: 9px;
+}
+
+.squad-row b {
+  color: #fff;
+}
+
+.controls {
+  position: absolute;
+  left: 50%;
+  bottom: 5px;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,.34);
+  white-space: nowrap;
+  font-size: 8px;
+  letter-spacing: .05em;
+}
+
+.menu {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(50,78,68,.22), transparent 40%),
+    linear-gradient(180deg, rgba(3,7,11,.76), rgba(3,7,11,.96));
+}
+
+.menu-card {
+  width: min(760px, 94vw);
+  padding: 54px 58px;
+  text-align: center;
+  background: rgba(5,10,15,.84);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 30px 100px rgba(0,0,0,.55);
+  backdrop-filter: blur(18px);
+}
+
+.logo {
+  margin-top: 10px;
+  font-size: clamp(40px, 8vw, 86px);
+  line-height: .9;
+  font-weight: 950;
+  letter-spacing: -.045em;
+}
+
+.logo em {
+  display: block;
+  color: var(--accent);
+  font-style: normal;
+}
+
+.menu-sub {
+  max-width: 600px;
+  margin: 24px auto 0;
+  color: rgba(255,255,255,.68);
+  line-height: 1.65;
+  text-transform: none;
+  letter-spacing: .01em;
+}
+
+.begin {
+  margin-top: 30px;
+  min-width: 230px;
+  padding: 14px 22px;
+  border: 1px solid rgba(232,194,90,.65);
+  background: var(--accent);
+  color: #11150f;
+  font-weight: 950;
+  letter-spacing: .14em;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.begin:hover {
+  filter: brightness(1.08);
+}
+
+.menu-note {
+  margin-top: 16px;
+  color: rgba(255,255,255,.32);
+  font-size: 9px;
+  letter-spacing: .12em;
+}
+
+.fade {
+  animation: fadeIn .5s ease both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 800px) {
+  .mission-card {
+    top: 10px;
+    left: 10px;
+    width: calc(100vw - 20px);
+    padding: 11px 13px;
+  }
+
+  .mission-copy {
+    display: none;
+  }
+
+  .top-right {
+    top: 82px;
+    right: 10px;
+  }
+
+  .status-chip {
+    min-width: 125px;
+    padding: 5px 7px;
+    font-size: 9px;
+  }
+
+  .bottom-left {
+    left: 10px;
+    bottom: 42px;
+    width: 220px;
+    padding: 10px 12px;
+  }
+
+  .squad-panel {
+    right: 10px;
+    bottom: 42px;
+    width: 210px;
+    padding: 10px 12px;
+  }
+
+  .bottom-center {
+    bottom: 10px;
+    width: 46vw;
+  }
+
+  .controls {
+    display: none;
+  }
+
+  .menu-card {
+    padding: 36px 24px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
