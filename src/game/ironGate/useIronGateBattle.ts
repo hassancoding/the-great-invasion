@@ -25,8 +25,8 @@ const ZONE_DAMAGE_PER_SEC = COMBAT_CONFIG.zoneDamagePerSec;
 
 type PlayerState = {
   x: number; z: number; yaw: number; hp: number; weapon: WeaponId;
-  ammo: { ar: number; sg: number };
-  reserve: { ar: number; sg: number };
+  ammo: Record<WeaponId, number>;
+  reserve: Record<WeaponId, number>;
   reloadUntil: number; reloadStart: number; lastShot: number; sprint: boolean;
 };
 
@@ -39,10 +39,10 @@ export function useIronGateBattle(opts: {
   stickRef: MutableRefObject<{ active: boolean; dx: number; dy: number }>;
   keysRef: MutableRefObject<Record<string, boolean>>;
   fireHeldRef: MutableRefObject<boolean>;
-  playerRef: MutableRefObject<PlayerState | any>;
+  playerRef: MutableRefObject<PlayerState>;
   unitsRef: MutableRefObject<Unit[]>;
   bulletsRef: MutableRefObject<Bullet[]>;
-  zoneRef: MutableRefObject<ZoneState | any>;
+  zoneRef: MutableRefObject<ZoneState>;
   timeRef: MutableRefObject<number>;
   scoreRef: MutableRefObject<number>;
   killsRef: MutableRefObject<number>;
@@ -50,7 +50,7 @@ export function useIronGateBattle(opts: {
   hitsRef: MutableRefObject<number>;
   radarRef: MutableRefObject<HTMLCanvasElement | null>;
   feedIdRef: MutableRefObject<number>;
-  ordersRef: MutableRefObject<{ ALPHA: SquadOrder; BRAVO: SquadOrder }>;
+  ordersRef: MutableRefObject<Record<string, SquadOrder>>;
   weatherRef: MutableRefObject<WeatherState>;
   outsideWarnRef: MutableRefObject<number>;
   setHud: Dispatch<SetStateAction<any>>;
@@ -177,7 +177,7 @@ export function useIronGateBattle(opts: {
     setEvents(IRON_GATE_EVENTS.map((e) => ({ ...e })));
     events = IRON_GATE_EVENTS.map((e) => ({ ...e }));
 
-    const spawnBullet = (x: number, z: number, yaw: number, from: Bullet['from'], damage: number, speed = BULLET_SPEED, life = 1.4, radius = 0.12) => {
+    const spawnBullet = (x: number, z: number, yaw: number, from: Bullet['from'], damage: number, speed: number = BULLET_SPEED, life: number = 1.4, radius: number = 0.12) => {
       const mesh = new THREE.Mesh(
         new THREE.SphereGeometry(radius, 6, 6),
         new THREE.MeshBasicMaterial({ color: from === 'enemy' ? 0xff4444 : 0xfbbf24 })
@@ -240,7 +240,7 @@ export function useIronGateBattle(opts: {
       if (e.code === 'KeyE' || e.code === 'Digit2') switchWeapon('sg');
       if (e.code === 'KeyT') setWeather((wth) => cycleWeather(wth));
       if (e.code.startsWith('Digit') && e.code >= 'Digit3' && e.code <= 'Digit8') {
-        setOrders((prev) => applySquadOrder(prev, e.code));
+        setOrders((prev: { ALPHA: SquadOrder; BRAVO: SquadOrder }) => applySquadOrder(prev, e.code));
       }
     };
     const onKeyUp = (e: KeyboardEvent) => { keysRef.current[e.code] = false; };
