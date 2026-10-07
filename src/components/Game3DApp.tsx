@@ -59,7 +59,7 @@ export default function Game3DApp() {
   const [dmgFlash, setDmgFlash] = useState(0);
   const [personalBest, setPersonalBest] = useState(0);
   const [isNewRecord, setIsNewRecord] = useState(false);
-  const [events, setEvents] = useState<IronGateEvent[]>(() => IRON_GATE_EVENTS.map((e) => ({ ...e })));
+  const [, setEvents] = useState<IronGateEvent[]>(() => IRON_GATE_EVENTS.map((e) => ({ ...e })));
 
   useEffect(() => { ordersRef.current = orders; }, [orders]);
   useEffect(() => { weatherRef.current = weather; }, [weather]);
@@ -94,12 +94,13 @@ export default function Game3DApp() {
     try { audio.play(record ? 'record' : won ? 'levelup' : 'fail'); } catch {}
   }, []);
 
+  // Cast opts for strict MutableRefObject variance under tsconfig strict
   useIronGateBattle({
     phase, endRound, mountRef, stickRef, keysRef, fireHeldRef, playerRef,
     unitsRef, bulletsRef, zoneRef, timeRef, scoreRef, killsRef, shotsRef, hitsRef,
     radarRef, feedIdRef, ordersRef, weatherRef, outsideWarnRef,
     setHud, setWeaponSlot, setEvents, setKillFeed, setHitmark, setDmgFlash, setWeather, setOrders,
-  });
+  } as Parameters<typeof useIronGateBattle>[0]);
 
   useEffect(() => {
     if (phase !== 'countdown') return;
