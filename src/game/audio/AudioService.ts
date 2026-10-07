@@ -1,4 +1,20 @@
-type SoundName = "click" | "claim" | "combo" | "fail" | "levelup" | "record";
+/**
+ * Lightweight audio service — Web Audio oscillators, zero asset files.
+ * Unlocks only after user interaction (browser autoplay policy).
+ */
+
+type SoundName =
+  | "click"
+  | "claim"
+  | "combo"
+  | "fail"
+  | "levelup"
+  | "record"
+  | "shoot"
+  | "hit"
+  | "damage"
+  | "zone"
+  | "reload";
 
 class AudioService {
   private ctx: AudioContext | null = null;
@@ -77,6 +93,51 @@ class AudioService {
         osc.start(now);
         osc.stop(now + 0.08);
         break;
+      case "shoot": {
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(180, now);
+        osc.frequency.exponentialRampToValueAtTime(60, now + 0.06);
+        gain.gain.setValueAtTime(0.09, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc.start(now);
+        osc.stop(now + 0.08);
+        break;
+      }
+      case "hit":
+        osc.type = "square";
+        osc.frequency.setValueAtTime(880, now);
+        osc.frequency.exponentialRampToValueAtTime(440, now + 0.05);
+        gain.gain.setValueAtTime(0.07, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+        osc.start(now);
+        osc.stop(now + 0.07);
+        break;
+      case "damage":
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(120, now);
+        osc.frequency.exponentialRampToValueAtTime(40, now + 0.2);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        osc.start(now);
+        osc.stop(now + 0.25);
+        break;
+      case "zone":
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(220, now);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+        break;
+      case "reload":
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(200, now);
+        osc.frequency.linearRampToValueAtTime(320, now + 0.15);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.start(now);
+        osc.stop(now + 0.2);
+        break;
       case "claim":
         osc.type = "triangle";
         osc.frequency.setValueAtTime(440, now);
@@ -87,13 +148,13 @@ class AudioService {
         osc.stop(now + 0.15);
         break;
       case "combo":
-        osc.type = "square";
+        osc.type = "sine";
         osc.frequency.setValueAtTime(520, now);
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.18);
+        osc.frequency.setValueAtTime(680, now + 0.06);
         gain.gain.setValueAtTime(0.1, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
         osc.start(now);
-        osc.stop(now + 0.2);
+        osc.stop(now + 0.18);
         break;
       case "fail":
         osc.type = "sawtooth";
