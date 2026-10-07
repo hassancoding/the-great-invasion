@@ -21,8 +21,13 @@ export default function Game3DApp() {
   const stickRef = useRef({ active: false, dx: 0, dy: 0 });
   const keysRef = useRef<Record<string, boolean>>({});
   const fireHeldRef = useRef(false);
-  const playerRef = useRef({
-    x: 0, z: 18, yaw: 0, hp: 100, weapon: 'ar' as WeaponId,
+  const playerRef = useRef<{
+    x: number; z: number; yaw: number; hp: number; weapon: WeaponId;
+    ammo: Record<WeaponId, number>;
+    reserve: Record<WeaponId, number>;
+    reloadUntil: number; reloadStart: number; lastShot: number; sprint: boolean;
+  }>({
+    x: 0, z: 18, yaw: 0, hp: 100, weapon: 'ar',
     ammo: { ar: WEAPONS.ar.magSize, sg: WEAPONS.sg.magSize },
     reserve: { ar: WEAPONS.ar.reserveStart, sg: WEAPONS.sg.reserveStart },
     reloadUntil: 0, reloadStart: 0, lastShot: 0, sprint: false,
@@ -94,7 +99,6 @@ export default function Game3DApp() {
     try { audio.play(record ? 'record' : won ? 'levelup' : 'fail'); } catch {}
   }, []);
 
-  // Cast opts for strict MutableRefObject variance under tsconfig strict
   useIronGateBattle({
     phase, endRound, mountRef, stickRef, keysRef, fireHeldRef, playerRef,
     unitsRef, bulletsRef, zoneRef, timeRef, scoreRef, killsRef, shotsRef, hitsRef,
