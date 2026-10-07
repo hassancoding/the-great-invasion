@@ -64,15 +64,32 @@ export const ACHIEVEMENTS_LIST = [
   { id: "speed_master", name: "Rapid Deployment", description: "Claim 8 territories in the first 20 seconds", icon: "🚀" },
 ] as const;
 
-/** Battle-royale style shrinking zone (PUBG / Free Fire inspired) */
+/** Battle-royale style shrinking zone — paced for ~2 min browser rounds */
 export const ZONE_CONFIG = {
-  startRadius: 110,
+  startRadius: 95,
   phases: [
-    { radius: 90, wait: 45, shrink: 25 },
-    { radius: 65, wait: 40, shrink: 22 },
-    { radius: 42, wait: 35, shrink: 20 },
-    { radius: 24, wait: 30, shrink: 18 },
-    { radius: 12, wait: 25, shrink: 15 },
-    { radius: 5, wait: 20, shrink: 12 },
+    { radius: 70, wait: 18, shrink: 12 },
+    { radius: 48, wait: 14, shrink: 10 },
+    { radius: 30, wait: 12, shrink: 9 },
+    { radius: 16, wait: 10, shrink: 8 },
+    { radius: 8, wait: 8, shrink: 6 },
+    { radius: 4, wait: 6, shrink: 5 },
   ],
+} as const;
+
+/** Iron Gate combat tuning */
+export const COMBAT_CONFIG = {
+  roundSeconds: 100,
+  enemyCount: 12,
+  allyCount: 4,
+  playerSpeed: 15,
+  sprintMult: 1.6,
+  enemySpeed: 9.5,
+  bulletSpeed: 58,
+  fireCooldown: 0.13,
+  reloadTime: 1.45,
+  magSize: 30,
+  reserveStart: 90,
+  zoneDamagePerSec: 14,
+  mobileAimAssist: 0.22,
 } as const;
