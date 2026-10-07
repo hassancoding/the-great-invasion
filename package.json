@@ -1,6 +1,6 @@
 {
-  "name": "great-invasion",
-  "version": "2.0.0",
+  "name": "bolt-hop",
+  "version": "3.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",

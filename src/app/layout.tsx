@@ -8,28 +8,28 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "The Great Invasion — Tactical Battle Royale",
+  title: "Bolt Hop — Leap. Loot. Deliver.",
   description:
-    "Operation Iron Gate. Survive the shrinking zone, command your squad, and eliminate hostiles in this fast 3D tactical battle royale. Play free in your browser.",
-  keywords: ["battle royale", "tactical shooter", "war game", "browser game", "free fire style", "pubg browser", "3d game"],
-  authors: [{ name: "The Great Invasion" }],
+    "Jump across sky platforms, collect coins, stomp drones, and reach the beacon. Fast mobile platformer. Play free in your browser.",
+  keywords: ["platformer", "jump game", "browser game", "mobile game", "yandex games", "arcade"],
+  authors: [{ name: "Bolt Hop" }],
   manifest: "/manifest.json",
   openGraph: {
-    title: "The Great Invasion — Iron Gate",
-    description: "Survive the zone. Command your squad. Can you beat the score?",
+    title: "Bolt Hop — Leap. Loot. Deliver.",
+    description: "How far can you hop? Collect coins and beat your best score.",
     type: "website",
-    siteName: "The Great Invasion",
+    siteName: "Bolt Hop",
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Great Invasion — Iron Gate",
-    description: "Survive the zone. Command your squad. Can you beat the score?",
+    title: "Bolt Hop",
+    description: "Leap. Loot. Deliver. Can you beat the score?",
   },
   robots: "index, follow",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Great Invasion",
+    title: "Bolt Hop",
   },
 };
 
@@ -38,7 +38,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#0a0e17",
+  themeColor: "#0f172a",
 };
 
 export default function RootLayout({
@@ -48,7 +48,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#0a0e17] text-white overflow-x-hidden font-sans">
+      <body className="min-h-full flex flex-col bg-slate-950 text-white overflow-x-hidden font-sans">
         {children}
       </body>
     </html>

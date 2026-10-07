@@ -1,11 +1,11 @@
 {
-  "name": "The Great Invasion",
-  "short_name": "Iron Gate",
-  "description": "Survive the shrinking zone. Command your squad. Eliminate the enemy.",
+  "name": "Bolt Hop",
+  "short_name": "Bolt Hop",
+  "description": "Leap. Loot. Deliver. Jump platforms, collect coins, reach the beacon.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0e17",
-  "theme_color": "#0a0e17",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
   "orientation": "any",
   "icons": [
     {
