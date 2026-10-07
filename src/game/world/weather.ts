@@ -1,4 +1,0 @@
-export type WeatherState='CLEAR'|'OVERCAST'|'RAIN'|'FOG'|'STORM';
-export type WeatherProfile={state:WeatherState;visibility:number;movement:number;airSupport:number};
-export const WEATHER:Record<WeatherState,WeatherProfile>={CLEAR:{state:'CLEAR',visibility:1,movement:1,airSupport:1},OVERCAST:{state:'OVERCAST',visibility:.9,movement:1,airSupport:.9},RAIN:{state:'RAIN',visibility:.72,movement:.86,airSupport:.7},FOG:{state:'FOG',visibility:.42,movement:1,airSupport:.55},STORM:{state:'STORM',visibility:.28,movement:.7,airSupport:.25}};
-export function cycleWeather(current:WeatherState):WeatherState{const order:WeatherState[]=['CLEAR','OVERCAST','RAIN','FOG','STORM'];return order[(order.indexOf(current)+1)%order.length]}
