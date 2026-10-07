@@ -18,6 +18,20 @@ import {
   type Bullet,
 } from '@/game/ironGate/helpers';
 import { ensureRapier, createIronGatePhysics, type IronGatePhysics } from '@/game/ironGate/physicsWorld';
+import {
+  createRecoilState,
+  applyRecoil,
+  decayRecoil,
+  spawnMuzzleFlash,
+  updateMuzzleFlashes,
+  spawnImpact,
+  updateImpacts,
+  startDeathReaction,
+  updateDeaths,
+  type MuzzleFlash,
+  type ImpactSpark,
+  type DeathFx,
+} from '@/game/ironGate/combatFx';
 
 const ROUND_SECONDS = COMBAT_CONFIG.roundSeconds;
 const PLAYER_SPEED = COMBAT_CONFIG.playerSpeed;
@@ -139,6 +153,10 @@ export function useIronGateBattle(opts: {
     }
     unitsRef.current = units;
     bulletsRef.current = [];
+    const muzzleFlashes: MuzzleFlash[] = [];
+    const impacts: ImpactSpark[] = [];
+    const deathFx: DeathFx[] = [];
+    const recoil = createRecoilState();
 
     playerRef.current = {
       x: 0, z: 18, yaw: 0, hp: 100, weapon: 'ar',
@@ -188,6 +206,9 @@ export function useIronGateBattle(opts: {
       for (let i = 0; i < wp.pellets; i++) {
         spawnBullet(p.x, p.z, p.yaw + (Math.random() - 0.5) * wp.spread * 2, 'player', wp.damage, wp.bulletSpeed, wp.life, p.weapon === 'sg' ? 0.1 : 0.12);
       }
+      applyRecoil(recoil, p.weapon);
+      p.yaw += recoil.kickYaw * 0.35;
+      muzzleFlashes.push(spawnMuzzleFlash(scene, p.x, 1.35, p.z, p.yaw, p.weapon));
       try { audio.play('shoot'); } catch {}
     };
 
@@ -347,13 +368,19 @@ export function useIronGateBattle(opts: {
         u.mesh.rotation.y = u.aimY;
         if (dist2(u.x, u.z, p.x, p.z) < (u.team === 'enemy' ? 32 : 40) && t - u.lastShot > (u.team === 'enemy' ? 0.55 : 0.4)) {
           u.lastShot = t;
-          spawnBullet(u.x, u.z, Math.atan2(p.x - u.x, p.z - u.z) + (Math.random() - 0.5) * 0.18, u.team === 'enemy' ? 'enemy' : 'ally', u.team === 'enemy' ? 12 : 22);
+          const ay = Math.atan2(p.x - u.x, p.z - u.z) + (Math.random() - 0.5) * 0.18;
+          spawnBullet(u.x, u.z, ay, u.team === 'enemy' ? 'enemy' : 'ally', u.team === 'enemy' ? 12 : 22);
+          muzzleFlashes.push(spawnMuzzleFlash(scene, u.x, 1.3, u.z, ay, 'ar'));
         }
         if (dist2(u.x, u.z, zone.x, zone.z) > zone.r) u.hp -= ZONE_DAMAGE_PER_SEC * 0.7 * dt;
-        if (u.hp <= 0) {
+        if (u.hp <= 0 && !u.dead) {
           u.dead = true;
-          u.mesh.visible = false;
-          if (u.team === 'enemy') { killsRef.current += 1; scoreRef.current += 120; }
+          deathFx.push(startDeathReaction(u.mesh, u.aimY));
+          if (u.team === 'enemy') {
+            killsRef.current += 1;
+            scoreRef.current += 120;
+            impacts.push(spawnImpact(scene, u.x, 1.2, u.z, 'kill'));
+          }
         }
       }
 
@@ -372,6 +399,8 @@ export function useIronGateBattle(opts: {
         if (b.from === 'enemy' && dist2(b.mesh.position.x, b.mesh.position.z, p.x, p.z) < 1.1) {
           p.hp -= b.damage;
           setDmgFlash((n) => n + 1);
+          impacts.push(spawnImpact(scene, p.x, 1.2, p.z, 'hit'));
+          recoil.punch = Math.min(1, recoil.punch + 0.35);
           try { audio.play('damage'); if (navigator.vibrate) navigator.vibrate(40); } catch {}
           scene.remove(b.mesh);
           bullets.splice(i, 1);
@@ -386,15 +415,17 @@ export function useIronGateBattle(opts: {
             if (b.from === 'player') {
               hitsRef.current += 1;
               scoreRef.current += 15;
+              impacts.push(spawnImpact(scene, u.x, 1.2, u.z, 'hit'));
               setHitmark(true);
               window.setTimeout(() => setHitmark(false), 90);
               try { audio.play('hit'); } catch {}
             }
             scene.remove(b.mesh);
             bullets.splice(i, 1);
-            if (u.hp <= 0) {
+            if (u.hp <= 0 && !u.dead) {
               u.dead = true;
-              u.mesh.visible = false;
+              deathFx.push(startDeathReaction(u.mesh, u.aimY));
+              impacts.push(spawnImpact(scene, u.x, 1.3, u.z, u.team === 'enemy' ? 'kill' : 'hit'));
               if (u.team === 'enemy') {
                 killsRef.current += 1;
                 scoreRef.current += 120;
@@ -412,9 +443,21 @@ export function useIronGateBattle(opts: {
         }
       }
 
-      const camPos = new THREE.Vector3(p.x - Math.sin(p.yaw) * 12, 14, p.z - Math.cos(p.yaw) * 12 + 8);
+      decayRecoil(recoil, dt);
+      updateMuzzleFlashes(muzzleFlashes, scene, dt);
+      updateImpacts(impacts, scene, dt);
+      updateDeaths(deathFx, scene, dt);
+
+      const punchY = recoil.punch * 0.55;
+      const punchBack = recoil.punch * 0.8;
+      const aimYaw = p.yaw + recoil.kickYaw;
+      const camPos = new THREE.Vector3(
+        p.x - Math.sin(aimYaw) * (12 + punchBack),
+        14 + punchY + recoil.kickPitch * 4,
+        p.z - Math.cos(aimYaw) * (12 + punchBack) + 8
+      );
       camera.position.lerp(camPos, 1 - Math.pow(0.001, dt));
-      camera.lookAt(p.x, 1.2, p.z);
+      camera.lookAt(p.x, 1.2 + recoil.kickPitch * 2.5, p.z);
       scene.fog = new THREE.FogExp2(0x0a1220, 0.007 + (1 - WEATHER[weatherRef.current].visibility) * 0.022);
 
       for (const ev of events) {
