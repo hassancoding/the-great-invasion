@@ -92,4 +92,38 @@ export const COMBAT_CONFIG = {
   reserveStart: 90,
   zoneDamagePerSec: 14,
   mobileAimAssist: 0.22,
+  radarRange: 55,
+} as const;
+
+export type WeaponId = 'ar' | 'sg';
+
+export const WEAPONS = {
+  ar: {
+    id: 'ar' as const,
+    name: 'AR',
+    label: 'ASSAULT',
+    magSize: 30,
+    reserveStart: 90,
+    fireCooldown: 0.12,
+    reloadTime: 1.4,
+    damage: 26,
+    bulletSpeed: 62,
+    pellets: 1,
+    spread: 0.04,
+    life: 1.5,
+  },
+  sg: {
+    id: 'sg' as const,
+    name: 'SG',
+    label: 'SHOTGUN',
+    magSize: 8,
+    reserveStart: 24,
+    fireCooldown: 0.72,
+    reloadTime: 1.9,
+    damage: 18,
+    bulletSpeed: 48,
+    pellets: 5,
+    spread: 0.22,
+    life: 0.55,
+  },
 } as const;

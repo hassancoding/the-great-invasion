@@ -13,13 +13,14 @@ export const DEFAULT_ORDERS: Record<SquadId, SquadOrder> = {
   BRAVO: 'ADVANCE',
 };
 
+/** Keys 3–8 for squad (1–2 reserved for weapons AR / SG) */
 export const ORDER_KEYS: Record<string, readonly [SquadId, SquadOrder]> = {
-  Digit1: ['ALPHA', 'FOLLOW'],
-  Digit2: ['ALPHA', 'FLANK_LEFT'],
-  Digit3: ['ALPHA', 'DEFEND'],
-  Digit4: ['BRAVO', 'ADVANCE'],
-  Digit5: ['BRAVO', 'SECURE_BRIDGE'],
-  Digit6: ['BRAVO', 'HOLD'],
+  Digit3: ['ALPHA', 'FOLLOW'],
+  Digit4: ['ALPHA', 'FLANK_LEFT'],
+  Digit5: ['ALPHA', 'DEFEND'],
+  Digit6: ['BRAVO', 'ADVANCE'],
+  Digit7: ['BRAVO', 'SECURE_BRIDGE'],
+  Digit8: ['BRAVO', 'HOLD'],
 };
 
 export function applySquadOrder(
