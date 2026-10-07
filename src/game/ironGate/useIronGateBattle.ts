@@ -39,10 +39,10 @@ export function useIronGateBattle(opts: {
   stickRef: MutableRefObject<{ active: boolean; dx: number; dy: number }>;
   keysRef: MutableRefObject<Record<string, boolean>>;
   fireHeldRef: MutableRefObject<boolean>;
-  playerRef: MutableRefObject<PlayerState | any>;
+  playerRef: MutableRefObject<PlayerState>;
   unitsRef: MutableRefObject<Unit[]>;
   bulletsRef: MutableRefObject<Bullet[]>;
-  zoneRef: MutableRefObject<ZoneState | any>;
+  zoneRef: MutableRefObject<ZoneState>;
   timeRef: MutableRefObject<number>;
   scoreRef: MutableRefObject<number>;
   killsRef: MutableRefObject<number>;
@@ -189,22 +189,23 @@ export function useIronGateBattle(opts: {
 
     const tryPlayerFire = (t: number) => {
       const p = playerRef.current;
-      const wp = WEAPONS[p.weapon];
+      const weapon = p.weapon;
+      const wp = WEAPONS[weapon];
       if (t < p.reloadUntil) return;
-      if (p.ammo[p.weapon] <= 0) {
-        if (p.reserve[p.weapon] > 0 && t >= p.reloadUntil) {
+      if (p.ammo[weapon] <= 0) {
+        if (p.reserve[weapon] > 0 && t >= p.reloadUntil) {
           p.reloadStart = t;
           p.reloadUntil = t + wp.reloadTime;
-          const take = Math.min(wp.magSize, p.reserve[p.weapon]);
-          p.reserve[p.weapon] -= take;
+          const take = Math.min(wp.magSize, p.reserve[weapon]);
+          p.reserve[weapon] -= take;
           try { audio.play('reload'); } catch {}
-          window.setTimeout(() => { p.ammo[p.weapon] = Math.min(wp.magSize, p.ammo[p.weapon] + take); }, wp.reloadTime * 1000);
+          window.setTimeout(() => { p.ammo[weapon] = Math.min(wp.magSize, p.ammo[weapon] + take); }, wp.reloadTime * 1000);
         }
         return;
       }
       if (t - p.lastShot < wp.fireCooldown) return;
       p.lastShot = t;
-      p.ammo[p.weapon] -= 1;
+      p.ammo[weapon] -= 1;
       shotsRef.current += 1;
       for (let i = 0; i < wp.pellets; i++) {
         spawnBullet(p.x, p.z, p.yaw + (Math.random() - 0.5) * wp.spread * 2, 'player', wp.damage, wp.bulletSpeed, wp.life, p.weapon === 'sg' ? 0.1 : 0.12);
@@ -226,14 +227,15 @@ export function useIronGateBattle(opts: {
       keysRef.current[e.code] = true;
       if (e.code === 'KeyR') {
         const p = playerRef.current;
-        const wp = WEAPONS[p.weapon];
-        if (p.ammo[p.weapon] < wp.magSize && p.reserve[p.weapon] > 0 && timeRef.current >= p.reloadUntil) {
+        const weapon = p.weapon;
+        const wp = WEAPONS[weapon];
+        if (p.ammo[weapon] < wp.magSize && p.reserve[weapon] > 0 && timeRef.current >= p.reloadUntil) {
           p.reloadStart = timeRef.current;
           p.reloadUntil = timeRef.current + wp.reloadTime;
-          const take = Math.min(wp.magSize - p.ammo[p.weapon], p.reserve[p.weapon]);
-          p.reserve[p.weapon] -= take;
+          const take = Math.min(wp.magSize - p.ammo[weapon], p.reserve[weapon]);
+          p.reserve[weapon] -= take;
           try { audio.play('reload'); } catch {}
-          window.setTimeout(() => { p.ammo[p.weapon] = Math.min(wp.magSize, p.ammo[p.weapon] + take); }, wp.reloadTime * 1000);
+          window.setTimeout(() => { p.ammo[weapon] = Math.min(wp.magSize, p.ammo[weapon] + take); }, wp.reloadTime * 1000);
         }
       }
       if (e.code === 'KeyQ' || e.code === 'Digit1') switchWeapon('ar');
