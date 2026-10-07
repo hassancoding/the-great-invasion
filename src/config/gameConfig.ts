@@ -1,7 +1,7 @@
 export const GAME_CONFIG = {
   name: "The Great Invasion",
-  tagline: "Expand. Defend. Conquer the map.",
-  version: "1.0.0",
+  tagline: "Survive the zone. Command your squad. Secure Iron Gate.",
+  version: "2.0.0",
 
   // Round settings
   roundDuration: 60, // seconds

@@ -8,22 +8,22 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "The Great Invasion — Modern War Territory Game",
+  title: "The Great Invasion — Tactical Battle Royale",
   description:
-    "Expand your nation. Defend your borders. Conquer the map in this fast modern-war territory control game. Play free in your browser.",
-  keywords: ["war game", "territory control", "strategy", "browser game", "modern war", "invasion"],
+    "Operation Iron Gate. Survive the shrinking zone, command your squad, and eliminate hostiles in this fast 3D tactical battle royale. Play free in your browser.",
+  keywords: ["battle royale", "tactical shooter", "war game", "browser game", "free fire style", "pubg browser", "3d game"],
   authors: [{ name: "The Great Invasion" }],
   manifest: "/manifest.json",
   openGraph: {
-    title: "The Great Invasion",
-    description: "Expand. Defend. Conquer the map. Can you hold more territory?",
+    title: "The Great Invasion — Iron Gate",
+    description: "Survive the zone. Command your squad. Can you beat the score?",
     type: "website",
     siteName: "The Great Invasion",
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Great Invasion",
-    description: "Expand. Defend. Conquer the map. Can you hold more territory?",
+    title: "The Great Invasion — Iron Gate",
+    description: "Survive the zone. Command your squad. Can you beat the score?",
   },
   robots: "index, follow",
   appleWebApp: {
