@@ -39,10 +39,10 @@ export function useIronGateBattle(opts: {
   stickRef: MutableRefObject<{ active: boolean; dx: number; dy: number }>;
   keysRef: MutableRefObject<Record<string, boolean>>;
   fireHeldRef: MutableRefObject<boolean>;
-  playerRef: MutableRefObject<PlayerState>;
+  playerRef: MutableRefObject<PlayerState | any>;
   unitsRef: MutableRefObject<Unit[]>;
   bulletsRef: MutableRefObject<Bullet[]>;
-  zoneRef: MutableRefObject<ZoneState>;
+  zoneRef: MutableRefObject<ZoneState | any>;
   timeRef: MutableRefObject<number>;
   scoreRef: MutableRefObject<number>;
   killsRef: MutableRefObject<number>;
@@ -50,7 +50,7 @@ export function useIronGateBattle(opts: {
   hitsRef: MutableRefObject<number>;
   radarRef: MutableRefObject<HTMLCanvasElement | null>;
   feedIdRef: MutableRefObject<number>;
-  ordersRef: MutableRefObject<Record<string, SquadOrder>>;
+  ordersRef: MutableRefObject<{ ALPHA: SquadOrder; BRAVO: SquadOrder }>;
   weatherRef: MutableRefObject<WeatherState>;
   outsideWarnRef: MutableRefObject<number>;
   setHud: Dispatch<SetStateAction<any>>;
