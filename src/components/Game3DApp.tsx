@@ -254,14 +254,15 @@ export default function Game3DApp() {
       <button data-ui className="absolute bottom-8 right-4 z-20 w-20 h-20 rounded-full bg-red-600/80 active:bg-red-500 border-2 border-red-400 font-bold text-sm sm:hidden touch-none" onPointerDown={(e) => { e.preventDefault(); fireHeldRef.current = true; }} onPointerUp={() => { fireHeldRef.current = false; }} onPointerCancel={() => { fireHeldRef.current = false; }}>FIRE</button>
       <button data-ui className={`absolute bottom-28 right-6 z-20 px-3 py-2 rounded-lg text-xs font-semibold sm:hidden flex items-center gap-1.5 ${hud.reloading ? 'bg-amber-700/90 text-amber-100' : 'bg-slate-800/90'}`} onClick={() => {
         const p = playerRef.current;
-        const w = WEAPONS[p.weapon];
-        if (p.ammo[p.weapon] < w.magSize && p.reserve[p.weapon] > 0 && timeRef.current >= p.reloadUntil) {
+        const weapon = p.weapon;
+        const w = WEAPONS[weapon];
+        if (p.ammo[weapon] < w.magSize && p.reserve[weapon] > 0 && timeRef.current >= p.reloadUntil) {
           p.reloadStart = timeRef.current;
           p.reloadUntil = timeRef.current + w.reloadTime;
-          const take = Math.min(w.magSize - p.ammo[p.weapon], p.reserve[p.weapon]);
-          p.reserve[p.weapon] -= take;
+          const take = Math.min(w.magSize - p.ammo[weapon], p.reserve[weapon]);
+          p.reserve[weapon] -= take;
           try { audio.play('reload'); } catch {}
-          window.setTimeout(() => { p.ammo[p.weapon] = Math.min(w.magSize, p.ammo[p.weapon] + take); }, w.reloadTime * 1000);
+          window.setTimeout(() => { p.ammo[weapon] = Math.min(w.magSize, p.ammo[weapon] + take); }, w.reloadTime * 1000);
         }
       }}>{hud.reloading ? (<><span className="inline-block w-3 h-3 border-2 border-amber-200 border-t-transparent rounded-full animate-spin" />{Math.round(hud.reloadProgress * 100)}%</>) : 'RELOAD'}</button>
     </div>
