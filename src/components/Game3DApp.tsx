@@ -22,89 +22,19 @@ import { shareResult, buildShareLinks } from '@/services/sharing/ShareService';
 import { analytics } from '@/services/analytics/AnalyticsService';
 import { audio } from '@/game/audio/AudioService';
 import { WeaponSlotButton } from '@/components/WeaponSlots';
+import { IronGateMenu } from '@/components/ironGate/IronGateMenu';
+import { IronGateResults } from '@/components/ironGate/IronGateResults';
+import {
+  ENEMY_NAMES,
+  makeUnitMesh,
+  clamp,
+  dist2,
+  type Unit,
+  type Bullet,
+  type Phase,
+} from '@/game/ironGate/helpers';
 
-type Phase = 'menu' | 'countdown' | 'playing' | 'results';
-
-type Unit = {
-  id: number;
-  mesh: THREE.Group;
-  team: 'player' | 'ally' | 'enemy';
-  hp: number;
-  maxHp: number;
-  dead: boolean;
-  x: number;
-  z: number;
-  vx: number;
-  vz: number;
-  aimY: number;
-  lastShot: number;
-  name: string;
-  state: 'idle' | 'advance' | 'engage' | 'flank' | 'retreat';
-};
-
-type Bullet = {
-  mesh: THREE.Mesh;
-  vx: number;
-  vz: number;
-  life: number;
-  from: 'player' | 'enemy' | 'ally';
-  damage: number;
-};
-
-const ENEMY_NAMES = [
-  'Viper', 'Razor', 'Havoc', 'Reaper', 'Ghost', 'Titan',
-  'Fang', 'Blaze', 'Onyx', 'Cobra', 'Wolf', 'Dagger',
-];
-
-const ROUND_SECONDS = COMBAT_CONFIG.roundSeconds;
-const PLAYER_SPEED = COMBAT_CONFIG.playerSpeed;
-const SPRINT_MULT = COMBAT_CONFIG.sprintMult;
-const ENEMY_SPEED = COMBAT_CONFIG.enemySpeed;
-const BULLET_SPEED = COMBAT_CONFIG.bulletSpeed;
-const FIRE_COOLDOWN = COMBAT_CONFIG.fireCooldown;
-const RELOAD_TIME = COMBAT_CONFIG.reloadTime;
-const MAG_SIZE = COMBAT_CONFIG.magSize;
-const RESERVE_START = COMBAT_CONFIG.reserveStart;
-const ZONE_DAMAGE_PER_SEC = COMBAT_CONFIG.zoneDamagePerSec;
-
-function makeUnitMesh(color: number, isPlayer = false): THREE.Group {
-  const g = new THREE.Group();
-  const body = new THREE.Mesh(
-    new THREE.CapsuleGeometry(0.45, 1.1, 4, 8),
-    new THREE.MeshStandardMaterial({ color, roughness: 0.65, metalness: 0.15 })
-  );
-  body.position.y = 1.0;
-  body.castShadow = true;
-  g.add(body);
-
-  const head = new THREE.Mesh(
-    new THREE.SphereGeometry(0.32, 10, 10),
-    new THREE.MeshStandardMaterial({ color: isPlayer ? 0xf0d0b0 : 0xc4a484 })
-  );
-  head.position.y = 1.85;
-  g.add(head);
-
-  const gun = new THREE.Mesh(
-    new THREE.BoxGeometry(0.12, 0.12, 0.9),
-    new THREE.MeshStandardMaterial({ color: 0x222222 })
-  );
-  gun.position.set(0.35, 1.15, 0.45);
-  g.add(gun);
-
-  return g;
-}
-
-function clamp(v: number, a: number, b: number) {
-  return Math.max(a, Math.min(b, v));
-}
-
-function dist2(ax: number, az: number, bx: number, bz: number) {
-  const dx = ax - bx;
-  const dz = az - bz;
-  return Math.sqrt(dx * dx + dz * dz);
-}
-
-export default function Game3D() {
+export default function Game3DApp() {
   const mountRef = useRef<HTMLDivElement>(null);
   const stickRef = useRef({ active: false, dx: 0, dy: 0 });
   const keysRef = useRef<Record<string, boolean>>({});
@@ -971,53 +901,7 @@ export default function Game3D() {
   };
 
   if (phase === 'menu') {
-    return (
-      <div className="relative min-h-[100dvh] w-full bg-[#0a0e17] text-white flex flex-col items-center justify-center px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-sky-900/30 via-transparent to-transparent pointer-events-none" />
-        <p className="text-sky-400 text-xs font-bold tracking-[0.25em] mb-2">
-          TACTICAL BATTLE ROYALE
-        </p>
-        <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-center mb-2">
-          THE GREAT INVASION
-        </h1>
-        <p className="text-slate-400 text-center max-w-md mb-8 text-sm sm:text-base">
-          Operation Iron Gate — Survive the shrinking zone. Command your squad.
-          Eliminate the enemy force.
-        </p>
-        {personalBest > 0 && (
-          <p className="text-slate-400 text-sm mb-4">
-            Personal Best: <span className="text-sky-400 font-bold">{personalBest.toLocaleString()}</span>
-          </p>
-        )}
-        <button
-          onClick={startMission}
-          className="w-full max-w-xs py-4 rounded-2xl bg-sky-600 hover:bg-sky-500 active:scale-[0.98] transition font-bold text-lg shadow-lg shadow-sky-900/40 mb-3"
-        >
-          DEPLOY
-        </button>
-        <div className="text-slate-500 text-xs text-center max-w-sm space-y-1 mt-4">
-          <p>
-            Desktop: WASD move · Click hold fire · R reload · Shift sprint · 1–6
-            squad
-          </p>
-          <p>Mobile: Stick · FIRE · tap AR/SG slots · RELOAD</p>
-        </div>
-        <div className="mt-10 grid grid-cols-3 gap-3 text-center text-xs text-slate-400 max-w-sm w-full">
-          <div className="bg-slate-900/80 rounded-xl p-3 border border-slate-800">
-            <div className="text-sky-400 font-bold text-lg">3D</div>
-            Battlefield
-          </div>
-          <div className="bg-slate-900/80 rounded-xl p-3 border border-slate-800">
-            <div className="text-emerald-400 font-bold text-lg">ZONE</div>
-            Shrinking
-          </div>
-          <div className="bg-slate-900/80 rounded-xl p-3 border border-slate-800">
-            <div className="text-amber-400 font-bold text-lg">SQUAD</div>
-            Commands
-          </div>
-        </div>
-      </div>
-    );
+    return <IronGateMenu personalBest={personalBest} onDeploy={startMission} />;
   }
 
   if (phase === 'countdown') {
@@ -1032,81 +916,16 @@ export default function Game3D() {
   }
 
   if (phase === 'results' && results) {
-    const links = buildShareLinks(shareMsg);
     return (
-      <div className="min-h-[100dvh] w-full bg-[#0a0e17] text-white flex flex-col items-center justify-center px-4 py-8">
-        <p
-          className={`text-sm font-bold tracking-widest mb-2 ${
-            results.placement === 'VICTORY' || results.placement === 'LAST STANDING'
-              ? 'text-emerald-400'
-              : 'text-red-400'
-          }`}
-        >
-          {results.placement}
-        </p>
-        <h2 className="text-3xl font-black mb-1">MISSION REPORT</h2>
-        <p className="text-slate-400 mb-6 text-center">{results.message}</p>
-        {isNewRecord && (
-          <div className="mb-3 px-4 py-1.5 rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm animate-bounce">
-            🏆 NEW PERSONAL BEST
-          </div>
-        )}
-        <div className="bg-slate-900/90 border border-slate-700 rounded-2xl p-6 w-full max-w-sm mb-6">
-          <div className="text-5xl font-black text-sky-400 tabular-nums mb-1">
-            {results.score.toLocaleString()}
-          </div>
-          <div className="text-slate-500 text-sm mb-1">SCORE</div>
-          {personalBest > 0 && (
-            <div className="text-slate-400 text-xs mb-4">
-              Best: <span className="text-sky-300 font-semibold">{personalBest.toLocaleString()}</span>
-            </div>
-          )}
-          {personalBest <= 0 && <div className="mb-4" />}
-          <div className="grid grid-cols-3 gap-3 text-center text-sm">
-            <div>
-              <div className="text-white font-bold text-xl">{results.kills}</div>
-              <div className="text-slate-500">Kills</div>
-            </div>
-            <div>
-              <div className="text-white font-bold text-xl">{results.accuracy}%</div>
-              <div className="text-slate-500">Accuracy</div>
-            </div>
-            <div>
-              <div className="text-white font-bold text-xl">{results.survived}s</div>
-              <div className="text-slate-500">Survived</div>
-            </div>
-          </div>
-        </div>
-        <button
-          onClick={startMission}
-          className="w-full max-w-xs py-4 rounded-2xl bg-sky-600 hover:bg-sky-500 font-bold text-lg mb-3"
-        >
-          REDEPLOY
-        </button>
-        <button
-          onClick={handleShare}
-          className="w-full max-w-xs py-3 rounded-xl bg-slate-800 hover:bg-slate-700 font-semibold mb-3"
-        >
-          Share Result
-        </button>
-        <div className="flex gap-3 text-xs text-slate-400 mb-6">
-          <a href={links.whatsapp} target="_blank" rel="noreferrer" className="hover:text-white">
-            WhatsApp
-          </a>
-          <a href={links.twitter} target="_blank" rel="noreferrer" className="hover:text-white">
-            X
-          </a>
-          <a href={links.facebook} target="_blank" rel="noreferrer" className="hover:text-white">
-            Facebook
-          </a>
-        </div>
-        <button
-          onClick={() => setPhase('menu')}
-          className="text-slate-500 text-sm hover:text-slate-300"
-        >
-          Main Menu
-        </button>
-      </div>
+      <IronGateResults
+        results={results}
+        isNewRecord={isNewRecord}
+        personalBest={personalBest}
+        shareMsg={shareMsg}
+        onRedeploy={startMission}
+        onShare={handleShare}
+        onMenu={() => setPhase('menu')}
+      />
     );
   }
 
