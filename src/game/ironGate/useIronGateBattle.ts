@@ -10,6 +10,8 @@ import { audio } from '@/game/audio/AudioService';
 import {
   ENEMY_NAMES,
   makeUnitMesh,
+  buildBattlefield,
+  setupAtmosphere,
   clamp,
   dist2,
   type Unit,
@@ -80,11 +82,9 @@ export function useIronGateBattle(opts: {
     const h = mount.clientHeight || 640;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0b1220);
-    scene.fog = new THREE.FogExp2(0x0b1220, 0.012);
 
-    const camera = new THREE.PerspectiveCamera(60, w / h, 0.1, 400);
-    camera.position.set(0, 18, 28);
+    const camera = new THREE.PerspectiveCamera(58, w / h, 0.1, 400);
+    camera.position.set(0, 16, 26);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
     renderer.setSize(w, h);
@@ -92,52 +92,24 @@ export function useIronGateBattle(opts: {
     renderer.shadowMap.enabled = true;
     mount.appendChild(renderer.domElement);
 
-    scene.add(new THREE.AmbientLight(0x6a7a9a, 0.55));
-    const sun = new THREE.DirectionalLight(0xfff2d6, 1.15);
-    sun.position.set(40, 60, 20);
-    sun.castShadow = true;
-    scene.add(sun);
-
-    const ground = new THREE.Mesh(
-      new THREE.CircleGeometry(130, 48),
-      new THREE.MeshStandardMaterial({ color: 0x1a2433, roughness: 0.95 })
-    );
-    ground.rotation.x = -Math.PI / 2;
-    ground.receiveShadow = true;
-    scene.add(ground);
-
-    const grid = new THREE.GridHelper(200, 40, 0x2a3a4e, 0x152030);
-    (grid.material as THREE.Material).opacity = 0.45;
-    (grid.material as THREE.Material).transparent = true;
-    scene.add(grid);
-
-    const coverMat = new THREE.MeshStandardMaterial({ color: 0x3d4a5c, roughness: 0.8 });
-    for (let i = 0; i < 18; i++) {
-      const box = new THREE.Mesh(
-        new THREE.BoxGeometry(2 + Math.random() * 3, 1.2 + Math.random() * 2, 2 + Math.random() * 3),
-        coverMat
-      );
-      const a = Math.random() * Math.PI * 2;
-      const r = 12 + Math.random() * 70;
-      box.position.set(Math.cos(a) * r, (box.geometry as THREE.BoxGeometry).parameters.height / 2, Math.sin(a) * r);
-      box.castShadow = true;
-      scene.add(box);
-    }
-
-    const obj = new THREE.Mesh(
-      new THREE.CylinderGeometry(3, 3, 0.4, 24),
-      new THREE.MeshStandardMaterial({ color: 0x3b82f6, emissive: 0x1d4ed8, emissiveIntensity: 0.4 })
-    );
-    obj.position.set(0, 0.2, -8);
-    scene.add(obj);
+    setupAtmosphere(scene, renderer);
+    buildBattlefield(scene);
 
     const zoneRing = new THREE.Mesh(
-      new THREE.RingGeometry(99.5, 100.5, 64),
-      new THREE.MeshBasicMaterial({ color: 0x22d3ee, side: THREE.DoubleSide, transparent: true, opacity: 0.55 })
+      new THREE.RingGeometry(99.2, 101.2, 96),
+      new THREE.MeshBasicMaterial({ color: 0x22d3ee, side: THREE.DoubleSide, transparent: true, opacity: 0.65, depthWrite: false })
     );
     zoneRing.rotation.x = -Math.PI / 2;
-    zoneRing.position.y = 0.15;
+    zoneRing.position.y = 0.2;
     scene.add(zoneRing);
+
+    const zoneInner = new THREE.Mesh(
+      new THREE.RingGeometry(98.0, 98.6, 64),
+      new THREE.MeshBasicMaterial({ color: 0xf43f5e, side: THREE.DoubleSide, transparent: true, opacity: 0.25, depthWrite: false })
+    );
+    zoneInner.rotation.x = -Math.PI / 2;
+    zoneInner.position.y = 0.18;
+    scene.add(zoneInner);
 
     const playerMesh = makeUnitMesh(0x3b82f6, true);
     playerMesh.position.set(0, 0, 18);
@@ -179,9 +151,10 @@ export function useIronGateBattle(opts: {
 
     const spawnBullet = (x: number, z: number, yaw: number, from: Bullet['from'], damage: number, speed: number = BULLET_SPEED, life: number = 1.4, radius: number = 0.12) => {
       const mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(radius, 6, 6),
-        new THREE.MeshBasicMaterial({ color: from === 'enemy' ? 0xff4444 : 0xfbbf24 })
+        new THREE.SphereGeometry(radius, 8, 8),
+        new THREE.MeshBasicMaterial({ color: from === 'enemy' ? 0xff5555 : 0xfde68a })
       );
+      mesh.scale.set(1, 1, 2.2);
       mesh.position.set(x, 1.2, z);
       scene.add(mesh);
       bulletsRef.current.push({ mesh, vx: Math.sin(yaw) * speed, vz: Math.cos(yaw) * speed, life, from, damage });
@@ -296,6 +269,7 @@ export function useIronGateBattle(opts: {
       zone.r += (zone.targetR - zone.r) * Math.min(1, dt * 0.35);
       const ringScale = zone.r / 100;
       zoneRing.scale.set(ringScale, ringScale, ringScale);
+      zoneInner.scale.set(ringScale, ringScale, ringScale);
 
       const keys = keysRef.current;
       let mx = 0, mz = 0;
@@ -423,7 +397,7 @@ export function useIronGateBattle(opts: {
       const camPos = new THREE.Vector3(p.x - Math.sin(p.yaw) * 12, 14, p.z - Math.cos(p.yaw) * 12 + 8);
       camera.position.lerp(camPos, 1 - Math.pow(0.001, dt));
       camera.lookAt(p.x, 1.2, p.z);
-      scene.fog = new THREE.FogExp2(0x0b1220, 0.008 + (1 - WEATHER[weatherRef.current].visibility) * 0.025);
+      scene.fog = new THREE.FogExp2(0x0a1220, 0.007 + (1 - WEATHER[weatherRef.current].visibility) * 0.022);
 
       for (const ev of events) {
         if (!ev.triggered && t >= ev.time) {
