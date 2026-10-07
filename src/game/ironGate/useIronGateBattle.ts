@@ -17,6 +17,7 @@ import {
   type Unit,
   type Bullet,
 } from '@/game/ironGate/helpers';
+import { ensureRapier, createIronGatePhysics, type IronGatePhysics } from '@/game/ironGate/physicsWorld';
 
 const ROUND_SECONDS = COMBAT_CONFIG.roundSeconds;
 const PLAYER_SPEED = COMBAT_CONFIG.playerSpeed;
@@ -74,9 +75,11 @@ export function useIronGateBattle(opts: {
   useEffect(() => {
     if (phase !== 'playing' || !mountRef.current) return;
 
+    let cancelled = false;
     let events = IRON_GATE_EVENTS.map((e) => ({ ...e }));
     let dead = false;
     let raf = 0;
+    let phys: IronGatePhysics | null = null;
     const mount = mountRef.current;
     const w = mount.clientWidth || 360;
     const h = mount.clientHeight || 640;
@@ -154,10 +157,12 @@ export function useIronGateBattle(opts: {
         new THREE.SphereGeometry(radius, 8, 8),
         new THREE.MeshBasicMaterial({ color: from === 'enemy' ? 0xff5555 : 0xfde68a })
       );
-      mesh.scale.set(1, 1, 2.2);
-      mesh.position.set(x, 1.2, z);
+      mesh.scale.set(1, 1, 2.8);
+      mesh.position.set(x, 1.35, z);
       scene.add(mesh);
-      bulletsRef.current.push({ mesh, vx: Math.sin(yaw) * speed, vz: Math.cos(yaw) * speed, life, from, damage });
+      const dirX = Math.sin(yaw);
+      const dirZ = Math.cos(yaw);
+      bulletsRef.current.push({ mesh, vx: dirX * speed, vz: dirZ * speed, life, from, damage });
     };
 
     const tryPlayerFire = (t: number) => {
@@ -281,9 +286,17 @@ export function useIronGateBattle(opts: {
       const len = Math.hypot(mx, mz) || 1;
       mx /= len; mz /= len;
       const sprint = !!(keys['ShiftLeft'] || keys['ShiftRight']);
-      const spd = PLAYER_SPEED * (sprint ? SPRINT_MULT : 1) * WEATHER[weatherRef.current].movement;
-      p.x = clamp(p.x + mx * spd * dt, -120, 120);
-      p.z = clamp(p.z + mz * spd * dt, -120, 120);
+      const weatherMult = WEATHER[weatherRef.current].movement;
+      if (phys && (mx !== 0 || mz !== 0)) {
+        const moved = phys.movePlayer(mx * weatherMult, mz * weatherMult, p.yaw, sprint, dt);
+        p.x = moved.x;
+        p.z = moved.z;
+      } else if (mx !== 0 || mz !== 0) {
+        const spd = PLAYER_SPEED * (sprint ? SPRINT_MULT : 1) * weatherMult;
+        p.x = clamp(p.x + mx * spd * dt, -120, 120);
+        p.z = clamp(p.z + mz * spd * dt, -120, 120);
+      }
+      if (phys) phys.step(dt);
       playerMesh.position.set(p.x, 0, p.z);
       playerMesh.rotation.y = p.yaw;
 
@@ -349,8 +362,13 @@ export function useIronGateBattle(opts: {
         const b = bullets[i];
         b.life -= dt;
         b.mesh.position.x += b.vx * dt;
+        b.mesh.position.y -= 6.5 * dt;
         b.mesh.position.z += b.vz * dt;
-        if (b.life <= 0) { scene.remove(b.mesh); bullets.splice(i, 1); continue; }
+        if (b.life <= 0 || b.mesh.position.y < -0.5) {
+          scene.remove(b.mesh);
+          bullets.splice(i, 1);
+          continue;
+        }
         if (b.from === 'enemy' && dist2(b.mesh.position.x, b.mesh.position.z, p.x, p.z) < 1.1) {
           p.hp -= b.damage;
           setDmgFlash((n) => n + 1);
@@ -423,7 +441,7 @@ export function useIronGateBattle(opts: {
           kills: killsRef.current,
           enemies: aliveEnemies,
           timeLeft,
-          zoneText: outside ? '⚠ OUTSIDE ZONE' : zone.phase === 0 ? 'ZONE STABLE' : `ZONE PHASE ${zone.phase} · R${Math.round(zone.r)}`,
+          zoneText: outside ? 'OUTSIDE ZONE' : zone.phase === 0 ? 'ZONE STABLE' : `ZONE PHASE ${zone.phase} R${Math.round(zone.r)}`,
           outside,
           event: events.find((e) => e.triggered && t - e.time < 4)?.title ?? 'OPERATION IRON GATE',
           reloading: t < p.reloadUntil,
@@ -473,7 +491,18 @@ export function useIronGateBattle(opts: {
     };
     raf = requestAnimationFrame(tick);
 
+    ensureRapier().then(() => {
+      if (cancelled || dead) return;
+      try {
+        phys = createIronGatePhysics(0, 18);
+      } catch (e) {
+        console.warn('Physics init failed, using kinematic fallback', e);
+        phys = null;
+      }
+    });
+
     return () => {
+      cancelled = true;
       dead = true;
       cancelAnimationFrame(raf);
       window.removeEventListener('keydown', onKeyDown);
@@ -482,6 +511,8 @@ export function useIronGateBattle(opts: {
       window.removeEventListener('resize', onResize);
       renderer.domElement.removeEventListener('pointerdown', onPointerDown);
       renderer.domElement.removeEventListener('pointermove', onPointerMove);
+      try { phys?.dispose(); } catch {}
+      phys = null;
       if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
       renderer.dispose();
     };
