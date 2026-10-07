@@ -18,7 +18,7 @@ import {
 } from '@/game/command/squadOrders';
 import { WEATHER, cycleWeather, type WeatherState } from '@/game/world/weather';
 import { IRON_GATE_EVENTS, type IronGateEvent } from '@/game/events/ironGateEvents';
-import { shareResult, buildShareLinks } from '@/services/sharing/ShareService';
+import { shareResult } from '@/services/sharing/ShareService';
 import { analytics } from '@/services/analytics/AnalyticsService';
 import { audio } from '@/game/audio/AudioService';
 import { WeaponSlotButton } from '@/components/WeaponSlots';
@@ -33,6 +33,13 @@ import {
   type Bullet,
   type Phase,
 } from '@/game/ironGate/helpers';
+
+const ROUND_SECONDS = COMBAT_CONFIG.roundSeconds;
+const PLAYER_SPEED = COMBAT_CONFIG.playerSpeed;
+const SPRINT_MULT = COMBAT_CONFIG.sprintMult;
+const ENEMY_SPEED = COMBAT_CONFIG.enemySpeed;
+const BULLET_SPEED = COMBAT_CONFIG.bulletSpeed;
+const ZONE_DAMAGE_PER_SEC = COMBAT_CONFIG.zoneDamagePerSec;
 
 export default function Game3DApp() {
   const mountRef = useRef<HTMLDivElement>(null);
