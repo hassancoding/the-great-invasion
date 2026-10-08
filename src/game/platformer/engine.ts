@@ -18,6 +18,17 @@ import {
   initYandex,
   showInterstitial,
 } from './yandexSdk';
+import {
+  drawSky,
+  drawParallaxCity,
+  drawClouds,
+  drawBlock,
+  drawCoin,
+  drawSpike,
+  drawEnemy,
+  drawGoal,
+  drawCourier,
+} from './graphics';
 
 type Input = {
   left: boolean;
@@ -120,8 +131,8 @@ export class BoltHopEngine {
     this.player = {
       x: this.level.spawn.x,
       y: this.level.spawn.y,
-      w: 22,
-      h: 28,
+      w: 24,
+      h: 36,
       vx: 0,
       vy: 0,
       onGround: false,
@@ -355,49 +366,45 @@ export class BoltHopEngine {
     const ctx = this.ctx;
     const W = this.w;
     const H = this.h;
-    const g = ctx.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0, '#1e3a5f');
-    g.addColorStop(0.5, '#3b82c4');
-    g.addColorStop(1, '#7dd3fc');
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, W, H);
 
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    for (let i = 0; i < 6; i++) {
-      const cx = ((i * 140 - this.cameraX * 0.2 + this.anim * 8) % (W + 120)) - 40;
-      const cy = 40 + (i % 3) * 50;
-      this.drawCloud(cx, cy, 40 + (i % 3) * 10);
-    }
+    drawSky(ctx, W, H, this.anim);
+    drawParallaxCity(ctx, W, H, this.cameraX, this.anim);
+    drawClouds(ctx, W, this.cameraX, this.anim);
 
     if (this.phase === 'menu') {
       this.drawMenu();
       return;
     }
 
-    ctx.save();
-    ctx.translate(-Math.floor(this.cameraX), 0);
+    const groundY = this.level.height;
+    const viewY = Math.min(0, H - groundY - 40);
 
-    for (const s of this.level.solids) this.drawBlock(s.x, s.y, s.w, s.h);
+    ctx.save();
+    ctx.translate(-Math.floor(this.cameraX), viewY);
+
+    for (const s of this.level.solids) drawBlock(ctx, s.x, s.y, s.w, s.h);
     for (const c of this.level.coins) {
-      if (!c.taken) this.drawCoin(c.x + c.w / 2, c.y + c.h / 2, this.anim);
+      if (!c.taken) drawCoin(ctx, c.x + c.w / 2, c.y + c.h / 2, this.anim);
     }
-    for (const s of this.level.spikes) this.drawSpike(s.x, s.y, s.w, s.h);
+    for (const s of this.level.spikes) drawSpike(ctx, s.x, s.y, s.w, s.h);
     for (const e of this.level.enemies) {
-      if (e.alive) this.drawEnemy(e.x, e.y, e.w, e.h, e.dir, this.anim);
+      if (e.alive) drawEnemy(ctx, e.x, e.y, e.w, e.h, e.dir, this.anim);
     }
     if (this.level.goal) {
-      this.drawGoal(this.level.goal.x, this.level.goal.y, this.level.goal.w, this.level.goal.h, this.anim);
+      drawGoal(ctx, this.level.goal.x, this.level.goal.y, this.level.goal.w, this.level.goal.h, this.anim);
     }
     if (this.player.alive) {
       const blink = this.invuln > 0 && Math.floor(this.anim * 15) % 2 === 0;
       if (!blink) {
-        this.drawPlayer(
+        drawCourier(
+          ctx,
           this.player.x,
           this.player.y,
           this.player.w,
           this.player.h,
           this.player.facing,
           this.player.onGround,
+          this.player.vx,
           this.anim
         );
       }
@@ -405,137 +412,29 @@ export class BoltHopEngine {
     ctx.restore();
   }
 
-  private drawCloud(x: number, y: number, r: number) {
-    const ctx = this.ctx;
-    ctx.beginPath();
-    ctx.arc(x, y, r * 0.5, 0, Math.PI * 2);
-    ctx.arc(x + r * 0.45, y - 4, r * 0.4, 0, Math.PI * 2);
-    ctx.arc(x + r * 0.9, y, r * 0.48, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  private drawBlock(x: number, y: number, w: number, h: number) {
-    const ctx = this.ctx;
-    ctx.fillStyle = '#334155';
-    ctx.fillRect(x, y, w, h);
-    ctx.fillStyle = '#475569';
-    ctx.fillRect(x, y, w, 6);
-    ctx.fillStyle = '#1e293b';
-    ctx.fillRect(x, y + h - 4, w, 4);
-    ctx.strokeStyle = 'rgba(15,23,42,0.35)';
-    ctx.lineWidth = 1;
-    for (let tx = x; tx < x + w; tx += TILE) {
-      ctx.beginPath();
-      ctx.moveTo(tx, y);
-      ctx.lineTo(tx, y + h);
-      ctx.stroke();
-    }
-  }
-
-  private drawCoin(x: number, y: number, t: number) {
-    const ctx = this.ctx;
-    const bob = Math.sin(t * 6 + x * 0.05) * 3;
-    ctx.fillStyle = '#fbbf24';
-    ctx.beginPath();
-    ctx.arc(x, y + bob, 8, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#fde68a';
-    ctx.beginPath();
-    ctx.arc(x - 2, y + bob - 2, 3, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  private drawSpike(x: number, y: number, w: number, h: number) {
-    const ctx = this.ctx;
-    ctx.fillStyle = '#f43f5e';
-    ctx.beginPath();
-    ctx.moveTo(x, y + h);
-    ctx.lineTo(x + w / 2, y);
-    ctx.lineTo(x + w, y + h);
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  private drawEnemy(x: number, y: number, w: number, h: number, dir: number, t: number) {
-    const ctx = this.ctx;
-    const bounce = Math.abs(Math.sin(t * 8)) * 2;
-    ctx.fillStyle = '#ef4444';
-    ctx.fillRect(x, y + bounce, w, h - bounce);
-    ctx.fillStyle = '#7f1d1d';
-    ctx.fillRect(x + 4, y + 8 + bounce, 6, 6);
-    ctx.fillRect(x + w - 10, y + 8 + bounce, 6, 6);
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(x + (dir > 0 ? w - 8 : 2), y + 10 + bounce, 4, 4);
-  }
-
-  private drawGoal(x: number, y: number, w: number, h: number, t: number) {
-    const ctx = this.ctx;
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillRect(x + w / 2 - 3, y, 6, h);
-    ctx.fillStyle = '#22c55e';
-    const wave = Math.sin(t * 4) * 3;
-    ctx.beginPath();
-    ctx.moveTo(x + w / 2, y + 4);
-    ctx.lineTo(x + w / 2 + 22, y + 12 + wave);
-    ctx.lineTo(x + w / 2, y + 24);
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  private drawPlayer(
-    x: number,
-    y: number,
-    w: number,
-    h: number,
-    facing: number,
-    onGround: boolean,
-    t: number
-  ) {
-    const ctx = this.ctx;
-    const squash = onGround && Math.abs(this.player.vx) > 20 ? 1 + Math.sin(t * 20) * 0.05 : 1;
-    const hh = h * squash;
-    const yy = y + (h - hh);
-    ctx.fillStyle = '#38bdf8';
-    ctx.fillRect(x, yy, w, hh);
-    ctx.fillStyle = '#0f172a';
-    ctx.fillRect(x + (facing > 0 ? 10 : 2), yy + 8, 10, 8);
-    ctx.fillStyle = '#7dd3fc';
-    ctx.fillRect(x + (facing > 0 ? 12 : 4), yy + 10, 6, 4);
-    ctx.strokeStyle = '#e2e8f0';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(x + w / 2, yy);
-    ctx.lineTo(x + w / 2, yy - 8);
-    ctx.stroke();
-    ctx.fillStyle = '#f43f5e';
-    ctx.beginPath();
-    ctx.arc(x + w / 2, yy - 10, 3, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#0369a1';
-    ctx.fillRect(x + 2, yy + hh - 6, 7, 6);
-    ctx.fillRect(x + w - 9, yy + hh - 6, 7, 6);
-  }
-
   private drawMenu() {
     const ctx = this.ctx;
     const W = this.w;
     const H = this.h;
-    ctx.fillStyle = 'rgba(15,23,42,0.35)';
+    ctx.fillStyle = 'rgba(15,23,42,0.4)';
     ctx.fillRect(0, 0, W, H);
+
+    drawCourier(ctx, W / 2 - 12, H * 0.38, 24, 36, 1, true, 80, this.anim);
+
     ctx.textAlign = 'center';
     ctx.fillStyle = '#f8fafc';
-    ctx.font = 'bold 42px system-ui,sans-serif';
-    ctx.fillText(GAME_NAME, W / 2, H * 0.28);
+    ctx.font = 'bold 44px system-ui,sans-serif';
+    ctx.fillText(GAME_NAME, W / 2, H * 0.22);
     ctx.font = '16px system-ui,sans-serif';
     ctx.fillStyle = '#bae6fd';
-    ctx.fillText('Leap. Loot. Deliver.', W / 2, H * 0.28 + 36);
-    this.drawPlayer(W / 2 - 11, H * 0.42, 22, 28, 1, true, this.anim);
+    ctx.fillText('Leap. Loot. Deliver.', W / 2, H * 0.22 + 32);
+
     ctx.fillStyle = '#e2e8f0';
     ctx.font = '14px system-ui,sans-serif';
-    ctx.fillText('Tap PLAY or press Enter', W / 2, H * 0.58);
+    ctx.fillText('Tap PLAY or press Enter', W / 2, H * 0.62);
     ctx.fillStyle = '#94a3b8';
     ctx.font = '12px system-ui,sans-serif';
-    ctx.fillText('Arrow keys / WASD · Space jump', W / 2, H * 0.58 + 22);
-    ctx.fillText('Mobile: on-screen buttons', W / 2, H * 0.58 + 40);
+    ctx.fillText('Arrow keys / WASD · Space jump', W / 2, H * 0.62 + 22);
+    ctx.fillText('Mobile: on-screen buttons', W / 2, H * 0.62 + 40);
   }
 }
