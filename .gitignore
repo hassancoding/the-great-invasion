@@ -34,3 +34,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Vite / Phaser build
+dist-game/
+.vite/
+*.local

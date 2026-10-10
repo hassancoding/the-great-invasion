@@ -1,0 +1,92 @@
+{
+  "version": "1.0.0",
+  "wave": 1,
+  "note": "Wave 1 uses Web Audio synthesis. Replace paths with real OGG/MP3 when production audio lands; event keys stay stable.",
+  "buses": ["master", "music", "sfx", "ambience"],
+  "defaults": {
+    "master": 1.0,
+    "music": 0.45,
+    "sfx": 0.7,
+    "ambience": 0.35
+  },
+  "music": {
+    "menu": {
+      "id": "echoes_of_the_riftlands",
+      "title": "Echoes of the Riftlands",
+      "trigger": "MenuScene",
+      "durationHintSec": "60-90",
+      "loop": true,
+      "file": "assets/audio/music/echoes_of_the_riftlands.ogg",
+      "status": "procedural-wave1"
+    },
+    "explore": {
+      "id": "the_failing_well",
+      "title": "The Failing Well",
+      "trigger": "sector explore mode",
+      "durationHintSec": "60-120",
+      "loop": true,
+      "file": "assets/audio/music/the_failing_well.ogg",
+      "status": "procedural-wave1"
+    },
+    "combat": {
+      "id": "dominion_rising",
+      "title": "Dominion Rising",
+      "trigger": "surge / combat pressure",
+      "durationHintSec": "60-90",
+      "loop": true,
+      "file": "assets/audio/music/dominion_rising.ogg",
+      "status": "procedural-wave1"
+    },
+    "well": {
+      "id": "wells_of_fate",
+      "title": "Wells of Fate",
+      "trigger": "claiming Aether Well",
+      "durationHintSec": "30-60",
+      "loop": true,
+      "file": "assets/audio/music/wells_of_fate.ogg",
+      "status": "procedural-wave1"
+    },
+    "boss": {
+      "id": "heart_of_the_rift",
+      "title": "Heart of the Rift",
+      "trigger": "elite / boss set-piece",
+      "durationHintSec": "90-150",
+      "loop": true,
+      "file": "assets/audio/music/heart_of_the_rift.ogg",
+      "status": "procedural-wave1"
+    }
+  },
+  "sfx": {
+    "jump": { "event": "player.jump", "category": "movement", "file": "assets/audio/sfx/jump.ogg" },
+    "land": { "event": "player.land", "category": "movement", "file": "assets/audio/sfx/land.ogg" },
+    "dash": { "event": "player.dash", "category": "movement", "file": "assets/audio/sfx/dash.ogg" },
+    "slash": { "event": "combat.light", "category": "combat", "file": "assets/audio/sfx/slash.ogg" },
+    "heavy": { "event": "combat.heavy", "category": "combat", "file": "assets/audio/sfx/heavy.ogg" },
+    "hit": { "event": "combat.hit", "category": "combat", "file": "assets/audio/sfx/hit.ogg" },
+    "stomp": { "event": "combat.stomp", "category": "combat", "file": "assets/audio/sfx/stomp.ogg" },
+    "hurt": { "event": "player.hurt", "category": "combat", "file": "assets/audio/sfx/hurt.ogg", "duckMusic": true },
+    "crystal": { "event": "pickup.crystal", "category": "magic", "file": "assets/audio/sfx/crystal.ogg" },
+    "bounce": { "event": "env.bounce", "category": "environment", "file": "assets/audio/sfx/bounce.ogg" },
+    "well_hum": { "event": "well.near", "category": "magic", "file": "assets/audio/sfx/well_hum.ogg" },
+    "well_charge": { "event": "well.claiming", "category": "magic", "file": "assets/audio/sfx/well_charge.ogg" },
+    "well_stable": { "event": "well.stabilized", "category": "magic", "file": "assets/audio/sfx/well_stable.ogg" },
+    "surge": { "event": "threat.surge", "category": "combat", "file": "assets/audio/sfx/surge.ogg" },
+    "reaver_charge": { "event": "enemy.elite.charge", "category": "combat", "file": "assets/audio/sfx/reaver_charge.ogg" },
+    "hulk_slam": { "event": "enemy.hulk.slam", "category": "combat", "file": "assets/audio/sfx/hulk_slam.ogg" },
+    "shield_block": { "event": "enemy.legionnaire.block", "category": "combat", "file": "assets/audio/sfx/shield_block.ogg" },
+    "victory": { "event": "run.win", "category": "ui", "file": "assets/audio/sfx/victory.ogg" },
+    "defeat": { "event": "run.lose", "category": "ui", "file": "assets/audio/sfx/defeat.ogg" },
+    "ui_click": { "event": "ui.click", "category": "ui", "file": "assets/audio/sfx/ui_click.ogg" },
+    "ui_confirm": { "event": "ui.confirm", "category": "ui", "file": "assets/audio/sfx/ui_confirm.ogg" },
+    "star": { "event": "results.star", "category": "ui", "file": "assets/audio/sfx/star.ogg" }
+  },
+  "reactive": [
+    { "gameplay": "Enter sector", "audio": "explore bed fade in" },
+    { "gameplay": "First enemy / surge", "audio": "combat bed + tension layer" },
+    { "gameplay": "Claiming Well", "audio": "well bed + charge ticks" },
+    { "gameplay": "Well stabilized", "audio": "well_stable sting → surge" },
+    { "gameplay": "Aether Reaver spawn", "audio": "boss bed optional" },
+    { "gameplay": "Heavy player hit", "audio": "hurt SFX + music duck" },
+    { "gameplay": "Victory / defeat", "audio": "sting then results silence/menu" }
+  ]
+}

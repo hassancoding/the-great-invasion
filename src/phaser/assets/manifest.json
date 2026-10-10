@@ -1,0 +1,88 @@
+{
+  "version": "1.0.0",
+  "style": "stylized-2d-fantasy",
+  "source": "Game Asset Sheet — The Great Invasion",
+  "specs": {
+    "characterFrame": "96x96",
+    "smallEnemyFrame": "64x64",
+    "largeEnemyFrame": "128x128",
+    "tile": "32x32",
+    "uiIcon": "64x64",
+    "format": "transparent-png + json-atlas"
+  },
+  "characters": {
+    "arin": {
+      "id": "arin",
+      "name": "Arin Solwright",
+      "faction": "Skybound Concord",
+      "frameSize": [96, 96],
+      "anchor": [0.5, 1],
+      "animations": {
+        "idle": { "frames": ["arin_idle_0"], "frameRate": 6, "repeat": -1 },
+        "run": { "frames": ["arin_run_0", "arin_run_1"], "frameRate": 10, "repeat": -1 },
+        "jump": { "frames": ["arin_jump_0"], "frameRate": 8, "repeat": 0 },
+        "attack_light": { "frames": ["arin_atk_l_0", "arin_atk_l_1"], "frameRate": 14, "repeat": 0 },
+        "attack_heavy": { "frames": ["arin_atk_h_0", "arin_atk_h_1"], "frameRate": 12, "repeat": 0 },
+        "hurt": { "frames": ["arin_hurt_0"], "frameRate": 8, "repeat": 0 },
+        "death": { "frames": ["arin_death_0"], "frameRate": 6, "repeat": 0 }
+      },
+      "palette": {
+        "armor": "#0ea5e9",
+        "plate": "#e0f2fe",
+        "blade": "#38bdf8",
+        "hair": "#78350f",
+        "skin": "#fcd34d"
+      }
+    }
+  },
+  "enemies": {
+    "graveling": {
+      "id": "graveling",
+      "name": "Graveling",
+      "faction": "Obsidian Dominion",
+      "frameSize": [64, 64],
+      "hp": 1,
+      "speed": 100,
+      "palette": { "body": "#6d28d9", "eye": "#67e8f9" }
+    },
+    "legionnaire": {
+      "id": "legionnaire",
+      "name": "Shard Legionnaire",
+      "faction": "Obsidian Dominion",
+      "frameSize": [96, 96],
+      "hp": 2,
+      "speed": 70,
+      "palette": { "body": "#4c1d95", "shield": "#6366f1", "visor": "#67e8f9" }
+    },
+    "hulk": {
+      "id": "hulk",
+      "name": "Obsidian Hulk",
+      "faction": "Obsidian Dominion",
+      "frameSize": [128, 128],
+      "hp": 4,
+      "speed": 45,
+      "palette": { "body": "#4c1d95", "core": "#c084fc" }
+    },
+    "elite": {
+      "id": "elite",
+      "name": "Aether Reaver",
+      "faction": "Obsidian Dominion",
+      "frameSize": [128, 128],
+      "hp": 8,
+      "speed": 55,
+      "palette": { "body": "#86198f", "claw": "#f0abfc", "core": "#e879f9" }
+    }
+  },
+  "environment": {
+    "tileset": "riftlands_floating",
+    "tileSize": 32,
+    "well": { "id": "aether_well", "size": [48, 64] },
+    "biomes": ["skybound", "verdant", "obsidian", "ashfall"]
+  },
+  "fx": {
+    "slash_light": "cyan_arc",
+    "slash_heavy": "cyan_flash",
+    "crystal": "aether_crystal",
+    "well_pulse": "cyan_column"
+  }
+}
