@@ -10,8 +10,8 @@ export type Player = Rect & {
   alive: boolean;
 };
 
-/** Dominion roster — P1 combat */
-export type EnemyKind = 'graveling' | 'legionnaire' | 'hulk';
+/** Dominion roster — P1 combat + P3 elite */
+export type EnemyKind = 'graveling' | 'legionnaire' | 'hulk' | 'elite';
 
 export type Enemy = Rect & {
   kind: EnemyKind;
@@ -24,6 +24,9 @@ export type Enemy = Rect & {
   stun: number;
   /** flash white on hit */
   hitFlash: number;
+  /** elite charge cooldown / windup */
+  chargeCd?: number;
+  charging?: boolean;
 };
 
 export type Coin = Rect & { taken: boolean };
