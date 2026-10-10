@@ -1,11 +1,11 @@
 {
-  "name": "Bolt Hop",
-  "short_name": "Bolt Hop",
-  "description": "Leap. Loot. Deliver. Jump platforms, collect coins, reach the beacon.",
+  "name": "The Great Invasion",
+  "short_name": "Great Invasion",
+  "description": "Hold the line. Claim the Well. Leap Riftlands ruins and stabilize Aether Wells.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
+  "background_color": "#050814",
+  "theme_color": "#050814",
   "orientation": "any",
   "icons": [
     {
