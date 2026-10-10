@@ -45,7 +45,7 @@ function makeEnemy(kind: EnemyKind, x: number, y: number): Enemy {
     };
   }
   if (kind === 'elite') {
-    // Orun Reaver Captain — mini-boss
+    // Aether Reaver — elite mini-boss (asset sheet)
     return {
       kind,
       x: x - 2,
