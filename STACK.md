@@ -6,7 +6,7 @@
 |-------|--------|
 | Engine | **Phaser 3** (Arcade Physics) |
 | Language | **TypeScript** |
-| Bundler | **Vite 6** |
+| Bundler | **Vite 5** |
 | Delivery | Web + **PWA** (`vite-plugin-pwa`) |
 | Assets | Transparent PNG + JSON atlas (production); procedural sheet-matched textures until sheets land |
 
