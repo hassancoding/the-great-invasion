@@ -1,20 +1,22 @@
 /**
  * The Great Invasion — Audio system (Wave 1)
  *
- * Buses: master / music / sfx / ambience
- * Wave 1: Web Audio synthesized SFX + layered procedural music beds
- * Production path: swap in OGG/MP3 via manifest keys without changing call sites
+ * Loads OGG from public/assets/audio when available (Phaser sound).
+ * Falls back to Web Audio synthesis if a key is missing.
  *
- * Mobile: unlock() on first pointer/key — browsers block autoplay until gesture.
+ * Buses: master / music / sfx / ambience
+ * Mobile: unlock() on first gesture.
  */
+
+import type Phaser from 'phaser';
 
 export type MusicState =
   | 'none'
-  | 'menu' // Echoes of the Riftlands
-  | 'explore' // The Failing Well
-  | 'combat' // Dominion Rising
-  | 'well' // Wells of Fate
-  | 'boss' // Heart of the Rift
+  | 'menu'
+  | 'explore'
+  | 'combat'
+  | 'well'
+  | 'boss'
   | 'victory'
   | 'defeat';
 
@@ -30,30 +32,108 @@ type ToneOpts = {
   bus?: Bus;
 };
 
+const MUSIC_KEYS: Record<Exclude<MusicState, 'none' | 'victory' | 'defeat'>, string> = {
+  menu: 'music_menu',
+  explore: 'music_explore',
+  combat: 'music_combat',
+  well: 'music_well',
+  boss: 'music_boss',
+};
+
+const SFX_FILES: Record<string, string> = {
+  jump: 'sfx_jump',
+  land: 'sfx_land',
+  dash: 'sfx_dash',
+  slash: 'sfx_slash',
+  heavy: 'sfx_heavy',
+  hit: 'sfx_hit',
+  stomp: 'sfx_stomp',
+  hurt: 'sfx_hurt',
+  crystal: 'sfx_crystal',
+  bounce: 'sfx_bounce',
+  well_hum: 'sfx_well_hum',
+  well_charge: 'sfx_well_charge',
+  well_stable: 'sfx_well_stable',
+  surge: 'sfx_surge',
+  reaver_charge: 'sfx_reaver_charge',
+  hulk_slam: 'sfx_hulk_slam',
+  shield_block: 'sfx_shield_block',
+  victory: 'sfx_victory',
+  defeat: 'sfx_defeat',
+  ui_click: 'sfx_ui_click',
+  ui_confirm: 'sfx_ui_confirm',
+  star: 'sfx_star',
+};
+
+/** Phaser load keys → file paths (relative to public/) */
+export const AUDIO_LOAD_LIST: { key: string; path: string }[] = [
+  { key: 'music_menu', path: 'assets/audio/music/echoes_of_the_riftlands.ogg' },
+  { key: 'music_explore', path: 'assets/audio/music/the_failing_well.ogg' },
+  { key: 'music_combat', path: 'assets/audio/music/dominion_rising.ogg' },
+  { key: 'music_well', path: 'assets/audio/music/wells_of_fate.ogg' },
+  { key: 'music_boss', path: 'assets/audio/music/heart_of_the_rift.ogg' },
+  { key: 'sfx_jump', path: 'assets/audio/sfx/jump.ogg' },
+  { key: 'sfx_land', path: 'assets/audio/sfx/land.ogg' },
+  { key: 'sfx_dash', path: 'assets/audio/sfx/dash.ogg' },
+  { key: 'sfx_slash', path: 'assets/audio/sfx/slash.ogg' },
+  { key: 'sfx_heavy', path: 'assets/audio/sfx/heavy.ogg' },
+  { key: 'sfx_hit', path: 'assets/audio/sfx/hit.ogg' },
+  { key: 'sfx_stomp', path: 'assets/audio/sfx/stomp.ogg' },
+  { key: 'sfx_hurt', path: 'assets/audio/sfx/hurt.ogg' },
+  { key: 'sfx_crystal', path: 'assets/audio/sfx/crystal.ogg' },
+  { key: 'sfx_bounce', path: 'assets/audio/sfx/bounce.ogg' },
+  { key: 'sfx_well_hum', path: 'assets/audio/sfx/well_hum.ogg' },
+  { key: 'sfx_well_charge', path: 'assets/audio/sfx/well_charge.ogg' },
+  { key: 'sfx_well_stable', path: 'assets/audio/sfx/well_stable.ogg' },
+  { key: 'sfx_surge', path: 'assets/audio/sfx/surge.ogg' },
+  { key: 'sfx_reaver_charge', path: 'assets/audio/sfx/reaver_charge.ogg' },
+  { key: 'sfx_hulk_slam', path: 'assets/audio/sfx/hulk_slam.ogg' },
+  { key: 'sfx_shield_block', path: 'assets/audio/sfx/shield_block.ogg' },
+  { key: 'sfx_victory', path: 'assets/audio/sfx/victory.ogg' },
+  { key: 'sfx_defeat', path: 'assets/audio/sfx/defeat.ogg' },
+  { key: 'sfx_ui_click', path: 'assets/audio/sfx/ui_click.ogg' },
+  { key: 'sfx_ui_confirm', path: 'assets/audio/sfx/ui_confirm.ogg' },
+  { key: 'sfx_star', path: 'assets/audio/sfx/star.ogg' },
+];
+
 class AudioManagerImpl {
+  private scene: Phaser.Scene | null = null;
   private ctx: AudioContext | null = null;
   private unlocked = false;
   private musicState: MusicState = 'none';
-  private musicNodes: { stop: () => void }[] = [];
+  private currentMusic: Phaser.Sound.BaseSound | null = null;
   private musicTimer: ReturnType<typeof setInterval> | null = null;
+  private useFiles = false;
 
-  /** Linear gains 0–1 */
   private volumes: Record<Bus, number> = {
     master: 1,
-    music: 0.45,
-    sfx: 0.7,
+    music: 0.4,
+    sfx: 0.75,
     ambience: 0.35,
   };
-
   private muted = false;
 
-  // ─── lifecycle ───────────────────────────────────────────
+  attach(scene: Phaser.Scene) {
+    this.scene = scene;
+    this.useFiles = scene.cache.audio.exists('sfx_jump');
+  }
 
   unlock() {
     const c = this.ensure();
     if (!c) return;
     if (c.state === 'suspended') void c.resume();
     this.unlocked = true;
+    if (this.scene?.sound) {
+      try {
+        // Phaser 3 unlock
+        const snd = this.scene.sound as Phaser.Sound.WebAudioSoundManager;
+        if (typeof (snd as unknown as { unlock: () => void }).unlock === 'function') {
+          (snd as unknown as { unlock: () => void }).unlock();
+        }
+      } catch {
+        /* ignore */
+      }
+    }
   }
 
   isUnlocked() {
@@ -62,6 +142,9 @@ class AudioManagerImpl {
 
   setVolume(bus: Bus, value: number) {
     this.volumes[bus] = Math.max(0, Math.min(1, value));
+    if (bus === 'music' && this.currentMusic && 'setVolume' in this.currentMusic) {
+      (this.currentMusic as Phaser.Sound.WebAudioSound).setVolume(this.busGain('music'));
+    }
   }
 
   getVolume(bus: Bus) {
@@ -73,15 +156,35 @@ class AudioManagerImpl {
     if (m) this.stopMusic();
   }
 
-  // ─── music state machine ─────────────────────────────────
-
-  /** Crossfade-style switch of procedural beds by gameplay state */
   setMusic(state: MusicState) {
-    if (state === this.musicState) return;
+    if (state === this.musicState && state !== 'victory' && state !== 'defeat') return;
     this.musicState = state;
     this.stopMusic();
     if (this.muted || state === 'none') return;
     this.unlock();
+
+    if (state === 'victory') {
+      this.playSfxKey('victory');
+      return;
+    }
+    if (state === 'defeat') {
+      this.playSfxKey('defeat');
+      return;
+    }
+
+    const key = MUSIC_KEYS[state];
+    if (this.useFiles && this.scene && this.scene.cache.audio.exists(key)) {
+      try {
+        this.currentMusic = this.scene.sound.add(key, {
+          loop: true,
+          volume: this.busGain('music'),
+        });
+        this.currentMusic.play();
+        return;
+      } catch {
+        /* synth fallback */
+      }
+    }
 
     switch (state) {
       case 'menu':
@@ -99,112 +202,140 @@ class AudioManagerImpl {
       case 'boss':
         this.startBossBed();
         break;
-      case 'victory':
-        this.sfxVictory();
-        break;
-      case 'defeat':
-        this.sfxDefeat();
-        break;
     }
   }
 
-  /** Layer pressure into current bed (Threat Director escalation) */
   addTensionLayer() {
     if (this.muted || !this.unlocked) return;
-    // Short taiko-like hit + rising drone pulse
     this.tone({ freq: 90, dur: 0.35, type: 'triangle', gain: 0.06, bus: 'music' });
     this.tone({ freq: 55, dur: 0.5, type: 'sine', gain: 0.04, slideTo: 70, bus: 'music', delay: 20 });
   }
 
   stopMusic() {
-    for (const n of this.musicNodes) n.stop();
-    this.musicNodes = [];
+    if (this.currentMusic) {
+      try {
+        this.currentMusic.stop();
+        this.currentMusic.destroy();
+      } catch {
+        /* ignore */
+      }
+      this.currentMusic = null;
+    }
     if (this.musicTimer) {
       clearInterval(this.musicTimer);
       this.musicTimer = null;
     }
   }
 
-  // ─── Wave 1 SFX (combat / movement / well / UI) ───────────
-
   sfxJump() {
-    this.tone({ freq: 280, dur: 0.09, type: 'square', gain: 0.055, slideTo: 420 });
+    this.playSfx('jump', () => this.tone({ freq: 280, dur: 0.09, type: 'square', gain: 0.055, slideTo: 420 }));
   }
   sfxLand() {
-    this.tone({ freq: 120, dur: 0.04, type: 'triangle', gain: 0.035 });
+    this.playSfx('land', () => this.tone({ freq: 120, dur: 0.04, type: 'triangle', gain: 0.035 }));
   }
   sfxDash() {
-    this.tone({ freq: 400, dur: 0.1, type: 'sawtooth', gain: 0.04, slideTo: 180 });
+    this.playSfx('dash', () => this.tone({ freq: 400, dur: 0.1, type: 'sawtooth', gain: 0.04, slideTo: 180 }));
   }
   sfxSlash() {
-    this.tone({ freq: 520, dur: 0.06, type: 'square', gain: 0.05, slideTo: 280 });
+    this.playSfx('slash', () => this.tone({ freq: 520, dur: 0.06, type: 'square', gain: 0.05, slideTo: 280 }));
   }
   sfxHeavy() {
-    this.tone({ freq: 160, dur: 0.14, type: 'sawtooth', gain: 0.07, slideTo: 70 });
+    this.playSfx('heavy', () => this.tone({ freq: 160, dur: 0.14, type: 'sawtooth', gain: 0.07, slideTo: 70 }));
   }
   sfxHit() {
-    this.tone({ freq: 240, dur: 0.07, type: 'triangle', gain: 0.06, slideTo: 120 });
+    this.playSfx('hit', () => this.tone({ freq: 240, dur: 0.07, type: 'triangle', gain: 0.06, slideTo: 120 }));
   }
   sfxStomp() {
-    this.tone({ freq: 180, dur: 0.12, type: 'triangle', gain: 0.09, slideTo: 90 });
+    this.playSfx('stomp', () => this.tone({ freq: 180, dur: 0.12, type: 'triangle', gain: 0.09, slideTo: 90 }));
   }
   sfxHurt() {
-    this.tone({ freq: 220, dur: 0.18, type: 'sawtooth', gain: 0.06, slideTo: 80 });
+    this.playSfx('hurt', () => this.tone({ freq: 220, dur: 0.18, type: 'sawtooth', gain: 0.06, slideTo: 80 }));
     this.duckMusic(0.25, 0.2);
   }
   sfxCrystal() {
-    this.tone({ freq: 880, dur: 0.07, type: 'sine', gain: 0.06 });
-    this.tone({ freq: 1320, dur: 0.08, type: 'sine', gain: 0.045, delay: 40 });
+    this.playSfx('crystal', () => {
+      this.tone({ freq: 880, dur: 0.07, type: 'sine', gain: 0.06 });
+      this.tone({ freq: 1320, dur: 0.08, type: 'sine', gain: 0.045, delay: 40 });
+    });
   }
   sfxBounce() {
-    this.tone({ freq: 360, dur: 0.1, type: 'triangle', gain: 0.07, slideTo: 620 });
+    this.playSfx('bounce', () => this.tone({ freq: 360, dur: 0.1, type: 'triangle', gain: 0.07, slideTo: 620 }));
   }
   sfxWellHum() {
-    this.tone({ freq: 196, dur: 0.4, type: 'sine', gain: 0.03, bus: 'ambience' });
-    this.tone({ freq: 392, dur: 0.35, type: 'sine', gain: 0.02, bus: 'ambience', delay: 30 });
+    this.playSfx('well_hum', () => {
+      this.tone({ freq: 196, dur: 0.4, type: 'sine', gain: 0.03, bus: 'ambience' });
+      this.tone({ freq: 392, dur: 0.35, type: 'sine', gain: 0.02, bus: 'ambience', delay: 30 });
+    });
   }
   sfxWellCharge() {
-    this.tone({ freq: 220, dur: 0.25, type: 'sine', gain: 0.04, slideTo: 440, bus: 'ambience' });
+    this.playSfx('well_charge', () =>
+      this.tone({ freq: 220, dur: 0.25, type: 'sine', gain: 0.04, slideTo: 440, bus: 'ambience' })
+    );
   }
   sfxWellStable() {
-    this.tone({ freq: 523, dur: 0.12, type: 'sine', gain: 0.06 });
-    this.tone({ freq: 659, dur: 0.12, type: 'sine', gain: 0.055, delay: 90 });
-    this.tone({ freq: 784, dur: 0.2, type: 'sine', gain: 0.06, delay: 180 });
+    this.playSfx('well_stable', () => {
+      this.tone({ freq: 523, dur: 0.12, type: 'sine', gain: 0.06 });
+      this.tone({ freq: 659, dur: 0.12, type: 'sine', gain: 0.055, delay: 90 });
+      this.tone({ freq: 784, dur: 0.2, type: 'sine', gain: 0.06, delay: 180 });
+    });
   }
   sfxSurge() {
-    this.tone({ freq: 100, dur: 0.25, type: 'sawtooth', gain: 0.08, slideTo: 50 });
-    this.tone({ freq: 60, dur: 0.35, type: 'triangle', gain: 0.05, delay: 40 });
+    this.playSfx('surge', () => {
+      this.tone({ freq: 100, dur: 0.25, type: 'sawtooth', gain: 0.08, slideTo: 50 });
+      this.tone({ freq: 60, dur: 0.35, type: 'triangle', gain: 0.05, delay: 40 });
+    });
   }
   sfxReaverCharge() {
-    this.tone({ freq: 180, dur: 0.2, type: 'sawtooth', gain: 0.05, slideTo: 320 });
+    this.playSfx('reaver_charge', () =>
+      this.tone({ freq: 180, dur: 0.2, type: 'sawtooth', gain: 0.05, slideTo: 320 })
+    );
   }
   sfxHulkSlam() {
-    this.tone({ freq: 70, dur: 0.28, type: 'triangle', gain: 0.1, slideTo: 40 });
+    this.playSfx('hulk_slam', () => this.tone({ freq: 70, dur: 0.28, type: 'triangle', gain: 0.1, slideTo: 40 }));
   }
   sfxShieldBlock() {
-    this.tone({ freq: 600, dur: 0.05, type: 'square', gain: 0.04, slideTo: 200 });
+    this.playSfx('shield_block', () =>
+      this.tone({ freq: 600, dur: 0.05, type: 'square', gain: 0.04, slideTo: 200 })
+    );
   }
   sfxVictory() {
-    this.tone({ freq: 523, dur: 0.1, type: 'sine', gain: 0.06 });
-    this.tone({ freq: 659, dur: 0.1, type: 'sine', gain: 0.06, delay: 90 });
-    this.tone({ freq: 784, dur: 0.22, type: 'sine', gain: 0.07, delay: 180 });
+    this.playSfxKey('victory');
   }
   sfxDefeat() {
-    this.tone({ freq: 300, dur: 0.25, type: 'sawtooth', gain: 0.06, slideTo: 90 });
+    this.playSfxKey('defeat');
   }
   sfxUiClick() {
-    this.tone({ freq: 660, dur: 0.04, type: 'sine', gain: 0.035 });
+    this.playSfx('ui_click', () => this.tone({ freq: 660, dur: 0.04, type: 'sine', gain: 0.035 }));
   }
   sfxUiConfirm() {
-    this.tone({ freq: 520, dur: 0.06, type: 'sine', gain: 0.04 });
-    this.tone({ freq: 780, dur: 0.08, type: 'sine', gain: 0.035, delay: 50 });
+    this.playSfx('ui_confirm', () => {
+      this.tone({ freq: 520, dur: 0.06, type: 'sine', gain: 0.04 });
+      this.tone({ freq: 780, dur: 0.08, type: 'sine', gain: 0.035, delay: 50 });
+    });
   }
   sfxStar() {
-    this.tone({ freq: 988, dur: 0.08, type: 'sine', gain: 0.05 });
-    this.tone({ freq: 1319, dur: 0.12, type: 'sine', gain: 0.04, delay: 60 });
+    this.playSfx('star', () => {
+      this.tone({ freq: 988, dur: 0.08, type: 'sine', gain: 0.05 });
+      this.tone({ freq: 1319, dur: 0.12, type: 'sine', gain: 0.04, delay: 60 });
+    });
   }
 
-  // ─── internals ───────────────────────────────────────────
+  private playSfx(name: string, fallback: () => void) {
+    if (this.playSfxKey(name)) return;
+    fallback();
+  }
+
+  private playSfxKey(name: string): boolean {
+    const key = SFX_FILES[name];
+    if (!key || !this.useFiles || !this.scene || !this.scene.cache.audio.exists(key)) return false;
+    try {
+      this.unlock();
+      this.scene.sound.play(key, { volume: this.busGain('sfx') });
+      return true;
+    } catch {
+      return false;
+    }
+  }
 
   private ensure(): AudioContext | null {
     if (typeof window === 'undefined') return null;
@@ -252,17 +383,19 @@ class AudioManagerImpl {
   private duckMusic(factor: number, seconds: number) {
     const prev = this.volumes.music;
     this.volumes.music = prev * factor;
+    if (this.currentMusic && 'setVolume' in this.currentMusic) {
+      (this.currentMusic as Phaser.Sound.WebAudioSound).setVolume(this.busGain('music'));
+    }
     setTimeout(() => {
       this.volumes.music = prev;
+      if (this.currentMusic && 'setVolume' in this.currentMusic) {
+        (this.currentMusic as Phaser.Sound.WebAudioSound).setVolume(this.busGain('music'));
+      }
     }, seconds * 1000);
   }
 
-  /** Soft looping pad — menu / Echoes of the Riftlands */
   private startMenuBed() {
-    const c = this.ensure();
-    if (!c) return;
     const playChord = () => {
-      // Aether motif: A minor-ish open intervals
       for (const f of [220, 330, 440, 554]) {
         this.tone({ freq: f, dur: 1.8, type: 'sine', gain: 0.018, bus: 'music' });
       }
@@ -270,8 +403,6 @@ class AudioManagerImpl {
     playChord();
     this.musicTimer = setInterval(playChord, 3200);
   }
-
-  /** Exploration — restrained pulse */
   private startExploreBed() {
     const pulse = () => {
       this.tone({ freq: 110, dur: 0.5, type: 'sine', gain: 0.022, bus: 'music' });
@@ -280,8 +411,6 @@ class AudioManagerImpl {
     pulse();
     this.musicTimer = setInterval(pulse, 2400);
   }
-
-  /** Combat — Dominion Rising percussion bed */
   private startCombatBed() {
     const beat = () => {
       this.tone({ freq: 80, dur: 0.12, type: 'triangle', gain: 0.05, bus: 'music' });
@@ -291,8 +420,6 @@ class AudioManagerImpl {
     beat();
     this.musicTimer = setInterval(beat, 900);
   }
-
-  /** Well stabilization — crystal resolution */
   private startWellBed() {
     const shimmer = () => {
       this.tone({ freq: 523, dur: 0.6, type: 'sine', gain: 0.02, bus: 'music' });
@@ -302,8 +429,6 @@ class AudioManagerImpl {
     shimmer();
     this.musicTimer = setInterval(shimmer, 1800);
   }
-
-  /** Boss — heavier pulse */
   private startBossBed() {
     const beat = () => {
       this.tone({ freq: 55, dur: 0.2, type: 'sawtooth', gain: 0.06, bus: 'music' });
@@ -315,5 +440,4 @@ class AudioManagerImpl {
   }
 }
 
-/** Singleton — import anywhere in Phaser scenes */
 export const Audio = new AudioManagerImpl();

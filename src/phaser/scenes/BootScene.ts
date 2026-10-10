@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { generateSheetTextures } from '../utils/textureFactory';
-import { Audio } from '../systems/AudioManager';
+import { Audio, AUDIO_LOAD_LIST } from '../systems/AudioManager';
 
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -8,12 +8,17 @@ export class BootScene extends Phaser.Scene {
   }
 
   preload() {
-    // Production: this.load.audio('music_menu', 'assets/audio/music/echoes_of_the_riftlands.ogg');
-    // Until files exist, AudioManager uses Web Audio synthesis (Wave 1).
+    // Wave 1 generated OGG assets
+    for (const { key, path } of AUDIO_LOAD_LIST) {
+      this.load.audio(key, path);
+    }
+    // Optional production atlases later:
+    // this.load.atlas('arin', 'assets/characters/arin.png', 'assets/characters/arin.json');
   }
 
   create() {
     generateSheetTextures(this);
+    Audio.attach(this);
 
     const unlock = () => {
       Audio.unlock();
