@@ -64,7 +64,7 @@ export function planSurge(stats: ThreatStats, sectorIndex: number): WavePlan {
   // Late sectors lean into elite pressure when player is competent
   if (sectorIndex >= 4 && (stats.kills >= 3 || heavyRatio > 0.3)) {
     return {
-      label: 'ORUN ADVANCE',
+      label: 'REAVER ADVANCE',
       kinds: scaleKinds(['elite', 'graveling', 'legionnaire'], scale),
     };
   }
@@ -154,14 +154,14 @@ export function spawnEnemyAt(
   };
 }
 
-/** Late-sector apex: inject Orun elite into the surge */
+/** Late-sector apex: inject Aether Reaver elite into the surge */
 export function planApexElite(stats: ThreatStats, sectorIndex: number): WavePlan | null {
   if (sectorIndex < 3) return null;
   const totalHits = stats.slashHits + stats.heavyHits + stats.stomps;
   // Harder response if player is strong
   if (stats.kills >= 4 || totalHits >= 6 || sectorIndex >= 5) {
     return {
-      label: 'ORUN REAVER',
+      label: 'AETHER REAVER',
       kinds: ['elite', 'legionnaire', 'graveling'],
     };
   }
