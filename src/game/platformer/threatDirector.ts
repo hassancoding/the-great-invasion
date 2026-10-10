@@ -61,6 +61,14 @@ export function planSurge(stats: ThreatStats, sectorIndex: number): WavePlan {
     };
   }
 
+  // Late sectors lean into elite pressure when player is competent
+  if (sectorIndex >= 4 && (stats.kills >= 3 || heavyRatio > 0.3)) {
+    return {
+      label: 'ORUN ADVANCE',
+      kinds: scaleKinds(['elite', 'graveling', 'legionnaire'], scale),
+    };
+  }
+
   // Default mixed
   return {
     label: 'DOMINION SURGE',
@@ -112,6 +120,24 @@ export function spawnEnemyAt(
       hitFlash: 0,
     };
   }
+  if (kind === 'elite') {
+    return {
+      kind,
+      x,
+      y: y - 10,
+      w: 34,
+      h: 42,
+      vx: 55,
+      alive: true,
+      dir,
+      hp: 8,
+      maxHp: 8,
+      stun: 0,
+      hitFlash: 0,
+      chargeCd: 0.8,
+      charging: false,
+    };
+  }
   return {
     kind: 'legionnaire',
     x,
@@ -126,4 +152,18 @@ export function spawnEnemyAt(
     stun: 0,
     hitFlash: 0,
   };
+}
+
+/** Late-sector apex: inject Orun elite into the surge */
+export function planApexElite(stats: ThreatStats, sectorIndex: number): WavePlan | null {
+  if (sectorIndex < 3) return null;
+  const totalHits = stats.slashHits + stats.heavyHits + stats.stomps;
+  // Harder response if player is strong
+  if (stats.kills >= 4 || totalHits >= 6 || sectorIndex >= 5) {
+    return {
+      label: 'ORUN REAVER',
+      kinds: ['elite', 'legionnaire', 'graveling'],
+    };
+  }
+  return null;
 }

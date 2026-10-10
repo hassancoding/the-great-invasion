@@ -212,12 +212,15 @@ export function drawEnemy(
   h: number,
   dir: number,
   t: number,
-  kind: 'graveling' | 'legionnaire' | 'hulk' = 'legionnaire',
+  kind: 'graveling' | 'legionnaire' | 'hulk' | 'elite' = 'legionnaire',
   hp = 1,
   maxHp = 1,
-  hitFlash = 0
+  hitFlash = 0,
+  charging = false
 ) {
-  const bounce = Math.abs(Math.sin(t * (kind === 'hulk' ? 5 : 9))) * (kind === 'hulk' ? 1 : 2);
+  const bounce =
+    Math.abs(Math.sin(t * (kind === 'hulk' || kind === 'elite' ? 5 : 9))) *
+    (kind === 'hulk' || kind === 'elite' ? 1 : 2);
   const yy = y + bounce;
   const flash = hitFlash > 0;
 
@@ -238,6 +241,53 @@ export function drawEnemy(
     ctx.beginPath();
     ctx.arc(x + w / 2 + dir * 3, yy + 10, 3, 0, Math.PI * 2);
     ctx.fill();
+  } else if (kind === 'elite') {
+    // Orun Reaver Captain — taller, horned helm, ember core, charge telegraph
+    const body = ctx.createLinearGradient(x, yy, x, yy + h);
+    body.addColorStop(0, flash ? '#fecaca' : '#7f1d1d');
+    body.addColorStop(0.35, flash ? '#fca5a5' : '#450a0a');
+    body.addColorStop(1, '#1c0a0a');
+    ctx.fillStyle = body;
+    roundRect(ctx, x, yy + 4, w, h - 4, 5);
+    ctx.fill();
+    // horned helm
+    ctx.fillStyle = flash ? '#e7e5e4' : '#292524';
+    ctx.beginPath();
+    ctx.moveTo(x + 4, yy + 14);
+    ctx.lineTo(x + w * 0.5, yy - 4);
+    ctx.lineTo(x + w - 4, yy + 14);
+    ctx.closePath();
+    ctx.fill();
+    // horns
+    ctx.strokeStyle = flash ? '#fef2f2' : '#f97316';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(x + 6, yy + 8);
+    ctx.lineTo(x - 2, yy - 2);
+    ctx.moveTo(x + w - 6, yy + 8);
+    ctx.lineTo(x + w + 2, yy - 2);
+    ctx.stroke();
+    // ember core
+    const pulse = 0.55 + Math.sin(t * 8) * 0.25;
+    ctx.fillStyle = `rgba(251, 146, 60, ${pulse})`;
+    ctx.beginPath();
+    ctx.arc(x + w / 2, yy + h * 0.48, 6, 0, Math.PI * 2);
+    ctx.fill();
+    // eyes
+    ctx.fillStyle = '#fef08a';
+    ctx.fillRect(x + 8, yy + 16, 5, 3);
+    ctx.fillRect(x + w - 13, yy + 16, 5, 3);
+    // charge telegraph slash
+    if (charging) {
+      ctx.strokeStyle = 'rgba(251, 146, 60, 0.85)';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      const cx = x + (dir > 0 ? w + 6 : -6);
+      ctx.moveTo(cx, yy + 10);
+      ctx.lineTo(cx + dir * 18, yy + h * 0.5);
+      ctx.lineTo(cx, yy + h - 8);
+      ctx.stroke();
+    }
   } else if (kind === 'hulk') {
     // Heavy armored construct
     const body = ctx.createLinearGradient(x, yy, x, yy + h);
@@ -293,13 +343,13 @@ export function drawEnemy(
 
   // HP pips for multi-hit foes
   if (maxHp > 1 && hp > 0) {
-    const pipW = 5;
-    const total = maxHp * (pipW + 2) - 2;
+    const pipW = maxHp > 6 ? 4 : 5;
+    const total = maxHp * (pipW + 1) - 1;
     let px = x + (w - total) / 2;
     for (let i = 0; i < maxHp; i++) {
-      ctx.fillStyle = i < hp ? '#22d3ee' : 'rgba(15,23,42,0.7)';
+      ctx.fillStyle = i < hp ? (kind === 'elite' ? '#fb923c' : '#22d3ee') : 'rgba(15,23,42,0.7)';
       ctx.fillRect(px, y - 6, pipW, 3);
-      px += pipW + 2;
+      px += pipW + 1;
     }
   }
 }

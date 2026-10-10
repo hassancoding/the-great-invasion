@@ -52,6 +52,7 @@ import type { Enemy } from './types';
 import {
   emptyStats,
   planSurge,
+  planApexElite,
   spawnEnemyAt,
   type ThreatStats,
   type WavePlan,
@@ -486,7 +487,23 @@ export class BoltHopEngine {
       e.hitFlash = Math.max(0, e.hitFlash - dt);
 
       if (e.stun <= 0) {
-        e.x += e.dir * e.vx * dt;
+        // Elite: face player + periodic charge
+        if (e.kind === 'elite') {
+          e.chargeCd = (e.chargeCd ?? 1.5) - dt;
+          const dx = p.x + p.w / 2 - (e.x + e.w / 2);
+          if (Math.abs(dx) > 8) e.dir = (dx > 0 ? 1 : -1) as 1 | -1;
+          if (e.chargeCd <= 0 && Math.abs(dx) < 160) {
+            e.charging = true;
+            e.chargeCd = 2.4;
+            this.shake = Math.max(this.shake, 0.15);
+            this.particles.spark(e.x + e.w / 2, e.y + e.h * 0.4, '#fb923c');
+          }
+          const speed = e.charging ? e.vx * 2.6 : e.vx * 0.85;
+          e.x += e.dir * speed * dt;
+          if (e.charging && e.chargeCd < 1.9) e.charging = false;
+        } else {
+          e.x += e.dir * e.vx * dt;
+        }
         const foot = { x: e.x + (e.dir > 0 ? e.w : -2), y: e.y + e.h + 2, w: 4, h: 4 };
         const wall = { x: e.x + (e.dir > 0 ? e.w : -2), y: e.y + 4, w: 4, h: e.h - 8 };
         let hasFloor = false;
@@ -495,14 +512,20 @@ export class BoltHopEngine {
           if (aabb(foot, s)) hasFloor = true;
           if (aabb(wall, s)) hitWall = true;
         }
-        if (!hasFloor || hitWall) e.dir = (e.dir === 1 ? -1 : 1) as 1 | -1;
+        if ((!hasFloor || hitWall) && e.kind !== 'elite') {
+          e.dir = (e.dir === 1 ? -1 : 1) as 1 | -1;
+        } else if (hitWall && e.kind === 'elite') {
+          e.charging = false;
+          e.dir = (e.dir === 1 ? -1 : 1) as 1 | -1;
+        }
       }
 
       if (!aabb(p, e)) continue;
-      // Stomp — full kill on graveling/legionnaire, 2 dmg on hulk
+      // Stomp — full kill on graveling/legionnaire, 2 on hulk, 2 on elite
       if (p.vy > 0 && p.y + p.h - e.y < 18) {
         p.vy = JUMP_VELOCITY * 0.7;
-        this.damageEnemy(e, e.kind === 'hulk' ? 2 : 99, true);
+        const stompDmg = e.kind === 'hulk' || e.kind === 'elite' ? 2 : 99;
+        this.damageEnemy(e, stompDmg, true);
       } else if (this.invuln <= 0 && e.stun <= 0) {
         this.hurt();
       }
@@ -566,7 +589,7 @@ export class BoltHopEngine {
       if (heavy) this.threat.heavyHits += 1;
       else this.threat.slashHits += 1;
       let dmg = heavy ? 2 : 1;
-      if (e.kind === 'hulk' && !heavy) dmg = 1;
+      if ((e.kind === 'hulk' || e.kind === 'elite') && !heavy) dmg = 1;
       this.damageEnemy(e, dmg, false);
       // knockback
       e.x += p.facing * (heavy ? 14 : 8);
@@ -585,8 +608,20 @@ export class BoltHopEngine {
       e.alive = false;
       this.threat.kills += 1;
       if (fromStomp) this.threat.stomps += 1;
-      const pts = e.kind === 'hulk' ? STOMP_SCORE * 2 : e.kind === 'legionnaire' ? STOMP_SCORE : 80;
+      const pts =
+        e.kind === 'elite'
+          ? STOMP_SCORE * 4
+          : e.kind === 'hulk'
+            ? STOMP_SCORE * 2
+            : e.kind === 'legionnaire'
+              ? STOMP_SCORE
+              : 80;
       this.score += pts;
+      if (e.kind === 'elite') {
+        this.banner = 'ORUN FALLEN';
+        this.surgeBannerTimer = 1.6;
+        this.particles.confetti(e.x + e.w / 2, e.y);
+      }
       if (fromStomp) sfxStomp();
       this.particles.burst(e.x + e.w / 2, e.y + e.h / 2, '#f87171', 12, 140);
     }
@@ -635,10 +670,12 @@ export class BoltHopEngine {
   private beginSurge() {
     this.sectorMode = 'surge';
     this.claimProgress = 1;
-    this.surgePlan = planSurge(this.threat, this.levelIndex);
+    // Apex elite plan can override late sectors
+    const apex = planApexElite(this.threat, this.levelIndex);
+    this.surgePlan = apex ?? planSurge(this.threat, this.levelIndex);
     this.banner = this.surgePlan.label;
-    this.surgeBannerTimer = 2.2;
-    this.shake = 0.3;
+    this.surgeBannerTimer = this.surgePlan.label.includes('ORUN') ? 2.8 : 2.2;
+    this.shake = this.surgePlan.label.includes('ORUN') ? 0.45 : 0.3;
     sfxHeavy();
 
     // Clear leftover patrols; spawn adaptive wave near Well / sides
@@ -774,7 +811,8 @@ export class BoltHopEngine {
           e.kind,
           e.hp,
           e.maxHp,
-          e.hitFlash
+          e.hitFlash,
+          !!e.charging
         );
       }
     }

@@ -44,6 +44,25 @@ function makeEnemy(kind: EnemyKind, x: number, y: number): Enemy {
       hitFlash: 0,
     };
   }
+  if (kind === 'elite') {
+    // Orun Reaver Captain — mini-boss
+    return {
+      kind,
+      x: x - 2,
+      y: y - 10,
+      w: 34,
+      h: 42,
+      vx: 55,
+      alive: true,
+      dir: 1,
+      hp: 8,
+      maxHp: 8,
+      stun: 0,
+      hitFlash: 0,
+      chargeCd: 1.2,
+      charging: false,
+    };
+  }
   // legionnaire
   return {
     kind: 'legionnaire',
@@ -94,6 +113,8 @@ export function loadLevel(index: number): LevelState {
         enemies.push(makeEnemy('legionnaire', x, y));
       } else if (ch === 'H') {
         enemies.push(makeEnemy('hulk', x, y));
+      } else if (ch === 'O') {
+        enemies.push(makeEnemy('elite', x, y));
       } else if (ch === 'G') {
         goal = { x: x + 4, y: y - 16, w: 24, h: 48 };
       } else if (ch === 'P') {
