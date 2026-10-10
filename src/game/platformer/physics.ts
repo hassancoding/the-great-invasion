@@ -16,6 +16,7 @@ export function moveAndCollide(
   let y = body.y;
   let onGround = false;
 
+  // Horizontal
   x += vx * dt;
   const hb = { x, y, w: body.w, h: body.h };
   for (const s of solids) {
@@ -26,6 +27,7 @@ export function moveAndCollide(
     hb.x = x;
   }
 
+  // Vertical
   y += vy * dt;
   const vb = { x, y, w: body.w, h: body.h };
   for (const s of solids) {

@@ -8,28 +8,36 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Bolt Hop — Leap. Loot. Deliver.",
+  title: "The Great Invasion — Hold the line. Claim the Well.",
   description:
-    "Jump across sky platforms, collect coins, stomp drones, and reach the beacon. Fast mobile platformer. Play free in your browser.",
-  keywords: ["platformer", "jump game", "browser game", "mobile game", "yandex games", "arcade"],
-  authors: [{ name: "Bolt Hop" }],
+    "Leap floating ruins in the Riftlands, cut through Dominion warbands, and stabilize Aether Wells. Fast tactical platformer. Play free in your browser.",
+  keywords: [
+    "platformer",
+    "action game",
+    "browser game",
+    "mobile game",
+    "riftlands",
+    "the great invasion",
+    "arcade",
+  ],
+  authors: [{ name: "The Great Invasion" }],
   manifest: "/manifest.json",
   openGraph: {
-    title: "Bolt Hop — Leap. Loot. Deliver.",
-    description: "How far can you hop? Collect coins and beat your best score.",
+    title: "The Great Invasion",
+    description: "Hold the line. Claim the Well. Can you stabilize the Riftlands?",
     type: "website",
-    siteName: "Bolt Hop",
+    siteName: "The Great Invasion",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Bolt Hop",
-    description: "Leap. Loot. Deliver. Can you beat the score?",
+    title: "The Great Invasion",
+    description: "Hold the line. Claim the Well.",
   },
   robots: "index, follow",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Bolt Hop",
+    title: "Great Invasion",
   },
 };
 
@@ -38,7 +46,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#0f172a",
+  themeColor: "#050814",
 };
 
 export default function RootLayout({
@@ -48,7 +56,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-slate-950 text-white overflow-x-hidden font-sans">
+      <body className="min-h-full flex flex-col bg-[#050814] text-white overflow-x-hidden font-sans">
         {children}
       </body>
     </html>

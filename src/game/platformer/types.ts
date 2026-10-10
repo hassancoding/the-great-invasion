@@ -10,10 +10,20 @@ export type Player = Rect & {
   alive: boolean;
 };
 
+/** Dominion roster — P1 combat */
+export type EnemyKind = 'graveling' | 'legionnaire' | 'hulk';
+
 export type Enemy = Rect & {
+  kind: EnemyKind;
   vx: number;
   alive: boolean;
   dir: 1 | -1;
+  hp: number;
+  maxHp: number;
+  /** stun timer after hit */
+  stun: number;
+  /** flash white on hit */
+  hitFlash: number;
 };
 
 export type Coin = Rect & { taken: boolean };
@@ -21,11 +31,29 @@ export type Spike = Rect;
 export type Goal = Rect;
 export type Solid = Rect;
 
+/** Moving platform: oscillates between origin and origin+range */
+export type Mover = Rect & {
+  ox: number;
+  oy: number;
+  rangeX: number;
+  rangeY: number;
+  speed: number;
+  phase: number;
+  /** previous frame position for carry */
+  px: number;
+  py: number;
+};
+
+/** Bounce pad launches player upward */
+export type BouncePad = Rect & { power: number };
+
 export type LevelState = {
   solids: Solid[];
   coins: Coin[];
   spikes: Spike[];
   enemies: Enemy[];
+  movers: Mover[];
+  pads: BouncePad[];
   goal: Goal | null;
   spawn: { x: number; y: number };
   width: number;
@@ -39,3 +67,5 @@ export type RunStats = {
   deaths: number;
   level: number;
 };
+
+export type AttackKind = 'light' | 'heavy';
