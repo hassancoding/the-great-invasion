@@ -618,7 +618,7 @@ export class BoltHopEngine {
               : 80;
       this.score += pts;
       if (e.kind === 'elite') {
-        this.banner = 'ORUN FALLEN';
+        this.banner = 'REAVER DOWN';
         this.surgeBannerTimer = 1.6;
         this.particles.confetti(e.x + e.w / 2, e.y);
       }
@@ -674,8 +674,8 @@ export class BoltHopEngine {
     const apex = planApexElite(this.threat, this.levelIndex);
     this.surgePlan = apex ?? planSurge(this.threat, this.levelIndex);
     this.banner = this.surgePlan.label;
-    this.surgeBannerTimer = this.surgePlan.label.includes('ORUN') ? 2.8 : 2.2;
-    this.shake = this.surgePlan.label.includes('ORUN') ? 0.45 : 0.3;
+    this.surgeBannerTimer = this.surgePlan.label.includes('REAVER') ? 2.8 : 2.2;
+    this.shake = this.surgePlan.label.includes('REAVER') ? 0.45 : 0.3;
     sfxHeavy();
 
     // Clear leftover patrols; spawn adaptive wave near Well / sides
