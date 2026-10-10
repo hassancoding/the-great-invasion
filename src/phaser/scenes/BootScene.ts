@@ -40,7 +40,6 @@ export class BootScene extends Phaser.Scene {
       this.load.audio(key, path);
     }
 
-    // Real sheet PNGs (when git-pushed to public/assets)
     for (const { key, path } of IMAGE_ASSETS) {
       this.load.image(key, path);
     }
@@ -48,7 +47,6 @@ export class BootScene extends Phaser.Scene {
       this.load.spritesheet(key, path, { frameWidth, frameHeight });
     }
 
-    // Tiny embedded JPEG fallbacks for menu when disk PNGs are absent
     for (const [key, uri] of Object.entries(SHEET_ART)) {
       if (!IMAGE_ASSETS.some((a) => a.key === key)) {
         this.load.image(key, uri);
@@ -57,15 +55,9 @@ export class BootScene extends Phaser.Scene {
   }
 
   create() {
-    // Fill any keys that failed disk load from embedded data-URIs
     registerSheetArt(this);
-
-    // Procedural 96×96 gameplay frames + anims (always — reliable combat size)
     generateSheetTextures(this);
-
-    // Prefer sheet strip anims when real spritesheets loaded
     this.registerSheetAnims();
-
     Audio.attach(this);
 
     const unlock = () => {
@@ -79,7 +71,6 @@ export class BootScene extends Phaser.Scene {
     this.scene.start('Menu');
   }
 
-  /** Build anims from disk spritesheets when present (menu/FX scale). */
   private registerSheetAnims() {
     const mk = (
       key: string,
@@ -98,7 +89,6 @@ export class BootScene extends Phaser.Scene {
       });
     };
 
-    // Concept strips are short — map to gameplay anim keys for optional use
     mk('sheet_arin_idle', 'sheet_arin', [0], 4, -1);
     mk('sheet_arin_run', 'sheet_arin', [1, 2], 8, -1);
     mk('sheet_graveling_walk', 'sheet_graveling', [0, 1], 6, -1);
