@@ -97,7 +97,8 @@ export class PlayScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, worldW, worldH);
     this.cameras.main.setBackgroundColor('#060b1a');
 
-    this.add.image(0, 0, 'sky').setOrigin(0, 0).setScrollFactor(0).setDisplaySize(this.scale.width, this.scale.height);
+    const skyKey = index >= 2 ? 'sky_ashfall' : index >= 1 ? 'sky' : 'sky';
+    this.add.image(0, 0, skyKey).setOrigin(0, 0).setScrollFactor(0).setDisplaySize(this.scale.width, this.scale.height);
 
     this.platforms = this.physics.add.staticGroup();
     this.enemies = this.physics.add.group();
@@ -112,7 +113,8 @@ export class PlayScene extends Phaser.Scene {
         const x = c * TILE + TILE / 2;
         const y = r * TILE + TILE / 2;
         if (ch === '#') {
-          const t = this.platforms.create(x, y, 'tile') as Phaser.Physics.Arcade.Sprite;
+          const tileKey = index >= 2 ? 'tile_ashfall' : index >= 1 ? 'tile_verdant' : 'tile_skybound';
+          const t = this.platforms.create(x, y, tileKey) as Phaser.Physics.Arcade.Sprite;
           t.refreshBody();
         } else if (ch === 'C') {
           const crystal = this.crystals.create(x, y, 'crystal') as Phaser.Physics.Arcade.Sprite;
@@ -142,6 +144,7 @@ export class PlayScene extends Phaser.Scene {
     this.player.setSize(28, 48);
     this.player.setOffset(34, 40);
     this.player.setDepth(10);
+    if (this.anims.exists('arin_idle')) this.player.play('arin_idle');
 
     this.physics.add.collider(this.player, this.platforms, this.onLandPlatform, undefined, this);
     this.physics.add.collider(this.enemies, this.platforms);
@@ -180,6 +183,15 @@ export class PlayScene extends Phaser.Scene {
     e.setCollideWorldBounds(true);
     e.setBounce(0);
     e.setVelocityX(st.speed * e.dir * 0.5);
+    const animKey =
+      kind === 'graveling'
+        ? 'graveling_walk'
+        : kind === 'legionnaire'
+          ? 'legionnaire_walk'
+          : kind === 'hulk'
+            ? 'hulk_walk'
+            : 'elite_idle';
+    if (this.anims.exists(animKey)) e.play(animKey);
     return e;
   }
 
@@ -291,6 +303,17 @@ export class PlayScene extends Phaser.Scene {
       this.facing = -1;
       this.player.setFlipX(true);
     }
+    // Asset-sheet animations
+    if (this.attackTimer <= 0) {
+      const onGround = body.blocked.down;
+      if (!onGround && this.anims.exists('arin_jump')) {
+        if (this.player.anims.currentAnim?.key !== 'arin_jump') this.player.play('arin_jump', true);
+      } else if (Math.abs(vx) > 20 && this.anims.exists('arin_run')) {
+        if (this.player.anims.currentAnim?.key !== 'arin_run') this.player.play('arin_run', true);
+      } else if (this.anims.exists('arin_idle')) {
+        if (this.player.anims.currentAnim?.key !== 'arin_idle') this.player.play('arin_idle', true);
+      }
+    }
 
     if (this.jumpBuf > 0 && this.coyote > 0) {
       this.player.setVelocityY(PHYSICS.jumpVelocity);
@@ -321,7 +344,13 @@ export class PlayScene extends Phaser.Scene {
   private startAttack(kind: 'light' | 'heavy') {
     this.attackKind = kind;
     this.attackTimer = kind === 'heavy' ? COMBAT.heavyDuration : COMBAT.lightDuration;
-    if (kind === 'heavy') Audio.sfxHeavy(); else Audio.sfxSlash();
+    if (kind === 'heavy') {
+      Audio.sfxHeavy();
+      if (this.anims.exists('arin_heavy')) this.player.play('arin_heavy', true);
+    } else {
+      Audio.sfxSlash();
+      if (this.anims.exists('arin_attack')) this.player.play('arin_attack', true);
+    }
     // hitbox sweep
     const reach = kind === 'heavy' ? COMBAT.heavyReach : COMBAT.lightReach;
     const dmg = kind === 'heavy' ? COMBAT.heavyDamage : COMBAT.lightDamage;
@@ -377,11 +406,16 @@ export class PlayScene extends Phaser.Scene {
         if (e.chargeCd <= 0 && Math.abs(dx) < 180) {
           e.charging = true;
           e.chargeCd = 2.4;
+          if (this.anims.exists('elite_charge')) e.play('elite_charge', true);
+          Audio.sfxReaverCharge();
         }
         const speed = e.charging ? st.speed * 2.4 : st.speed * 0.85;
         e.setVelocityX(e.dir * speed);
         e.setFlipX(e.dir < 0);
-        if (e.charging && e.chargeCd < 1.9) e.charging = false;
+        if (e.charging && e.chargeCd < 1.9) {
+          e.charging = false;
+          if (this.anims.exists('elite_idle')) e.play('elite_idle', true);
+        }
       } else {
         e.setVelocityX(e.dir * st.speed * 0.6);
         e.setFlipX(e.dir < 0);
