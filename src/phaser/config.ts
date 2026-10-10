@@ -18,6 +18,15 @@ export const PHYSICS = {
   jumpVelocity: -440,
   coyoteMs: 100,
   jumpBufferMs: 120,
+  /** Horizontal burst — GDD "movement is combat" */
+  dashSpeed: 520,
+  dashDuration: 0.14,
+  dashCooldown: 0.55,
+  dashInvuln: 0.18,
+  wallSlideGravity: 220,
+  wallJumpPush: 280,
+  wallJumpUp: -400,
+  wallCoyoteMs: 90,
 };
 
 export const COMBAT = {
@@ -28,6 +37,8 @@ export const COMBAT = {
   lightDamage: 1,
   heavyDamage: 2,
   claimSeconds: 1.6,
+  dashStrikeDamage: 1,
+  comboWindow: 1.1,
 };
 
 export function createGameConfig(parent: string | HTMLElement): Phaser.Types.Core.GameConfig {
