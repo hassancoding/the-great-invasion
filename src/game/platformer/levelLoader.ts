@@ -1,5 +1,65 @@
 import { LEVELS, TILE, type LevelDef } from '@/config/platformerConfig';
-import type { LevelState, Coin, Enemy, Spike, Solid, Goal } from './types';
+import type {
+  LevelState,
+  Coin,
+  Enemy,
+  EnemyKind,
+  Spike,
+  Solid,
+  Goal,
+  Mover,
+  BouncePad,
+} from './types';
+
+function makeEnemy(kind: EnemyKind, x: number, y: number): Enemy {
+  if (kind === 'graveling') {
+    return {
+      kind,
+      x: x + 6,
+      y: y + 10,
+      w: 20,
+      h: 22,
+      vx: 95,
+      alive: true,
+      dir: 1,
+      hp: 1,
+      maxHp: 1,
+      stun: 0,
+      hitFlash: 0,
+    };
+  }
+  if (kind === 'hulk') {
+    return {
+      kind,
+      x: x + 2,
+      y: y - 4,
+      w: 30,
+      h: 36,
+      vx: 40,
+      alive: true,
+      dir: 1,
+      hp: 4,
+      maxHp: 4,
+      stun: 0,
+      hitFlash: 0,
+    };
+  }
+  // legionnaire
+  return {
+    kind: 'legionnaire',
+    x: x + 4,
+    y: y + 2,
+    w: 24,
+    h: 30,
+    vx: 65,
+    alive: true,
+    dir: 1,
+    hp: 2,
+    maxHp: 2,
+    stun: 0,
+    hitFlash: 0,
+  };
+}
 
 export function loadLevel(index: number): LevelState {
   const def: LevelDef = LEVELS[Math.max(0, Math.min(index, LEVELS.length - 1))];
@@ -11,6 +71,8 @@ export function loadLevel(index: number): LevelState {
   const coins: Coin[] = [];
   const spikes: Spike[] = [];
   const enemies: Enemy[] = [];
+  const movers: Mover[] = [];
+  const pads: BouncePad[] = [];
   let goal: Goal | null = null;
   let spawn = { x: TILE, y: h - TILE * 3 };
 
@@ -27,11 +89,49 @@ export function loadLevel(index: number): LevelState {
       } else if (ch === 'S') {
         spikes.push({ x: x + 4, y: y + 16, w: 24, h: 16 });
       } else if (ch === 'E') {
-        enemies.push({ x: x + 4, y: y + 4, w: 24, h: 28, vx: 60, alive: true, dir: 1 });
+        enemies.push(makeEnemy('graveling', x, y));
+      } else if (ch === 'L') {
+        enemies.push(makeEnemy('legionnaire', x, y));
+      } else if (ch === 'H') {
+        enemies.push(makeEnemy('hulk', x, y));
       } else if (ch === 'G') {
         goal = { x: x + 4, y: y - 16, w: 24, h: 48 };
       } else if (ch === 'P') {
         spawn = { x, y: y - 4 };
+      } else if (ch === 'M') {
+        const m: Mover = {
+          x,
+          y,
+          w: TILE * 2,
+          h: TILE,
+          ox: x,
+          oy: y,
+          rangeX: TILE * 4,
+          rangeY: 0,
+          speed: 1.1,
+          phase: Math.random() * Math.PI * 2,
+          px: x,
+          py: y,
+        };
+        movers.push(m);
+      } else if (ch === 'V') {
+        const m: Mover = {
+          x,
+          y,
+          w: TILE * 2,
+          h: TILE,
+          ox: x,
+          oy: y,
+          rangeX: 0,
+          rangeY: TILE * 3,
+          speed: 0.9,
+          phase: Math.random() * Math.PI * 2,
+          px: x,
+          py: y,
+        };
+        movers.push(m);
+      } else if (ch === 'B') {
+        pads.push({ x: x + 2, y: y + 18, w: TILE - 4, h: 14, power: -620 });
       }
     }
   }
@@ -43,6 +143,8 @@ export function loadLevel(index: number): LevelState {
     coins,
     spikes,
     enemies,
+    movers,
+    pads,
     goal,
     spawn,
     width: w,
