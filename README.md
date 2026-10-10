@@ -30,7 +30,7 @@ A fast Riftlands sector-runner for the browser: short runs, slash combat, adapti
 | Bundler | **Vite 5** |
 | Delivery | Browser + **PWA** (`vite-plugin-pwa`) |
 | Audio | OGG assets + Web Audio fallback |
-| Visuals | Asset-sheet-matched procedural sprites (PNG atlases later) |
+| Visuals | Asset-sheet-matched procedural sprites |
 
 Legacy **Next.js 15** Canvas runner remains available for reference (`npm run dev:next`).
 
@@ -81,7 +81,6 @@ vercel.json               Vite production settings
 - **World** — skybound / verdant / obsidian / ashfall tiles + skies
 - **Props** — Well beacon, crystals, slash FX, HUD icons
 
-Production path: drop transparent PNG + JSON atlases under `public/assets/` using keys in `src/phaser/assets/manifest.json`.
 
 ### Audio (Wave 1)
 | Music | Role |
@@ -96,34 +95,9 @@ SFX cover movement, combat, Well, UI, and results. Manifest: `src/phaser/assets/
 
 ---
 
-## Deploy
 
-### Vercel (Phaser production)
-`vercel.json` configures:
-
-- **Install:** `npm install --legacy-peer-deps`
-- **Build:** `npm run build` (Vite)
-- **Output:** `dist-game`
-- **Framework:** vite
-
-Push to `main` triggers production deploy.
-
-### GitHub Pages
-Pages workflow on `main` is succeeding. Prefer Vercel for the playable Vite build.
-
----
-
-## Production status notes
-
-- Recent Vercel **ERROR** deploys started with the Phaser/Vite switch while the project was still treated as **Next.js** (`next build` without a working Vite output path).
-- `vercel.json` forces Vite install/build/output so production can publish the Phaser game.
-- GitHub **Pages** builds for `main` succeed.
-- Production URL may still serve an older Next.js Canvas build until a successful Vite deploy completes.
-- Audio unlocks after the first click/key (browser autoplay policy).
-
----
 
 ## License / credits
 
 Original Riftlands IP and Game Asset Sheet designs for **The Great Invasion**.  
-Wave 1 audio is generated placeholder OGG for development; replace with licensed compositions for release.
+
