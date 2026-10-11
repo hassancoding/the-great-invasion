@@ -3,6 +3,7 @@ import { generateSheetTextures } from '../utils/textureFactory';
 import { Audio, AUDIO_LOAD_LIST } from '../systems/AudioManager';
 import { SHEET_ART, registerSheetArt } from '../assets/sheetArt';
 import { IMAGE_ASSETS, SHEET_ASSETS } from '../assets/manifest';
+import { GAMEPLAY_SHEETS } from '../assets/gameplayData';
 
 /**
  * Boot — load transparent gameplay sheets + presentation art,
@@ -42,8 +43,16 @@ export class BootScene extends Phaser.Scene {
     for (const { key, path } of IMAGE_ASSETS) {
       this.load.image(key, path);
     }
+    for (const [key, spec] of Object.entries(GAMEPLAY_SHEETS)) {
+      this.load.spritesheet(key, spec.uri, {
+        frameWidth: spec.frameWidth,
+        frameHeight: spec.frameHeight,
+      });
+    }
     for (const { key, path, frameWidth, frameHeight } of SHEET_ASSETS) {
-      this.load.spritesheet(key, path, { frameWidth, frameHeight });
+      if (!(key in GAMEPLAY_SHEETS)) {
+        this.load.spritesheet(key, path, { frameWidth, frameHeight });
+      }
     }
     for (const [key, uri] of Object.entries(SHEET_ART)) {
       if (!IMAGE_ASSETS.some((a) => a.key === key) && !SHEET_ASSETS.some((a) => a.key === key)) {
@@ -69,10 +78,6 @@ export class BootScene extends Phaser.Scene {
     this.scene.start('Menu');
   }
 
-  /**
-   * Hero sheet frames: 0 idle, 1 idle-b, 2 run-a, 3 run-b, 4 jump, 5 attack
-   * Enemy sheets: 0..n-1 walk/idle poses from concept strip cells
-   */
   private registerGameplayAnims() {
     const mk = (
       key: string,
@@ -105,11 +110,9 @@ export class BootScene extends Phaser.Scene {
     mk('arin_jump', 'arin', [4], 1, 0);
     mk('arin_attack', 'arin', [5], 8, 0);
     mk('arin_heavy', 'arin', [5], 6, 0);
-
     mk('kaela_idle', 'kaela', [0, 1], 4, -1);
     mk('kaela_run', 'kaela', [2, 3], 10, -1);
     mk('varkhul_idle', 'varkhul', [0, 1], 4, -1);
-
     mk('graveling_walk', 'graveling', [0, 1, 2, 3], 8, -1);
     mk('legionnaire_walk', 'legionnaire', [0, 1, 2, 3], 7, -1);
     mk('hulk_walk', 'hulk', [0, 1, 2, 3], 5, -1);
