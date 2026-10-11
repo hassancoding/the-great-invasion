@@ -21,6 +21,6 @@
     },
     "baseUrl": "."
   },
-  "include": ["src/phaser/**/*.ts", "src/phaser/**/*.json", "src/services/**/*.ts", "src/types/**/*.ts", "vite.config.ts"],
-  "exclude": ["node_modules", "dist-game", "src/app", "src/components", "src/game"]
+  "include": ["src/phaser/**/*.ts", "src/phaser/**/*.json", "vite.config.ts"],
+  "exclude": ["node_modules", "dist-game"]
 }
