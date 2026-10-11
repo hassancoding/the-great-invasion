@@ -1,4 +1,4 @@
-# The Great Invasion — Technology Stack (v4)
+# The Great Invasion — Technology Stack (v4.3)
 
 ## Stage 1 — Browser (current)
 
@@ -19,7 +19,6 @@ npm install
 npm run dev          # Vite + Phaser → http://localhost:5173
 npm run build        # production → dist-game/
 npm run preview      # serve production build
-npm run dev:next     # legacy Next.js Canvas runner (fallback)
 ```
 
 ### Scene graph
@@ -32,7 +31,7 @@ npm run dev:next     # legacy Next.js Canvas runner (fallback)
 See `src/phaser/assets/manifest.json` and `public/assets/README.md`.
 
 Specs (initial):
-- Character frames 96×96
+- Character frames 96×96 (production sheets may be higher res; scale in Boot/Play)
 - Small enemies 64×64
 - Large / elite 128×128
 - Tiles 32×32
@@ -47,9 +46,6 @@ PWA caching, offline shell, save persistence (already scaffolded via `vite-plugi
 - **Mobile:** Capacitor wrapping `dist-game`
 - **Desktop:** Electron or Tauri when store requirements are set
 
-## Legacy
-`src/game/platformer/*` + Next.js remain as the Canvas 2D reference implementation (`npm run dev:next`). Phaser is the primary path forward.
-
 ## Audio (Wave 1)
 
 | Bus | Role | Default |
@@ -60,7 +56,7 @@ PWA caching, offline shell, save persistence (already scaffolded via `vite-plugi
 | ambience | Well hum, wind | 0.35 |
 
 **Reactive map**
-- Menu → *Echoes of the Riftlands* (procedural pad)
+- Menu → *Echoes of the Riftlands*
 - Explore → *The Failing Well*
 - Claiming → *Wells of Fate* + charge ticks
 - Surge → *Dominion Rising* (+ tension layer); Reaver → *Heart of the Rift*
