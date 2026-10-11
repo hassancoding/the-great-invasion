@@ -17,6 +17,14 @@ import {
   setupPlayerBody,
 } from '../utils/visualHelpers';
 import {
+  addVignette,
+  buildCinematicBackdrop,
+  dressPlatforms,
+  spawnImpactBurst,
+  spawnSlashArc,
+  type EnvTheme,
+} from '../utils/cinematicEnv';
+import {
   bumpRunCount,
   getPb,
   onFullClear,
@@ -127,12 +135,16 @@ export class PlayScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, worldW, worldH);
     this.cameras.main.setBackgroundColor('#060b1a');
 
-    const skyKey = index >= 2 ? 'sky_ashfall' : 'sky';
+    const theme: EnvTheme = index >= 2 ? 'ashfall' : index >= 1 ? 'verdant' : 'skybound';
+    const skyKey = theme === 'ashfall' ? 'sky_ashfall' : 'sky';
     this.add
       .image(0, 0, skyKey)
       .setOrigin(0, 0)
       .setScrollFactor(0)
-      .setDisplaySize(this.scale.width, this.scale.height);
+      .setDisplaySize(this.scale.width, this.scale.height)
+      .setDepth(-20);
+    buildCinematicBackdrop(this, theme, worldW, worldH);
+    addVignette(this);
 
     this.platforms = this.physics.add.staticGroup();
     this.enemies = this.physics.add.group();
@@ -161,7 +173,7 @@ export class PlayScene extends Phaser.Scene {
         else if (ch === 'O') this.spawnEnemy('elite', x, y);
         else if (ch === 'G') {
           this.well = this.physics.add.sprite(x, y - TILE / 2, 'well');
-          this.well.setImmovable(true);
+          this.well.setDepth(6).setImmovable(true);
           (this.well.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
         } else if (ch === 'P') spawn = { x, y: y - TILE / 2 };
         else if (ch === 'B') {
@@ -172,6 +184,8 @@ export class PlayScene extends Phaser.Scene {
         }
       }
     }
+
+    dressPlatforms(this, this.platforms, theme);
 
     const tex = this.textures.exists(this.heroKey) ? this.heroKey : 'arin';
     this.player = this.physics.add.sprite(spawn.x, spawn.y, tex);
@@ -483,18 +497,10 @@ export class PlayScene extends Phaser.Scene {
         this.damageEnemy(e, applied, false);
       }
     });
-    const g = this.add.graphics().setDepth(20);
-    g.lineStyle(kind === 'heavy' ? 5 : 3, 0x67e8f9, 0.9);
-    g.beginPath();
-    g.arc(
-      this.player.x + this.facing * 12,
-      this.player.y - 8,
-      reach * 0.7,
-      this.facing > 0 ? -1 : 2,
-      this.facing > 0 ? 1 : 4
-    );
-    g.strokePath();
-    this.tweens.add({ targets: g, alpha: 0, duration: 180, onComplete: () => g.destroy() });
+    spawnSlashArc(this, this.player.x, this.player.y, this.facing, reach, kind === 'heavy');
+    if (kind === 'heavy') {
+      this.cameras.main.shake(120, 0.006);
+    }
   }
 
   private updateAttack(dt: number) {
@@ -597,6 +603,7 @@ export class PlayScene extends Phaser.Scene {
     e.stun = fromStomp ? 0.2 : 0.15;
     if (fromStomp) Audio.sfxStomp();
     else Audio.sfxHit();
+      spawnImpactBurst(this, e.x, e.y - 10, 0x67e8f9, 6);
     e.setTint(0xffffff);
     this.time.delayedCall(80, () => e.clearTint());
     e.x += this.facing * (fromStomp ? 6 : 10);

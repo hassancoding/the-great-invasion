@@ -33,12 +33,12 @@ export class MenuScene extends Phaser.Scene {
       this.add
         .image(width * 0.78, height * 0.38, 'art_islands')
         .setScale(0.7)
-        .setAlpha(0.55)
+        .setAlpha(0.7)
         .setDepth(1);
       this.add
         .image(width * 0.18, height * 0.55, 'art_islands')
         .setScale(0.45)
-        .setAlpha(0.35)
+        .setAlpha(0.45)
         .setFlipX(true)
         .setDepth(1);
     }
@@ -162,6 +162,12 @@ export class MenuScene extends Phaser.Scene {
       })
       .setOrigin(0.5)
       .setDepth(6);
+
+    // Soft edge framing
+    const vg = this.add.graphics().setDepth(8);
+    vg.fillStyle(0x000000, 0.3);
+    vg.fillRect(0, 0, width, 24);
+    vg.fillRect(0, height - 40, width, 40);
 
     Audio.unlock();
     Audio.setMusic('menu');

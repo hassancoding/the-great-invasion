@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { TILE } from '../config';
+import { TILE, GAME_WIDTH, GAME_HEIGHT } from '../config';
 
 export type EnvTheme = 'skybound' | 'verdant' | 'ashfall';
 
@@ -41,12 +41,14 @@ export function buildCinematicBackdrop(
   const camH = scene.scale.height;
   const camW = scene.scale.width;
 
+  // Far sky already drawn by caller — add atmospheric bands
   const haze = scene.add.graphics().setScrollFactor(0).setDepth(-18);
   haze.fillStyle(t.haze, 0.08);
   haze.fillRect(0, 0, camW, camH * 0.45);
   haze.fillStyle(t.fog, 0.18);
   haze.fillRect(0, camH * 0.55, camW, camH * 0.45);
 
+  // Distant cliffs / mountains (procedural silhouettes)
   const far = scene.add.graphics().setScrollFactor(0.08).setDepth(-16);
   far.fillStyle(t.mid, 0.55);
   drawMountainRange(far, worldW * 1.2, camH * 0.42, 7, 0.55);
@@ -54,6 +56,7 @@ export function buildCinematicBackdrop(
   mid.fillStyle(t.ground, 0.7);
   drawMountainRange(mid, worldW * 1.1, camH * 0.55, 9, 0.7);
 
+  // Biome panel as soft mid-ground painting
   const biomeKey =
     theme === 'ashfall'
       ? 'art_obsidian'
@@ -61,12 +64,13 @@ export function buildCinematicBackdrop(
         ? 'art_verdant'
         : 'art_skybound';
   if (scene.textures.exists(biomeKey)) {
-    scene.add
+    const b = scene.add
       .image(worldW * 0.35, worldH * 0.35, biomeKey)
       .setScrollFactor(0.28)
       .setAlpha(0.35)
       .setDepth(-12)
       .setScale(1.8);
+    void b;
   }
   if (scene.textures.exists('art_islands')) {
     scene.add
@@ -84,6 +88,7 @@ export function buildCinematicBackdrop(
       .setDepth(-13);
   }
 
+  // Near fog strips for depth
   const nearFog = scene.add.graphics().setScrollFactor(0.55).setDepth(3);
   nearFog.fillStyle(t.fog, 0.12);
   for (let i = 0; i < 6; i++) {
@@ -91,6 +96,7 @@ export function buildCinematicBackdrop(
     nearFog.fillEllipse(fx, worldH - 20, 160, 28);
   }
 
+  // Ambient motes
   spawnAmbientMotes(scene, theme, worldW, worldH);
 }
 
@@ -141,6 +147,7 @@ function spawnAmbientMotes(
   }
 }
 
+/** Dress platform tiles: edge highlights + occasional vegetation silhouettes */
 export function dressPlatforms(
   scene: Phaser.Scene,
   platforms: Phaser.Physics.Arcade.StaticGroup,
@@ -150,23 +157,29 @@ export function dressPlatforms(
   platforms.getChildren().forEach((obj, i) => {
     const s = obj as Phaser.Physics.Arcade.Sprite;
     s.setDepth(2);
+    // Soft top edge light
     if (i % 3 === 0) {
-      scene.add
+      const edge = scene.add
         .rectangle(s.x, s.y - TILE / 2 + 2, TILE * 0.9, 3, accent, 0.25)
         .setDepth(2.5);
+      void edge;
     }
+    // Occasional vine/grass tick
     if (theme !== 'ashfall' && i % 5 === 0) {
-      scene.add
+      const vine = scene.add
         .rectangle(s.x + 8, s.y + 6, 2, 10, 0x4ade80, 0.55)
         .setDepth(2.6);
+      void vine;
     }
   });
 }
 
+/** Full-screen soft vignette for cinematic framing */
 export function addVignette(scene: Phaser.Scene) {
   const w = scene.scale.width;
   const h = scene.scale.height;
   const g = scene.add.graphics().setScrollFactor(0).setDepth(90);
+  // Approximate vignette with 4 edge gradients
   g.fillStyle(0x000000, 0.35);
   g.fillRect(0, 0, w, 28);
   g.fillRect(0, h - 36, w, 36);
@@ -174,6 +187,7 @@ export function addVignette(scene: Phaser.Scene) {
   g.fillRect(w - 36, 0, 36, h);
 }
 
+/** Impact burst at world position */
 export function spawnImpactBurst(
   scene: Phaser.Scene,
   x: number,
@@ -197,6 +211,7 @@ export function spawnImpactBurst(
   }
 }
 
+/** Slash arc graphic in facing direction */
 export function spawnSlashArc(
   scene: Phaser.Scene,
   x: number,
@@ -213,6 +228,7 @@ export function spawnSlashArc(
   const end = facing > 0 ? 0.9 : Math.PI + 0.9;
   g.arc(x + facing * 8, y - 6, reach * 0.75, start, end);
   g.strokePath();
+  // energy trail
   g.lineStyle(2, 0xffffff, 0.35);
   g.beginPath();
   g.arc(x + facing * 10, y - 6, reach * 0.55, start * 0.8, end * 0.8);
