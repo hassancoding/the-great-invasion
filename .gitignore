@@ -39,3 +39,5 @@ next-env.d.ts
 dist-game/
 .vite/
 *.local
+src/phaser/utils/diskFirstTextures.ts
+src/phaser/utils/safeTextures.ts

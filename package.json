@@ -10,7 +10,9 @@
     "build:next": "next build",
     "preview": "vite preview",
     "start": "vite preview",
-    "start:next": "next start"
+    "start:next": "next start",
+    "check:push": "bash scripts/check-github-push.sh",
+    "stage:gate": "bash scripts/check-github-push.sh"
   },
   "dependencies": {
     "@dimforge/rapier3d-compat": "^0.19.3",
