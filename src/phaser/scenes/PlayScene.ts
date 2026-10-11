@@ -176,8 +176,12 @@ export class PlayScene extends Phaser.Scene {
     const tex = this.textures.exists(this.heroKey) ? this.heroKey : 'arin';
     this.player = this.physics.add.sprite(spawn.x, spawn.y, tex);
     setupPlayerBody(this.player);
-    if (this.anims.exists('arin_idle')) this.player.play('arin_idle');
-    if (this.heroKey === 'kaela') this.player.setTint(0xa7f3d0);
+    const idle =
+      this.heroKey === 'kaela' && this.anims.exists('kaela_idle')
+        ? 'kaela_idle'
+        : 'arin_idle';
+    if (this.anims.exists(idle)) this.player.play(idle);
+    // No tint — real art already has character colors
 
     this.physics.add.collider(this.player, this.platforms, this.onLandPlatform, undefined, this);
     this.physics.add.collider(this.enemies, this.platforms);
@@ -375,11 +379,11 @@ export class PlayScene extends Phaser.Scene {
 
     if (this.attackTimer <= 0) {
       if (!body.blocked.down && this.anims.exists('arin_jump')) {
-        if (this.player.anims.currentAnim?.key !== 'arin_jump') this.player.play('arin_jump', true);
+        const jk = this.animKey('jump'); if (this.player.anims.currentAnim?.key !== jk) this.player.play(jk, true);
       } else if (Math.abs(vx) > 20 && this.anims.exists('arin_run')) {
-        if (this.player.anims.currentAnim?.key !== 'arin_run') this.player.play('arin_run', true);
+        const rk = this.animKey('run'); if (this.player.anims.currentAnim?.key !== rk) this.player.play(rk, true);
       } else if (this.anims.exists('arin_idle')) {
-        if (this.player.anims.currentAnim?.key !== 'arin_idle') this.player.play('arin_idle', true);
+        const ik = this.animKey('idle'); if (this.player.anims.currentAnim?.key !== ik) this.player.play(ik, true);
       }
     }
 
@@ -423,6 +427,15 @@ export class PlayScene extends Phaser.Scene {
     if (this.player.y > levelPixelHeight(LEVELS[this.levelIndex]) + 60) this.hurt(true);
   }
 
+  private animKey(kind: 'idle' | 'run' | 'jump' | 'attack' | 'heavy') {
+    if (this.heroKey === 'kaela') {
+      const k = kind === 'idle' ? 'kaela_idle' : kind === 'run' ? 'kaela_run' : `arin_${kind === 'heavy' ? 'heavy' : kind}`;
+      if (this.anims.exists(k)) return k;
+    }
+    const map = { idle: 'arin_idle', run: 'arin_run', jump: 'arin_jump', attack: 'arin_attack', heavy: 'arin_heavy' } as const;
+    return map[kind];
+  }
+
   private startDash() {
     this.dashTimer = PHYSICS.dashDuration;
     this.dashCd = PHYSICS.dashCooldown;
@@ -448,10 +461,10 @@ export class PlayScene extends Phaser.Scene {
     this.attackTimer = kind === 'heavy' ? COMBAT.heavyDuration : COMBAT.lightDuration;
     if (kind === 'heavy') {
       Audio.sfxHeavy();
-      if (this.anims.exists('arin_heavy')) this.player.play('arin_heavy', true);
+      this.player.play(this.animKey('heavy'), true);
     } else {
       Audio.sfxSlash();
-      if (this.anims.exists('arin_attack')) this.player.play('arin_attack', true);
+      this.player.play(this.animKey('attack'), true);
     }
     const reach = kind === 'heavy' ? COMBAT.heavyReach : COMBAT.lightReach;
     const dmg = kind === 'heavy' ? COMBAT.heavyDamage : COMBAT.lightDamage;

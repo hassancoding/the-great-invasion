@@ -1,7 +1,7 @@
 /**
  * Production gameplay + presentation assets.
- * Paths are relative to public/ (Vite serves /assets/...).
- * Inspect dimensions before changing frameWidth/Height.
+ * Paths relative to public/ (Vite serves /assets/...).
+ * Frame sizes verified against generated transparent sheets.
  */
 
 export type ImageAsset = { key: string; path: string };
@@ -12,7 +12,7 @@ export type SheetAsset = {
   frameHeight: number;
 };
 
-/** Menu / portraits / environments (static) */
+/** Menu / portraits / environments */
 export const IMAGE_ASSETS: ImageAsset[] = [
   { key: 'art_arin', path: 'assets/gameplay/heroes/arin_portrait.png' },
   { key: 'art_kaela', path: 'assets/gameplay/heroes/kaela_portrait.png' },
@@ -31,9 +31,9 @@ export const IMAGE_ASSETS: ImageAsset[] = [
 ];
 
 /**
- * Gameplay spritesheets — transparent, verified frame sizes.
+ * Gameplay spritesheets — transparent RGBA.
  * Hero frames: 0 idle, 1 idle-b, 2 run-a, 3 run-b, 4 jump, 5 attack
- * Enemy frames: multi-pose cells from concept strips (2–4 frames)
+ * Enemy frames: distinct cells from concept strips
  */
 export const SHEET_ASSETS: SheetAsset[] = [
   { key: 'arin', path: 'assets/gameplay/heroes/arin_sheet.png', frameWidth: 64, frameHeight: 80 },

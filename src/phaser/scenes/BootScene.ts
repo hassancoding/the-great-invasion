@@ -43,12 +43,14 @@ export class BootScene extends Phaser.Scene {
     for (const { key, path } of IMAGE_ASSETS) {
       this.load.image(key, path);
     }
+    // Prefer embedded transparent sheets (always available in bundle)
     for (const [key, spec] of Object.entries(GAMEPLAY_SHEETS)) {
       this.load.spritesheet(key, spec.uri, {
         frameWidth: spec.frameWidth,
         frameHeight: spec.frameHeight,
       });
     }
+    // Optional disk overrides (same keys — last wins if both load; embedded is enough)
     for (const { key, path, frameWidth, frameHeight } of SHEET_ASSETS) {
       if (!(key in GAMEPLAY_SHEETS)) {
         this.load.spritesheet(key, path, { frameWidth, frameHeight });
@@ -78,6 +80,10 @@ export class BootScene extends Phaser.Scene {
     this.scene.start('Menu');
   }
 
+  /**
+   * Hero frames: 0 idle, 1 idle-b, 2 run-a, 3 run-b, 4 jump, 5 attack
+   * Enemy frames: concept-strip cells 0..n
+   */
   private registerGameplayAnims() {
     const mk = (
       key: string,
@@ -110,9 +116,11 @@ export class BootScene extends Phaser.Scene {
     mk('arin_jump', 'arin', [4], 1, 0);
     mk('arin_attack', 'arin', [5], 8, 0);
     mk('arin_heavy', 'arin', [5], 6, 0);
+
     mk('kaela_idle', 'kaela', [0, 1], 4, -1);
     mk('kaela_run', 'kaela', [2, 3], 10, -1);
     mk('varkhul_idle', 'varkhul', [0, 1], 4, -1);
+
     mk('graveling_walk', 'graveling', [0, 1, 2, 3], 8, -1);
     mk('legionnaire_walk', 'legionnaire', [0, 1, 2, 3], 7, -1);
     mk('hulk_walk', 'hulk', [0, 1, 2, 3], 5, -1);

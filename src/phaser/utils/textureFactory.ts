@@ -25,17 +25,27 @@ function rr(
 }
 
 function canvas(scene: Phaser.Scene, key: string, w: number, h: number) {
-  if (scene.textures.exists(key)) scene.textures.remove(key);
+  // Never wipe disk-loaded PNG sheets (arin, graveling, …)
+  if (scene.textures.exists(key)) {
+    const src = scene.textures.get(key).getSourceImage();
+    // HTMLImageElement / ImageBitmap => disk load; HTMLCanvasElement => prior procedural
+    if (src && typeof HTMLImageElement !== 'undefined' && src instanceof HTMLImageElement) {
+      return null;
+    }
+    scene.textures.remove(key);
+  }
   return scene.textures.createCanvas(key, w, h);
 }
 
 /** Generate all runtime textures + register animations */
 export function generateSheetTextures(scene: Phaser.Scene) {
-  makeArinSheet(scene);
-  makeGravelingSheet(scene);
-  makeLegionnaireSheet(scene);
-  makeHulkSheet(scene);
-  makeReaverSheet(scene);
+  // Prefer disk transparent sheets (Boot preload). Only procedural-fill gaps.
+  if (!scene.textures.exists('arin')) makeArinSheet(scene);
+  if (!scene.textures.exists('graveling')) makeGravelingSheet(scene);
+  if (!scene.textures.exists('legionnaire')) makeLegionnaireSheet(scene);
+  if (!scene.textures.exists('hulk')) makeHulkSheet(scene);
+  if (!scene.textures.exists('elite')) makeReaverSheet(scene);
+  if (!scene.textures.exists('reaver')) makeReaverSheet(scene);
   makeTiles(scene);
   makeWell(scene);
   makeCrystal(scene);
