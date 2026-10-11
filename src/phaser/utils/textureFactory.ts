@@ -904,7 +904,8 @@ function registerAnimations(scene: Phaser.Scene) {
     });
   };
 
-  add('arin_idle', 'arin_sheet', 96, 96, [0], 4, -1);
+  // atlas owns arin_* anims — do not overwrite from arin_sheet
+  // add('arin_idle', 'arin_sheet', 96, 96, [0], 4, -1);
   add('arin_run', 'arin_sheet', 96, 96, [1, 2], 10, -1);
   add('arin_jump', 'arin_sheet', 96, 96, [3], 8, 0);
   add('arin_attack', 'arin_sheet', 96, 96, [4], 12, 0);
