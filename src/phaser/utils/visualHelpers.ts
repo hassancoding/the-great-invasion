@@ -3,31 +3,36 @@ import type { EnemyKind } from '../systems/ThreatDirector';
 import { ENEMY_STATS } from '../systems/ThreatDirector';
 import { TILE } from '../config';
 
-/** Player: 96×96 frame, origin at feet, hitbox feet-aligned */
+/** Player: 64×80 transparent sheet, origin at feet */
 export function setupPlayerBody(player: Phaser.Physics.Arcade.Sprite) {
+  const fw = player.width || 64;
+  const fh = player.height || 80;
+  const bw = 22;
+  const bh = 48;
   player
     .setOrigin(0.5, 1)
     .setCollideWorldBounds(true)
-    .setSize(22, 42)
-    .setOffset(37, 48)
+    .setSize(bw, bh)
+    .setOffset((fw - bw) / 2, fh - bh - 2)
     .setDepth(10)
-    .setScale(0.92);
+    .setScale(1);
 }
 
-/** Enemy body aligned to feet of procedural frame */
+/** Enemy body aligned to feet of gameplay frame */
 export function setupEnemyBody(
   e: Phaser.Physics.Arcade.Sprite,
   kind: EnemyKind
 ) {
   const st = ENEMY_STATS[kind];
-  const frameH = e.height || (kind === 'elite' || kind === 'hulk' ? 128 : 64);
-  const bw = Math.max(18, st.w * 0.55);
-  const bh = Math.max(24, st.h * 0.7);
+  const fw = e.width || st.w;
+  const fh = e.height || st.h;
+  const bw = Math.max(16, st.w * 0.5);
+  const bh = Math.max(22, st.h * 0.65);
   const scale =
-    kind === 'graveling' ? 0.95 : kind === 'hulk' ? 0.85 : 0.9;
+    kind === 'graveling' ? 1 : kind === 'hulk' ? 1 : kind === 'elite' ? 1.05 : 1;
   e.setOrigin(0.5, 1)
     .setSize(bw, bh)
-    .setOffset((e.width - bw) / 2, frameH - bh - 4)
+    .setOffset((fw - bw) / 2, Math.max(0, fh - bh - 2))
     .setCollideWorldBounds(true)
     .setBounce(0)
     .setScale(scale)
