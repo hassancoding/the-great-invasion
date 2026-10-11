@@ -21,7 +21,7 @@ A fast Riftlands sector-runner for the browser: short runs, slash combat, adapti
 
 ---
 
-## Stack (v4 — Stage 1)
+## Stack (v4.3 — Vite only)
 
 | Layer | Choice |
 |-------|--------|
@@ -32,8 +32,6 @@ A fast Riftlands sector-runner for the browser: short runs, slash combat, adapti
 | Audio | OGG assets + Web Audio fallback |
 | Visuals | Asset-sheet-matched procedural sprites |
 
-Legacy **Next.js 15** Canvas runner remains available for reference (`npm run dev:next`).
-
 See [STACK.md](./STACK.md) for distribution stages (PWA → Capacitor / Electron).
 
 ---
@@ -41,15 +39,10 @@ See [STACK.md](./STACK.md) for distribution stages (PWA → Capacitor / Electron
 ## Quick start
 
 ```bash
-npm install --legacy-peer-deps
+npm install
 npm run dev          # Phaser game → http://localhost:5173
 npm run build        # production → dist-game/
 npm run preview      # serve production build
-```
-
-```bash
-npm run dev:next     # legacy Next.js app → :3000
-npm run build:next
 ```
 
 ---
@@ -61,14 +54,14 @@ src/phaser/
   main.ts                 Phaser entry
   config.ts               960×540, physics, combat constants
   scenes/                 Boot · Menu · Play · Results
-  systems/                AudioManager · ThreatDirector
-  utils/textureFactory.ts Multi-frame Arin / Dominion / biomes
+  systems/                AudioManager · ThreatDirector · Progression
+  utils/                  textureFactory, cinematicEnv, visualHelpers
   assets/                 Visual + audio manifests
   data/levels.ts          Sector ASCII layouts
-public/assets/audio/      5 music loops + 22 SFX (OGG)
+public/assets/            Characters, enemies, audio, branding
 index.html                Vite shell
 vite.config.ts
-vercel.json               Vite production settings
+vercel.json               Vite production settings (output: dist-game)
 ```
 
 ---
@@ -80,7 +73,6 @@ vercel.json               Vite production settings
 - **Dominion** — Graveling, Shard Legionnaire, Obsidian Hulk, Aether Reaver
 - **World** — skybound / verdant / obsidian / ashfall tiles + skies
 - **Props** — Well beacon, crystals, slash FX, HUD icons
-
 
 ### Audio (Wave 1)
 | Music | Role |
@@ -95,9 +87,6 @@ SFX cover movement, combat, Well, UI, and results. Manifest: `src/phaser/assets/
 
 ---
 
-
-
 ## License / credits
 
-Original Riftlands IP and Game Asset Sheet designs for **The Great Invasion**.  
-
+Original Riftlands IP and Game Asset Sheet designs for **The Great Invasion**.
