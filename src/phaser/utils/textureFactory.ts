@@ -5,6 +5,7 @@
  * Swap for transparent PNG atlases when production sheets land.
  */
 import Phaser from 'phaser';
+import { generateEnvTextures } from './envTextures';
 
 function rr(
   ctx: CanvasRenderingContext2D,
@@ -39,13 +40,16 @@ function canvas(scene: Phaser.Scene, key: string, w: number, h: number) {
 
 /** Generate all runtime textures + register animations */
 export function generateSheetTextures(scene: Phaser.Scene) {
-  // Prefer disk transparent sheets (Boot preload). Only procedural-fill gaps.
-  if (!scene.textures.exists('arin')) makeArinSheet(scene);
+  // Heroes: always use multi-pose drawn frames (not single portrait embeds).
+  makeArinSheet(scene);
+  makeKaelaSheet(scene);
+  makeVarkhulSheet(scene);
   if (!scene.textures.exists('graveling')) makeGravelingSheet(scene);
   if (!scene.textures.exists('legionnaire')) makeLegionnaireSheet(scene);
   if (!scene.textures.exists('hulk')) makeHulkSheet(scene);
   if (!scene.textures.exists('elite')) makeReaverSheet(scene);
   if (!scene.textures.exists('reaver')) makeReaverSheet(scene);
+  generateEnvTextures(scene);
   makeTiles(scene);
   makeWell(scene);
   makeCrystal(scene);
@@ -185,22 +189,101 @@ function drawArinFrame(
   ctx.fill();
 }
 
+function addSheetFrames(scene: Phaser.Scene, key: string, frameWidth: number, frameHeight: number, count: number) {
+  const texture = scene.textures.get(key);
+  // Remove default __BASE-only usage by adding numeric frames
+  for (let i = 0; i < count; i++) {
+    if (!texture.has(String(i))) {
+      texture.add(i, 0, i * frameWidth, 0, frameWidth, frameHeight);
+    }
+  }
+}
+
 function makeArinSheet(scene: Phaser.Scene) {
-  const fw = 96;
+  const fw = 64;
+  const fh = 80;
   const poses: Array<'idle' | 'run0' | 'run1' | 'jump' | 'atk' | 'heavy'> = [
     'idle', 'run0', 'run1', 'jump', 'atk', 'heavy',
   ];
-  const tex = canvas(scene, 'arin_sheet', fw * poses.length, fw);
+  const tex = canvas(scene, 'arin', fw * poses.length, fh);
   if (!tex) return;
   const ctx = tex.getContext();
-  poses.forEach((p, i) => drawArinFrame(ctx, i * fw, p));
+  // drawArinFrame uses 96px cell — scale into 64x80 via temp
+  poses.forEach((p, i) => {
+    const tmp = document.createElement('canvas');
+    tmp.width = 96;
+    tmp.height = 96;
+    const tctx = tmp.getContext('2d')!;
+    drawArinFrame(tctx, 0, p);
+    ctx.drawImage(tmp, 0, 0, 96, 96, i * fw, 0, fw, fh);
+  });
   tex.refresh();
-  // single-frame fallback key
-  const single = canvas(scene, 'arin', fw, fw);
-  if (single) {
-    drawArinFrame(single.getContext(), 0, 'idle');
-    single.refresh();
-  }
+  addSheetFrames(scene, 'arin', fw, fh, poses.length);
+}
+
+function makeKaelaSheet(scene: Phaser.Scene) {
+  // Reuse Arin silhouette with verdant palette shift by redrawing
+  const fw = 64;
+  const fh = 80;
+  const poses: Array<'idle' | 'run0' | 'run1' | 'jump' | 'atk' | 'heavy'> = [
+    'idle', 'run0', 'run1', 'jump', 'atk', 'heavy',
+  ];
+  const tex = canvas(scene, 'kaela', fw * poses.length, fh);
+  if (!tex) return;
+  const ctx = tex.getContext();
+  poses.forEach((p, i) => {
+    const tmp = document.createElement('canvas');
+    tmp.width = 96;
+    tmp.height = 96;
+    const tctx = tmp.getContext('2d')!;
+    drawArinFrame(tctx, 0, p);
+    // verdant recolor pass
+    const img = tctx.getImageData(0, 0, 96, 96);
+    const d = img.data;
+    for (let px = 0; px < d.length; px += 4) {
+      if (d[px + 3] < 10) continue;
+      // shift blue armor toward green
+      const r = d[px], g = d[px + 1], b = d[px + 2];
+      d[px] = Math.min(255, Math.floor(r * 0.55));
+      d[px + 1] = Math.min(255, Math.floor(g * 1.15 + 20));
+      d[px + 2] = Math.min(255, Math.floor(b * 0.7));
+    }
+    tctx.putImageData(img, 0, 0);
+    ctx.drawImage(tmp, 0, 0, 96, 96, i * fw, 0, fw, fh);
+  });
+  tex.refresh();
+  addSheetFrames(scene, 'kaela', fw, fh, poses.length);
+}
+
+function makeVarkhulSheet(scene: Phaser.Scene) {
+  const fw = 64;
+  const fh = 80;
+  const poses: Array<'idle' | 'run0' | 'run1' | 'jump' | 'atk' | 'heavy'> = [
+    'idle', 'run0', 'run1', 'jump', 'atk', 'heavy',
+  ];
+  const tex = canvas(scene, 'varkhul', fw * poses.length, fh);
+  if (!tex) return;
+  const ctx = tex.getContext();
+  poses.forEach((p, i) => {
+    const tmp = document.createElement('canvas');
+    tmp.width = 96;
+    tmp.height = 96;
+    const tctx = tmp.getContext('2d')!;
+    drawArinFrame(tctx, 0, p);
+    const img = tctx.getImageData(0, 0, 96, 96);
+    const d = img.data;
+    for (let px = 0; px < d.length; px += 4) {
+      if (d[px + 3] < 10) continue;
+      // dark dominion / challenge skin
+      d[px] = Math.min(255, Math.floor(d[px] * 0.45 + 40));
+      d[px + 1] = Math.min(255, Math.floor(d[px + 1] * 0.35));
+      d[px + 2] = Math.min(255, Math.floor(d[px + 2] * 0.55 + 30));
+    }
+    tctx.putImageData(img, 0, 0);
+    ctx.drawImage(tmp, 0, 0, 96, 96, i * fw, 0, fw, fh);
+  });
+  tex.refresh();
+  addSheetFrames(scene, 'varkhul', fw, fh, poses.length);
 }
 
 // ─── Graveling 64×64 × 2 ───────────────────────────────────

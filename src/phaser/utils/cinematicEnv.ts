@@ -31,8 +31,8 @@ const THEME: Record<
 };
 
 /**
- * Parallax backdrop from graphics only.
- * Never places concept-sheet / atlas / biome-preview images in the world.
+ * Parallax environment layers.
+ * Uses generated env_* textures (ruins, cliffs, vegetation) — never concept sheets.
  */
 export function buildCinematicBackdrop(
   scene: Phaser.Scene,
@@ -44,27 +44,44 @@ export function buildCinematicBackdrop(
   const camH = scene.scale.height;
   const camW = scene.scale.width;
 
+  const farKey = `env_far_${theme}`;
+  const midKey = `env_mid_${theme}`;
+
+  // Far painted sky + ruins (screen-space parallax)
+  if (scene.textures.exists(farKey)) {
+    scene.add
+      .image(0, 0, farKey)
+      .setOrigin(0, 0)
+      .setScrollFactor(0)
+      .setDisplaySize(camW, camH)
+      .setDepth(-20);
+  }
+
+  // Soft haze overlay
   const haze = scene.add.graphics().setScrollFactor(0).setDepth(-18);
-  haze.fillStyle(t.haze, 0.07);
-  haze.fillRect(0, 0, camW, camH * 0.4);
-  haze.fillStyle(t.fog, 0.16);
-  haze.fillRect(0, camH * 0.55, camW, camH * 0.45);
+  haze.fillStyle(t.haze, 0.06);
+  haze.fillRect(0, 0, camW, camH * 0.35);
 
-  const far = scene.add.graphics().setScrollFactor(0.08).setDepth(-16);
-  far.fillStyle(t.mid, 0.5);
-  drawMountainRange(far, Math.max(worldW, camW) * 1.2, camH * 0.42, 7, 0.55);
+  // Mid cliffs / overgrown ruins — world scroll slow
+  if (scene.textures.exists(midKey)) {
+    const tiles = Math.ceil(worldW / 960) + 1;
+    for (let i = 0; i < tiles; i++) {
+      scene.add
+        .image(i * 960, worldH * 0.15, midKey)
+        .setOrigin(0, 0)
+        .setScrollFactor(0.25)
+        .setAlpha(0.9)
+        .setDepth(-14)
+        .setDisplaySize(960, Math.min(400, worldH * 0.7));
+    }
+  } else {
+    // Fallback silhouettes
+    const mid = scene.add.graphics().setScrollFactor(0.22).setDepth(-14);
+    mid.fillStyle(t.ground, 0.65);
+    mid.fillRect(0, camH * 0.45, camW * 2, camH * 0.3);
+  }
 
-  const mid = scene.add.graphics().setScrollFactor(0.2).setDepth(-14);
-  mid.fillStyle(t.ground, 0.65);
-  drawMountainRange(mid, Math.max(worldW, camW) * 1.1, camH * 0.55, 9, 0.72);
-
-  // Floating island silhouettes (shapes only — not sheet art)
-  const islands = scene.add.graphics().setScrollFactor(0.14).setDepth(-13);
-  islands.fillStyle(t.mid, 0.35);
-  drawFloatingIsland(islands, camW * 0.72, camH * 0.22, 70, 22);
-  islands.fillStyle(t.ground, 0.28);
-  drawFloatingIsland(islands, camW * 0.22, camH * 0.3, 48, 16);
-
+  // Near fog
   const nearFog = scene.add.graphics().setScrollFactor(0.5).setDepth(3);
   nearFog.fillStyle(t.fog, 0.1);
   for (let i = 0; i < Math.ceil(worldW / 200) + 2; i++) {
@@ -74,36 +91,6 @@ export function buildCinematicBackdrop(
   spawnAmbientMotes(scene, theme, worldW, worldH);
 }
 
-function drawFloatingIsland(
-  g: Phaser.GameObjects.Graphics,
-  cx: number,
-  cy: number,
-  w: number,
-  h: number
-) {
-  g.fillEllipse(cx, cy, w, h);
-  g.fillTriangle(cx - w * 0.35, cy + h * 0.2, cx + w * 0.35, cy + h * 0.2, cx, cy + h * 1.4);
-}
-
-function drawMountainRange(
-  g: Phaser.GameObjects.Graphics,
-  width: number,
-  baseY: number,
-  peaks: number,
-  scale: number
-) {
-  g.beginPath();
-  g.moveTo(0, baseY + 140);
-  for (let i = 0; i <= peaks; i++) {
-    const x = (i / peaks) * width;
-    const h = (40 + ((i * 37) % 90)) * scale;
-    g.lineTo(x, baseY - h);
-  }
-  g.lineTo(width, baseY + 140);
-  g.closePath();
-  g.fillPath();
-}
-
 function spawnAmbientMotes(
   scene: Phaser.Scene,
   theme: EnvTheme,
@@ -111,8 +98,7 @@ function spawnAmbientMotes(
   worldH: number
 ) {
   const color = THEME[theme].accent;
-  const n = 14;
-  for (let i = 0; i < n; i++) {
+  for (let i = 0; i < 14; i++) {
     const x = Phaser.Math.Between(20, Math.max(40, worldW - 20));
     const y = Phaser.Math.Between(40, Math.max(60, worldH - 40));
     const r = Phaser.Math.FloatBetween(1.2, 2.6);
@@ -132,16 +118,24 @@ function spawnAmbientMotes(
   }
 }
 
+/** Platform polish: optional ground-strip overlay edge */
 export function dressPlatforms(
   scene: Phaser.Scene,
   platforms: Phaser.Physics.Arcade.StaticGroup,
   theme: EnvTheme
 ) {
+  const groundKey = `env_ground_${theme}`;
   const accent = THEME[theme].accent;
   platforms.getChildren().forEach((obj, i) => {
     const s = obj as Phaser.Physics.Arcade.Sprite;
     s.setDepth(2);
-    if (i % 4 === 0) {
+    // Prefer painted ground strip if available (visual only on top row look)
+    if (scene.textures.exists(groundKey) && i % 2 === 0) {
+      // subtle edge highlight only — avoid covering whole collider art
+      scene.add
+        .rectangle(s.x, s.y - TILE / 2 + 2, TILE * 0.9, 3, accent, 0.28)
+        .setDepth(2.5);
+    } else if (i % 4 === 0) {
       scene.add
         .rectangle(s.x, s.y - TILE / 2 + 2, TILE * 0.85, 2, accent, 0.22)
         .setDepth(2.5);

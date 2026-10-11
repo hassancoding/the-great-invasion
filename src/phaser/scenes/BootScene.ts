@@ -111,17 +111,20 @@ export class BootScene extends Phaser.Scene {
       });
     };
 
-    // Heroes: only frame 0 is a genuine illustration (no pose-transform fakes).
-    // run/jump/attack/dash/hurt/death share idle until multi-pose art exists.
-    mk('arin_idle', 'arin', [0], 1, -1);
-    mk('arin_run', 'arin', [0], 1, -1);
-    mk('arin_jump', 'arin', [0], 1, 0);
-    mk('arin_attack', 'arin', [0], 8, 0);
-    mk('arin_heavy', 'arin', [0], 6, 0);
+    // Heroes: multi-pose frames drawn by textureFactory (not portrait transforms)
+    // 0 idle, 1 run0, 2 run1, 3 jump, 4 atk, 5 heavy
+    mk('arin_idle', 'arin', [0], 4, -1);
+    mk('arin_run', 'arin', [1, 2], 10, -1);
+    mk('arin_jump', 'arin', [3], 1, 0);
+    mk('arin_attack', 'arin', [4], 10, 0);
+    mk('arin_heavy', 'arin', [5], 8, 0);
 
-    mk('kaela_idle', 'kaela', [0], 1, -1);
-    mk('kaela_run', 'kaela', [0], 1, -1);
-    mk('varkhul_idle', 'varkhul', [0], 1, -1);
+    mk('kaela_idle', 'kaela', [0], 4, -1);
+    mk('kaela_run', 'kaela', [1, 2], 10, -1);
+    mk('kaela_jump', 'kaela', [3], 1, 0);
+    mk('kaela_attack', 'kaela', [4], 10, 0);
+    mk('varkhul_idle', 'varkhul', [0], 4, -1);
+    mk('varkhul_run', 'varkhul', [1, 2], 10, -1);
 
     mk('graveling_walk', 'graveling', [0, 1, 2, 3], 8, -1);
     mk('legionnaire_walk', 'legionnaire', [0, 1, 2, 3], 7, -1);
