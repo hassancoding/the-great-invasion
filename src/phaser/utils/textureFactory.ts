@@ -40,10 +40,12 @@ function canvas(scene: Phaser.Scene, key: string, w: number, h: number) {
 
 /** Generate all runtime textures + register animations */
 export function generateSheetTextures(scene: Phaser.Scene) {
-  // Heroes: always use multi-pose drawn frames (not single portrait embeds).
-  makeArinSheet(scene);
-  makeKaelaSheet(scene);
-  makeVarkhulSheet(scene);
+  // Arin: prefer atlas from Boot; only procedural if atlas missing
+  if (!scene.textures.exists('arin') || !scene.textures.get('arin').has('arin_idle_0')) {
+    makeArinSheet(scene);
+  }
+  if (!scene.textures.exists('kaela')) makeKaelaSheet(scene);
+  if (!scene.textures.exists('varkhul')) makeVarkhulSheet(scene);
   if (!scene.textures.exists('graveling')) makeGravelingSheet(scene);
   if (!scene.textures.exists('legionnaire')) makeLegionnaireSheet(scene);
   if (!scene.textures.exists('hulk')) makeHulkSheet(scene);
