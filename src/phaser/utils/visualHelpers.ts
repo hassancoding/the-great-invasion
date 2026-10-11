@@ -3,17 +3,18 @@ import type { EnemyKind } from '../systems/ThreatDirector';
 import { ENEMY_STATS } from '../systems/ThreatDirector';
 import { TILE } from '../config';
 
-/** Player: 64×80 atlas frames, origin at feet */
+/** Player: 128×160 atlas frames, origin at feet — readable at play zoom */
 export function setupPlayerBody(player: Phaser.Physics.Arcade.Sprite) {
-  const fw = player.width || 64;
-  const fh = player.height || 80;
-  const bw = 22;
-  const bh = 48;
+  const fw = player.width || 128;
+  const fh = player.height || 160;
+  // Physics hitbox stays gameplay-sized (not full art bounds)
+  const bw = 28;
+  const bh = 56;
   player
     .setOrigin(0.5, 1)
     .setCollideWorldBounds(true)
     .setSize(bw, bh)
-    .setOffset((fw - bw) / 2, fh - bh - 2)
+    .setOffset((fw - bw) / 2, fh - bh - 4)
     .setDepth(10)
     .setScale(1);
 }
@@ -45,5 +46,5 @@ export function platformTopY(tileCenterY: number) {
 
 export function applyPlayCamera(cam: Phaser.Cameras.Scene2D.Camera) {
   cam.setDeadzone(60, 36);
-  cam.setZoom(1.12);
+  cam.setZoom(1.2);
 }

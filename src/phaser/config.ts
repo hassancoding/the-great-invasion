@@ -50,7 +50,7 @@ export function createGameConfig(parent: string | HTMLElement): Phaser.Types.Cor
     backgroundColor: '#060b1a',
     pixelArt: false,
     antialias: true,
-    roundPixels: true,
+    roundPixels: false,
     scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,

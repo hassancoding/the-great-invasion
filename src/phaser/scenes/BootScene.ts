@@ -91,6 +91,12 @@ export class BootScene extends Phaser.Scene {
   private registerArinAnims() {
     if (!this.textures.exists('arin')) return;
     const tex = this.textures.get('arin');
+    // Painted art — linear filtering (not nearest/pixel-art)
+    try {
+      tex.setFilter(Phaser.Textures.FilterMode.LINEAR);
+    } catch {
+      /* older phaser */
+    }
 
     const mk = (key: string, frames: string[], frameRate: number, repeat: number) => {
       const valid = frames.filter((f) => tex.has(f));
