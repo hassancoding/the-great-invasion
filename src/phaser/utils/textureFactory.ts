@@ -562,43 +562,50 @@ function makeReaverSheet(scene: Phaser.Scene) {
 
 function makeTiles(scene: Phaser.Scene) {
   const s = 32;
-  const variants: { key: string; top: string; mid: string; bot: string; accent: string }[] = [
-    { key: 'tile', top: '#4ade80', mid: '#3d8b5a', bot: '#1e293b', accent: 'rgba(56,189,248,0.45)' },
-    { key: 'tile_skybound', top: '#94a3b8', mid: '#64748b', bot: '#1e293b', accent: 'rgba(56,189,248,0.55)' },
-    { key: 'tile_verdant', top: '#4ade80', mid: '#166534', bot: '#14532d', accent: 'rgba(74,222,128,0.4)' },
-    { key: 'tile_obsidian', top: '#a78bfa', mid: '#4c1d95', bot: '#1e1b4b', accent: 'rgba(192,132,252,0.5)' },
-    { key: 'tile_ashfall', top: '#fb923c', mid: '#7c2d12', bot: '#1c1917', accent: 'rgba(251,146,60,0.45)' },
+  const variants: { key: string; top: string; mid: string; bot: string; accent: string; moss: string }[] = [
+    { key: 'tile', top: '#4ade80', mid: '#3d8b5a', bot: '#1e293b', accent: 'rgba(56,189,248,0.45)', moss: '#86efac' },
+    { key: 'tile_skybound', top: '#94a3b8', mid: '#64748b', bot: '#1e293b', accent: 'rgba(56,189,248,0.55)', moss: '#7dd3fc' },
+    { key: 'tile_verdant', top: '#4ade80', mid: '#166534', bot: '#052e16', accent: 'rgba(74,222,128,0.5)', moss: '#bbf7d0' },
+    { key: 'tile_ashfall', top: '#a8a29e', mid: '#57534e', bot: '#1c1917', accent: 'rgba(251,146,60,0.45)', moss: '#fdba74' },
   ];
   for (const v of variants) {
     const tex = canvas(scene, v.key, s, s);
     if (!tex) continue;
     const ctx = tex.getContext();
-    const body = ctx.createLinearGradient(0, 0, 0, s);
-    body.addColorStop(0, v.mid);
-    body.addColorStop(0.2, v.mid);
-    body.addColorStop(1, v.bot);
-    ctx.fillStyle = body;
+    // stone body
+    const g = ctx.createLinearGradient(0, 0, 0, s);
+    g.addColorStop(0, v.top);
+    g.addColorStop(0.22, v.mid);
+    g.addColorStop(1, v.bot);
+    ctx.fillStyle = g;
     ctx.fillRect(0, 0, s, s);
-    // Beveled platform face — readable silhouette at game scale
-    ctx.fillStyle = v.top;
-    ctx.fillRect(0, 0, s, 7);
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.fillRect(0, 0, s, 2);
-    ctx.fillStyle = 'rgba(0,0,0,0.4)';
-    ctx.fillRect(0, s - 5, s, 5);
-    ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    ctx.fillRect(0, 7, 2, s - 12);
+    // crack lines
+    ctx.strokeStyle = 'rgba(0,0,0,0.28)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(4, 12); ctx.lineTo(14, 16); ctx.lineTo(22, 13);
+    ctx.moveTo(10, 20); ctx.lineTo(28, 24);
+    ctx.stroke();
+    // top lip highlight
     ctx.fillStyle = v.accent;
-    for (const ax of [8, 16, 24]) {
+    ctx.fillRect(0, 0, s, 3);
+    // moss / aether flecks
+    ctx.fillStyle = v.moss;
+    ctx.globalAlpha = 0.55;
+    for (const [mx, my] of [[6, 5], [14, 4], [22, 6], [28, 5]]) {
       ctx.beginPath();
-      ctx.arc(ax, 16, 1.4, 0, Math.PI * 2);
+      ctx.arc(mx, my, 1.4, 0, Math.PI * 2);
       ctx.fill();
     }
+    ctx.globalAlpha = 1;
+    // edge darken
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fillRect(0, s - 3, s, 3);
     tex.refresh();
   }
 }
 
-function makeWell(scene: Phaser.Scene) {
+function makeWellfunction makeWell(scene: Phaser.Scene) {
   const w = 48;
   const h = 64;
   const tex = canvas(scene, 'well', w, h);

@@ -139,7 +139,7 @@ export class BootScene extends Phaser.Scene {
       10,
       0
     );
-    mk('arin_dash', ['arin_dash_0', 'arin_dash_1', 'arin_dash_2'], 12, 0);
+    mk('arin_dash', ['arin_dash_0', 'arin_dash_1', 'arin_dash_2', 'arin_dash_3'], 12, 0);
     mk('arin_hurt', ['arin_hurt_0', 'arin_hurt_1', 'arin_hurt_2'], 8, 0);
     mk(
       'arin_death',

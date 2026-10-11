@@ -70,7 +70,7 @@ export function buildCinematicBackdrop(
         .image(i * 960, worldH * 0.15, midKey)
         .setOrigin(0, 0)
         .setScrollFactor(0.25)
-        .setAlpha(0.9)
+        .setAlpha(1)
         .setDepth(-14)
         .setDisplaySize(960, Math.min(400, worldH * 0.7));
     }
