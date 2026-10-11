@@ -6,8 +6,7 @@ import { IMAGE_ASSETS, SHEET_ASSETS } from '../assets/manifest';
 import { GAMEPLAY_SHEETS } from '../assets/gameplayData';
 
 /**
- * Boot — load Arin atlas (hand-painted path), enemy sheets, presentation art.
- * Procedural fill only for missing keys. Does not paint concept sheets into the world.
+ * Boot — Arin atlas (production sprites) + enemies + presentation art.
  */
 export class BootScene extends Phaser.Scene {
   constructor() {
@@ -44,14 +43,13 @@ export class BootScene extends Phaser.Scene {
       this.load.image(key, path);
     }
 
-    // Arin production atlas (plan: public/assets/sprites/arin/)
+    // Production Arin atlas — 64×80 frames
     this.load.atlas(
       'arin',
       'assets/sprites/arin/arin_sprites.png',
       'assets/sprites/arin/arin_atlas.json'
     );
 
-    // Enemy embedded sheets (multi-cell)
     for (const [key, spec] of Object.entries(GAMEPLAY_SHEETS)) {
       this.load.spritesheet(key, spec.uri, {
         frameWidth: spec.frameWidth,
@@ -89,18 +87,17 @@ export class BootScene extends Phaser.Scene {
     this.scene.start('Menu');
   }
 
-  /** Plan-matched Arin animations from atlas frame names */
+  /** Animations from arin_atlas.json frame names */
   private registerArinAnims() {
     if (!this.textures.exists('arin')) return;
+    const tex = this.textures.get('arin');
 
-    const mk = (
-      key: string,
-      frames: string[],
-      frameRate: number,
-      repeat: number
-    ) => {
-      const valid = frames.filter((f) => this.textures.get('arin').has(f));
-      if (!valid.length) return;
+    const mk = (key: string, frames: string[], frameRate: number, repeat: number) => {
+      const valid = frames.filter((f) => tex.has(f));
+      if (!valid.length) {
+        console.warn('[Boot] missing frames for', key, frames);
+        return;
+      }
       if (this.anims.exists(key)) this.anims.remove(key);
       this.anims.create({
         key,
@@ -110,18 +107,47 @@ export class BootScene extends Phaser.Scene {
       });
     };
 
+    mk('arin_idle', ['arin_idle_0', 'arin_idle_1', 'arin_idle_2', 'arin_idle_3'], 6, -1);
     mk(
-      'arin_idle',
-      ['arin_idle_0', 'arin_idle_1', 'arin_idle_2', 'arin_idle_3', 'arin_idle_4', 'arin_idle_5'],
-      6,
+      'arin_run',
+      ['arin_run_0', 'arin_run_1', 'arin_run_2', 'arin_run_3', 'arin_run_4', 'arin_run_5'],
+      10,
       -1
     );
-    mk('arin_run', ['arin_run_0', 'arin_run_1'], 10, -1);
-    mk('arin_jump', ['arin_jump_0'], 8, 0);
-    mk('arin_attack', ['arin_atk_l_0', 'arin_atk_l_1'], 14, 0);
-    mk('arin_heavy', ['arin_atk_h_0', 'arin_atk_h_1'], 12, 0);
-    mk('arin_hurt', ['arin_hurt_0'], 8, 0);
-    mk('arin_death', ['arin_death_0'], 6, 0);
+    mk('arin_jump', ['arin_jump_0', 'arin_jump_1'], 6, 0);
+    mk(
+      'arin_attack',
+      ['arin_attack_light_0', 'arin_attack_light_1', 'arin_attack_light_2', 'arin_attack_light_3'],
+      12,
+      0
+    );
+    mk(
+      'arin_heavy',
+      [
+        'arin_attack_heavy_0',
+        'arin_attack_heavy_1',
+        'arin_attack_heavy_2',
+        'arin_attack_heavy_3',
+        'arin_attack_heavy_4',
+      ],
+      10,
+      0
+    );
+    mk('arin_dash', ['arin_dash_0', 'arin_dash_1', 'arin_dash_2'], 12, 0);
+    mk('arin_hurt', ['arin_hurt_0', 'arin_hurt_1', 'arin_hurt_2'], 8, 0);
+    mk(
+      'arin_death',
+      [
+        'arin_death_0',
+        'arin_death_1',
+        'arin_death_2',
+        'arin_death_3',
+        'arin_death_4',
+        'arin_death_5',
+      ],
+      8,
+      0
+    );
   }
 
   private registerGameplayAnims() {
@@ -151,19 +177,14 @@ export class BootScene extends Phaser.Scene {
       });
     };
 
-    // Only fill hero anims if atlas registration left them missing
     if (!this.anims.exists('arin_idle')) {
+      console.warn('[Boot] Arin atlas anims missing — procedural fallback');
       mk('arin_idle', 'arin', [0], 4, -1);
-      mk('arin_run', 'arin', [1, 2], 10, -1);
-      mk('arin_jump', 'arin', [3], 1, 0);
-      mk('arin_attack', 'arin', [4], 10, 0);
-      mk('arin_heavy', 'arin', [5], 8, 0);
+      mk('arin_run', 'arin', [0], 8, -1);
     }
 
     mk('kaela_idle', 'kaela', [0], 4, -1);
     mk('kaela_run', 'kaela', [1, 2], 10, -1);
-    mk('kaela_jump', 'kaela', [3], 1, 0);
-    mk('kaela_attack', 'kaela', [4], 10, 0);
     mk('varkhul_idle', 'varkhul', [0], 4, -1);
     mk('varkhul_run', 'varkhul', [1, 2], 10, -1);
 

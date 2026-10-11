@@ -441,19 +441,35 @@ export class PlayScene extends Phaser.Scene {
     if (this.player.y > levelPixelHeight(LEVELS[this.levelIndex]) + 60) this.hurt(true);
   }
 
-  private animKey(kind: 'idle' | 'run' | 'jump' | 'attack' | 'heavy') {
+  private animKey(kind: 'idle' | 'run' | 'jump' | 'attack' | 'heavy' | 'dash' | 'hurt' | 'death') {
     if (this.heroKey === 'kaela') {
-      const k = kind === 'idle' ? 'kaela_idle' : kind === 'run' ? 'kaela_run' : `arin_${kind === 'heavy' ? 'heavy' : kind}`;
+      const k =
+        kind === 'idle'
+          ? 'kaela_idle'
+          : kind === 'run'
+            ? 'kaela_run'
+            : `arin_${kind === 'heavy' ? 'heavy' : kind === 'attack' ? 'attack' : kind}`;
       if (this.anims.exists(k)) return k;
     }
-    const map = { idle: 'arin_idle', run: 'arin_run', jump: 'arin_jump', attack: 'arin_attack', heavy: 'arin_heavy' } as const;
-    return map[kind];
+    const map: Record<string, string> = {
+      idle: 'arin_idle',
+      run: 'arin_run',
+      jump: 'arin_jump',
+      attack: 'arin_attack',
+      heavy: 'arin_heavy',
+      dash: 'arin_dash',
+      hurt: 'arin_hurt',
+      death: 'arin_death',
+    };
+    return map[kind] ?? 'arin_idle';
   }
 
   private startDash() {
     this.dashTimer = PHYSICS.dashDuration;
     this.dashCd = PHYSICS.dashCooldown;
     this.invuln = Math.max(this.invuln, PHYSICS.dashInvuln);
+    const dk = this.animKey('dash');
+    if (this.anims.exists(dk)) this.player.play(dk, true);
     Audio.sfxDash();
     // brief trail
     const g = this.add.rectangle(this.player.x, this.player.y, 28, 44, 0x38bdf8, 0.35).setDepth(9);

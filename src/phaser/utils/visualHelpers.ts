@@ -3,12 +3,12 @@ import type { EnemyKind } from '../systems/ThreatDirector';
 import { ENEMY_STATS } from '../systems/ThreatDirector';
 import { TILE } from '../config';
 
-/** Player: 96×96 atlas (or 64×80 fallback), origin at feet */
+/** Player: 64×80 atlas frames, origin at feet */
 export function setupPlayerBody(player: Phaser.Physics.Arcade.Sprite) {
-  const fw = player.width || 96;
-  const fh = player.height || 96;
-  const bw = 26;
-  const bh = 52;
+  const fw = player.width || 64;
+  const fh = player.height || 80;
+  const bw = 22;
+  const bh = 48;
   player
     .setOrigin(0.5, 1)
     .setCollideWorldBounds(true)
