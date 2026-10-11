@@ -111,15 +111,17 @@ export class BootScene extends Phaser.Scene {
       });
     };
 
-    mk('arin_idle', 'arin', [0, 1], 4, -1);
-    mk('arin_run', 'arin', [2, 3], 10, -1);
-    mk('arin_jump', 'arin', [4], 1, 0);
-    mk('arin_attack', 'arin', [5], 8, 0);
-    mk('arin_heavy', 'arin', [5], 6, 0);
+    // Heroes: only frame 0 is a genuine illustration (no pose-transform fakes).
+    // run/jump/attack/dash/hurt/death share idle until multi-pose art exists.
+    mk('arin_idle', 'arin', [0], 1, -1);
+    mk('arin_run', 'arin', [0], 1, -1);
+    mk('arin_jump', 'arin', [0], 1, 0);
+    mk('arin_attack', 'arin', [0], 8, 0);
+    mk('arin_heavy', 'arin', [0], 6, 0);
 
-    mk('kaela_idle', 'kaela', [0, 1], 4, -1);
-    mk('kaela_run', 'kaela', [2, 3], 10, -1);
-    mk('varkhul_idle', 'varkhul', [0, 1], 4, -1);
+    mk('kaela_idle', 'kaela', [0], 1, -1);
+    mk('kaela_run', 'kaela', [0], 1, -1);
+    mk('varkhul_idle', 'varkhul', [0], 1, -1);
 
     mk('graveling_walk', 'graveling', [0, 1, 2, 3], 8, -1);
     mk('legionnaire_walk', 'legionnaire', [0, 1, 2, 3], 7, -1);
