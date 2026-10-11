@@ -484,16 +484,21 @@ function makeTiles(scene: Phaser.Scene) {
     body.addColorStop(1, v.bot);
     ctx.fillStyle = body;
     ctx.fillRect(0, 0, s, s);
+    // Beveled platform face — readable silhouette at game scale
     ctx.fillStyle = v.top;
-    ctx.fillRect(0, 0, s, 5);
-    ctx.fillStyle = 'rgba(255,255,255,0.25)';
+    ctx.fillRect(0, 0, s, 7);
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
     ctx.fillRect(0, 0, s, 2);
-    ctx.fillStyle = 'rgba(0,0,0,0.35)';
-    ctx.fillRect(0, s - 4, s, 4);
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.fillRect(0, s - 5, s, 5);
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fillRect(0, 7, 2, s - 12);
     ctx.fillStyle = v.accent;
-    ctx.beginPath();
-    ctx.arc(12, 14, 1.5, 0, Math.PI * 2);
-    ctx.fill();
+    for (const ax of [8, 16, 24]) {
+      ctx.beginPath();
+      ctx.arc(ax, 16, 1.4, 0, Math.PI * 2);
+      ctx.fill();
+    }
     tex.refresh();
   }
 }

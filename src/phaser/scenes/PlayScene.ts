@@ -127,7 +127,25 @@ export class PlayScene extends Phaser.Scene {
       .image(0, 0, skyKey)
       .setOrigin(0, 0)
       .setScrollFactor(0)
-      .setDisplaySize(this.scale.width, this.scale.height);
+      .setDisplaySize(this.scale.width, this.scale.height)
+      .setDepth(-20);
+    // Soft floor gradient band for readable ground plane
+    const floor = this.add.rectangle(
+      this.scale.width / 2,
+      this.scale.height * 0.78,
+      this.scale.width,
+      this.scale.height * 0.45,
+      0x0c4a6e,
+      0.18
+    ).setScrollFactor(0).setDepth(-19);
+    if (this.textures.exists('art_islands')) {
+      this.add
+        .image(this.scale.width * 0.75, this.scale.height * 0.28, 'art_islands')
+        .setScrollFactor(0.15)
+        .setAlpha(0.35)
+        .setScale(0.55)
+        .setDepth(-18);
+    }
 
     this.platforms = this.physics.add.staticGroup();
     this.enemies = this.physics.add.group();
@@ -146,18 +164,26 @@ export class PlayScene extends Phaser.Scene {
             index >= 2 ? 'tile_ashfall' : index >= 1 ? 'tile_verdant' : 'tile_skybound';
           (this.platforms.create(x, y, tileKey) as Phaser.Physics.Arcade.Sprite).refreshBody();
         } else if (ch === 'C') {
-          const crystal = this.crystals.create(x, y, 'crystal') as Phaser.Physics.Arcade.Sprite;
-          crystal.setBounceY(0.2);
+          const crystal = this.crystals.create(x, y - 4, 'crystal') as Phaser.Physics.Arcade.Sprite;
+          crystal.setOrigin(0.5, 0.5).setScale(0.85).setDepth(5);
           (crystal.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
+          this.tweens.add({
+            targets: crystal,
+            y: crystal.y - 5,
+            duration: 900,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut',
+          });
         } else if (ch === 'E') this.spawnEnemy('graveling', x, y);
         else if (ch === 'L') this.spawnEnemy('legionnaire', x, y);
         else if (ch === 'H') this.spawnEnemy('hulk', x, y);
         else if (ch === 'O') this.spawnEnemy('elite', x, y);
         else if (ch === 'G') {
-          this.well = this.physics.add.sprite(x, y - 16, 'well');
+          this.well = this.physics.add.sprite(x, y - TILE / 2, 'well');
           this.well.setImmovable(true);
           (this.well.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
-        } else if (ch === 'P') spawn = { x, y: y - 8 };
+        } else if (ch === 'P') spawn = { x, y: y - TILE / 2 };  // top of tile; player origin is feet
         else if (ch === 'B') {
           const pad = this.platforms.create(x, y + 8, 'tile') as Phaser.Physics.Arcade.Sprite;
           pad.setTint(0x38bdf8);
@@ -169,7 +195,14 @@ export class PlayScene extends Phaser.Scene {
 
     const tex = this.textures.exists(this.heroKey) ? this.heroKey : 'arin';
     this.player = this.physics.add.sprite(spawn.x, spawn.y, tex);
-    this.player.setCollideWorldBounds(true).setSize(28, 48).setOffset(34, 40).setDepth(10);
+    // 96×96 frame: hitbox feet-aligned (art feet ~y90)
+    this.player
+      .setOrigin(0.5, 1)
+      .setCollideWorldBounds(true)
+      .setSize(22, 42)
+      .setOffset(37, 48)
+      .setDepth(10)
+      .setScale(0.92);
     if (this.anims.exists('arin_idle')) this.player.play('arin_idle');
     if (this.heroKey === 'kaela') this.player.setTint(0xa7f3d0);
 
@@ -178,8 +211,9 @@ export class PlayScene extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.crystals, this.collectCrystal, undefined, this);
     this.physics.add.overlap(this.player, this.enemies, this.onPlayerEnemy, undefined, this);
 
-    this.cameras.main.startFollow(this.player, true, 0.12, 0.12);
-    this.cameras.main.setDeadzone(80, 40);
+    this.cameras.main.startFollow(this.player, true, 0.14, 0.14);
+    this.cameras.main.setDeadzone(60, 36);
+    this.cameras.main.setZoom(1.12);
 
     this.sectorMode = 'explore';
     this.claimProgress = 0;
@@ -200,7 +234,7 @@ export class PlayScene extends Phaser.Scene {
 
   private spawnEnemy(kind: EnemyKind, x: number, y: number) {
     const st = ENEMY_STATS[kind];
-    const e = this.enemies.create(x, y - 4, kind) as EnemyGo;
+    const e = this.enemies.create(x, y - TILE / 2, kind) as EnemyGo;
     e.kind = kind;
     e.hp = st.hp;
     e.maxHp = st.hp;
@@ -208,7 +242,17 @@ export class PlayScene extends Phaser.Scene {
     e.stun = 0;
     e.chargeCd = kind === 'elite' ? 1.2 : 0;
     e.charging = false;
-    e.setSize(st.w * 0.7, st.h * 0.85).setCollideWorldBounds(true).setBounce(0);
+    // Align hitbox to feet of procedural frame (64 or 128)
+    const frameH = e.height || (kind === 'elite' || kind === 'hulk' ? 128 : 64);
+    const bw = Math.max(18, st.w * 0.55);
+    const bh = Math.max(24, st.h * 0.7);
+    e.setOrigin(0.5, 1)
+      .setSize(bw, bh)
+      .setOffset((e.width - bw) / 2, frameH - bh - 4)
+      .setCollideWorldBounds(true)
+      .setBounce(0)
+      .setScale(kind === 'graveling' ? 0.95 : kind === 'hulk' ? 0.85 : 0.9)
+      .setDepth(8);
     e.setVelocityX(st.speed * e.dir * 0.5);
     const animKey =
       kind === 'graveling'
