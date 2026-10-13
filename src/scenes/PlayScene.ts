@@ -17,7 +17,10 @@ export class PlayScene extends Phaser.Scene {
     super('Play');
   }
 
-  create() {
+  create(data?: { hero?: string }) {
+    const hero = data?.hero || this.registry.get('hero') || 'arin';
+    this.registry.set('hero', hero);
+
     const worldW = 2000;
     const worldH = 540;
     this.cameras.main.setBackgroundColor('#0c4a6e');
@@ -62,8 +65,9 @@ export class PlayScene extends Phaser.Scene {
       w: this.input.keyboard!.addKey('W'),
     };
 
+    const heroLabel = typeof hero === 'string' ? hero.toUpperCase() : 'ARIN';
     this.add
-      .text(12, 12, 'Arrows / WASD · SPACE jump · ESC menu', {
+      .text(12, 12, `${heroLabel}  ·  Arrows / WASD · SPACE jump · ESC menu`, {
         fontFamily: 'system-ui,sans-serif',
         fontSize: '13px',
         color: '#e0f2fe',

@@ -122,11 +122,11 @@ export class MenuScene extends Phaser.Scene {
     const btnY = h * 0.55;
     this.makeButton(titleX, btnY, 'NEW GAME', 0x38bdf8, '#0f172a', () => {
       this.cameras.main.fadeOut(280, 2, 6, 18);
-      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('Play'));
+      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('HeroSelect'));
     });
     this.makeButton(titleX, btnY + 56, 'DAILY RIFT', 0x1e293b, '#e0f2fe', () => {
       this.cameras.main.fadeOut(280, 2, 6, 18);
-      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('Play'));
+      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('HeroSelect'));
     }, true);
     this.makeButton(titleX, btnY + 112, 'OPTIONS', 0x1e293b, '#94a3b8', () => {
       this.flashNote('Options coming soon');

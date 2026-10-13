@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { BootScene } from './scenes/BootScene';
 import { MenuScene } from './scenes/MenuScene';
+import { HeroSelectScene } from './scenes/HeroSelectScene';
 import { PlayScene } from './scenes/PlayScene';
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -20,7 +21,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false,
     },
   },
-  scene: [BootScene, MenuScene, PlayScene],
+  scene: [BootScene, MenuScene, HeroSelectScene, PlayScene],
   input: {
     keyboard: true,
     activePointers: 3,

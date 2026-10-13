@@ -34,6 +34,9 @@ export class BootScene extends Phaser.Scene {
 
     this.load.image('menu_bg', 'assets/menu/bg.jpg');
     this.load.image('menu_hero', 'assets/menu/hero.png');
+    this.load.image('portrait_arin', 'assets/menu/portrait_arin.png');
+    this.load.image('portrait_kaela', 'assets/menu/portrait_kaela.png');
+    this.load.image('portrait_varkhul', 'assets/menu/portrait_varkhul.png');
   }
 
   create() {
