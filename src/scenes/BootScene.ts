@@ -37,6 +37,21 @@ export class BootScene extends Phaser.Scene {
     this.load.image('sky_vista', 'assets/env/sky_vista.jpg');
     this.load.image('sky_citadel', 'assets/env/sky_citadel.jpg');
     this.load.image('sky_ruins', 'assets/env/sky_ruins.jpg');
+
+    // Halcyon Spire layered vector environment pack (standalone assets)
+    this.load.svg('halcyon_sky', 'assets/env/halcyon/sky.svg', { width: 2048, height: 1152 });
+    this.load.svg('halcyon_far_islands', 'assets/env/halcyon/far-islands.svg', { width: 2048, height: 1152 });
+    this.load.svg('halcyon_distant_citadel', 'assets/env/halcyon/distant-citadel.svg', { width: 2048, height: 1152 });
+    this.load.svg('halcyon_midground_ruins', 'assets/env/halcyon/midground-ruins.svg', { width: 2048, height: 1152 });
+    this.load.svg('halcyon_foreground_crystals', 'assets/env/halcyon/foreground-crystals.svg', { width: 2048, height: 1152 });
+    this.load.svg('halcyon_platform_top', 'assets/env/halcyon/platform-top.svg', { width: 256, height: 96 });
+    this.load.svg('halcyon_platform_middle', 'assets/env/halcyon/platform-middle.svg', { width: 256, height: 96 });
+    this.load.svg('halcyon_platform_edge_left', 'assets/env/halcyon/platform-edge-left.svg', { width: 128, height: 96 });
+    this.load.svg('halcyon_platform_edge_right', 'assets/env/halcyon/platform-edge-right.svg', { width: 128, height: 96 });
+    this.load.svg('halcyon_cliff_face', 'assets/env/halcyon/cliff-face.svg', { width: 256, height: 256 });
+    this.load.svg('halcyon_crystal_cluster', 'assets/env/halcyon/crystal-cluster.svg', { width: 256, height: 256 });
+    this.load.svg('halcyon_ancient_arch', 'assets/env/halcyon/ancient-arch.svg', { width: 320, height: 384 });
+    this.load.svg('halcyon_aether_well', 'assets/env/halcyon/aether-well.svg', { width: 320, height: 320 });
     this.load.image('menu_hero', 'assets/menu/hero.png');
     this.load.image('portrait_arin', 'assets/sprites/arin/arin_portrait.png');
 
