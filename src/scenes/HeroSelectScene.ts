@@ -124,7 +124,7 @@ export class HeroSelectScene extends Phaser.Scene {
     root.add(bg);
     const ring = this.add.graphics();
     root.add(ring);
-    const key = `portrait_${hero.id}`;
+    const key = hero.id === 'arin' ? 'halcyon_arin_hero' : `portrait_${hero.id}`;
     if (this.textures.exists(key)) {
       const img = this.add.image(0, -28, key);
       img.setScale(Math.min((cardW - 24) / img.width, 140 / img.height));
