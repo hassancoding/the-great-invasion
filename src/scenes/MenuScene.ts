@@ -120,20 +120,19 @@ export class MenuScene extends Phaser.Scene {
 
     // Buttons
     const btnY = h * 0.55;
-    this.makeButton(titleX, btnY, 'NEW GAME', 0x38bdf8, '#0f172a', () => {
+    this.makeButton(titleX, btnY, 'ENTER HALCYON', 0x38bdf8, '#0f172a', () => {
       this.cameras.main.fadeOut(280, 2, 6, 18);
       this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('HeroSelect'));
     });
-    this.makeButton(titleX, btnY + 56, 'DAILY RIFT', 0x1e293b, '#e0f2fe', () => {
-      this.cameras.main.fadeOut(280, 2, 6, 18);
-      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('HeroSelect'));
+    this.makeButton(titleX, btnY + 56, 'HOW TO PLAY', 0x1e293b, '#e0f2fe', () => {
+      this.showInfo('FIELD MANUAL', 'MOVE   A / D or LEFT / RIGHT\nJUMP   W / UP / SPACE\nATTACK   J or K\nPAUSE / MENU   ESC\n\nSURVIVE THE SIEGE\nDefeat every wave. Enemies grow faster, tougher, and larger.\n\nCLAIM THE AETHER WELL\nOnly after the final breach is defeated, stand inside the Well ring until it stabilizes.');
     }, true);
-    this.makeButton(titleX, btnY + 112, 'OPTIONS', 0x1e293b, '#94a3b8', () => {
-      this.flashNote('Options coming soon');
+    this.makeButton(titleX, btnY + 112, 'THE RIFTLANDS', 0x1e293b, '#94a3b8', () => {
+      this.showInfo('THE RIFTLANDS', 'The invasion has reached Halcyon Spire.\n\nThree champions stand between the Rift and the Aether Well.\n\nSector I is the only open front. Clear its siege to earn the right to advance.');
     }, true);
 
     this.add
-      .text(w / 2, h - 22, 'v5.0 · Phaser · Arrow keys in game', {
+      .text(w / 2, h - 22, 'SECTOR I: HALCYON SPIRE  ·  THE SIEGE OF THE AETHER WELL', {
         fontFamily: 'system-ui,sans-serif',
         fontSize: '11px',
         color: '#64748b',
@@ -192,6 +191,18 @@ export class MenuScene extends Phaser.Scene {
       text.setScale(1);
     });
     hit.on('pointerdown', onClick);
+  }
+
+  private showInfo(title: string, body: string) {
+    const { width: w, height: h } = this.scale;
+    const shade = this.add.rectangle(w / 2, h / 2, w, h, 0x020617, 0.82).setDepth(30).setInteractive();
+    const panel = this.add.rectangle(w / 2, h / 2, Math.min(560, w - 48), Math.min(390, h - 48), 0x0b1729, 0.98).setStrokeStyle(2, 0x38bdf8, 0.75).setDepth(31);
+    const heading = this.add.text(w / 2, h * 0.24, title, { fontFamily: 'system-ui,sans-serif', fontSize: '22px', color: '#7dd3fc', fontStyle: 'bold' }).setOrigin(0.5).setDepth(32);
+    const copy = this.add.text(w / 2, h * 0.47, body, { fontFamily: 'system-ui,sans-serif', fontSize: '15px', color: '#e0f2fe', align: 'center', lineSpacing: 7, wordWrap: { width: Math.min(490, w - 90) } }).setOrigin(0.5).setDepth(32);
+    const close = this.add.text(w / 2, h * 0.76, 'RETURN', { fontFamily: 'system-ui,sans-serif', fontSize: '15px', color: '#0f172a', backgroundColor: '#38bdf8', padding: { x: 24, y: 10 }, fontStyle: 'bold' }).setOrigin(0.5).setDepth(33).setInteractive({ useHandCursor: true });
+    const dismiss = () => { shade.destroy(); panel.destroy(); heading.destroy(); copy.destroy(); close.destroy(); };
+    close.on('pointerdown', dismiss);
+    shade.on('pointerdown', dismiss);
   }
 
   private flashNote(msg: string) {
