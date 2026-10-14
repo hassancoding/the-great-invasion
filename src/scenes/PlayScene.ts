@@ -63,6 +63,8 @@ export class PlayScene extends Phaser.Scene {
       this
     );
 
+    if (this.sector.id === 'halcyon') this.buildHalcyonChallenges();
+
     this.cameras.main.startFollow(this.player, true, 0.12, 0.12);
     this.cameras.main.setZoom(1.12);
 
@@ -83,6 +85,50 @@ export class PlayScene extends Phaser.Scene {
     this.input.keyboard!.on('keydown-J', () => this.tryAttack());
     this.input.keyboard!.on('keydown-K', () => this.tryAttack());
     // Sector advancement is intentionally locked: only Halcyon Spire is open in this build.
+  }
+
+  private buildHalcyonChallenges() {
+    const spikeXs = [590, 1080, 1510, 1980];
+    for (const x of spikeXs) {
+      if (!this.textures.exists('shared_spike_hazard')) continue;
+      const spike = this.physics.add.staticImage(x, this.groundY - 30, 'shared_spike_hazard')
+        .setDisplaySize(112, 42)
+        .setDepth(6);
+      const body = spike.body as Phaser.Physics.Arcade.StaticBody;
+      body.setSize(100, 30);
+      body.updateFromGameObject();
+      this.physics.add.overlap(
+        this.player,
+        spike,
+        this.onPlayerHit as Phaser.Types.Physics.Arcade.ArcadePhysicsCallback,
+        undefined,
+        this
+      );
+    }
+
+    if (this.textures.exists('shared_bounce_pad')) {
+      const pad = this.physics.add.staticImage(835, this.groundY - 26, 'shared_bounce_pad')
+        .setDisplaySize(92, 46)
+        .setDepth(6);
+      const body = pad.body as Phaser.Physics.Arcade.StaticBody;
+      body.setSize(82, 28);
+      body.updateFromGameObject();
+      this.physics.add.overlap(
+        this.player,
+        pad,
+        () => {
+          const playerBody = this.player.body as Phaser.Physics.Arcade.Body;
+          if (playerBody.velocity.y > 0 || playerBody.blocked.down) {
+            this.player.setVelocityY(-790);
+            this.cameras.main.shake(90, 0.002);
+            this.cameras.main.flash(120, 80, 210, 255, false);
+          }
+        },
+        undefined,
+        this
+      );
+      this.tweens.add({ targets: pad, y: pad.y - 3, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    }
   }
 
   private buildHud() {
