@@ -38,6 +38,14 @@ export class BootScene extends Phaser.Scene {
     this.load.image('sky_citadel', 'assets/env/sky_citadel.jpg');
     this.load.image('sky_ruins', 'assets/env/sky_ruins.jpg');
 
+    // Newly added standalone Halcyon assets (Sector I pack)
+    this.load.svg('halcyon_custom_sky', 'assets/env/halcyon/backgrounds/halcyon-sky.svg', { width: 1920, height: 1080 });
+    this.load.svg('halcyon_arin_idle_prop', 'assets/env/halcyon/sprites/arin-idle.svg', { width: 256, height: 256 });
+    this.load.svg('halcyon_graveling_sprite', 'assets/env/halcyon/sprites/graveling.svg', { width: 192, height: 192 });
+    this.load.svg('halcyon_aether_well_prop', 'assets/env/halcyon/props/aether-well.svg', { width: 320, height: 320 });
+    this.load.svg('halcyon_ancient_arch_prop', 'assets/env/halcyon/props/ancient-arch.svg', { width: 256, height: 256 });
+    this.load.svg('halcyon_sky_crystal_prop', 'assets/env/halcyon/props/sky-crystal.svg', { width: 160, height: 192 });
+
     // Halcyon Spire layered vector environment pack (standalone assets)
     this.load.svg('halcyon_sky', 'assets/env/halcyon/sky.svg', { width: 2400, height: 540 });
     this.load.svg('halcyon_far_islands', 'assets/env/halcyon/far-islands.svg', { width: 2400, height: 540 });
