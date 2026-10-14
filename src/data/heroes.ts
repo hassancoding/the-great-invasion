@@ -29,10 +29,10 @@ export const HEROES: HeroDef[] = [
     blurb: 'Balanced swordplay. Dash. Claim the Well.',
     speed: 240,
     jump: 520,
-    scale: 0.85,
+    scale: 0.9,
     atlas: 'arin',
-    bodyW: 48,
-    bodyH: 90,
+    bodyW: 36,
+    bodyH: 88,
   },
   {
     id: 'kaela',
