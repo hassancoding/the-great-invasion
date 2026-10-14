@@ -52,6 +52,20 @@ export class BootScene extends Phaser.Scene {
     this.load.svg('halcyon_crystal_cluster', 'assets/env/halcyon/crystal-cluster.svg', { width: 256, height: 256 });
     this.load.svg('halcyon_ancient_arch', 'assets/env/halcyon/ancient-arch.svg', { width: 320, height: 384 });
     this.load.svg('halcyon_aether_well', 'assets/env/halcyon/aether-well.svg', { width: 320, height: 320 });
+
+    // Additional standalone layers for the existing Ashfall Reach and Shattered Ruins sectors.
+    this.load.svg('ashfall_sky', 'assets/env/ashfall/sky.svg', { width: 2400, height: 540 });
+    this.load.svg('ashfall_far', 'assets/env/ashfall/far-landscape.svg', { width: 2400, height: 540 });
+    this.load.svg('ashfall_mid', 'assets/env/ashfall/midground-structures.svg', { width: 2400, height: 540 });
+    this.load.svg('ashfall_foreground', 'assets/env/ashfall/foreground-effects.svg', { width: 2400, height: 540 });
+    this.load.svg('ashfall_platform', 'assets/env/ashfall/platform.svg', { width: 256, height: 96 });
+    this.load.svg('ashfall_energy_cluster', 'assets/env/ashfall/energy-cluster.svg', { width: 256, height: 256 });
+    this.load.svg('ruins_sky', 'assets/env/ruins/sky.svg', { width: 2400, height: 540 });
+    this.load.svg('ruins_far', 'assets/env/ruins/far-landscape.svg', { width: 2400, height: 540 });
+    this.load.svg('ruins_mid', 'assets/env/ruins/midground-structures.svg', { width: 2400, height: 540 });
+    this.load.svg('ruins_foreground', 'assets/env/ruins/foreground-effects.svg', { width: 2400, height: 540 });
+    this.load.svg('ruins_platform', 'assets/env/ruins/platform.svg', { width: 256, height: 96 });
+    this.load.svg('ruins_energy_cluster', 'assets/env/ruins/energy-cluster.svg', { width: 256, height: 256 });
     this.load.image('menu_hero', 'assets/menu/hero.png');
     this.load.image('portrait_arin', 'assets/sprites/arin/arin_portrait.png');
 
