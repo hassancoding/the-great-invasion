@@ -148,7 +148,7 @@ export function buildEnvironment(
         .setDepth(5);
       scene.tweens.add({ targets: crystal, y: crystal.y - 5, angle: { from: -3, to: 3 }, alpha: { from: 0.82, to: 1 }, duration: 1700 + (i * 137) % 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       const aura = scene.add.circle(cx, p.y - 14, 17, sector.accent, 0.12).setDepth(4);
-      scene.tweens.add({ targets: aura, scale: { from: 0.75, to: 1.35 }, alpha: { from: 0.06, to: 0.22 }, duration: 1900 + (i * 113) % 700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      scene.tweens.add({ targets: aura, scaleX: { from: 0.75, to: 1.35 }, scaleY: { from: 0.75, to: 1.35 }, alpha: { from: 0.06, to: 0.22 }, duration: 1900 + (i * 113) % 700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     } else {
       const crystal = scene.add.graphics().setDepth(5);
       crystal.fillStyle(sector.accent, 0.85);
