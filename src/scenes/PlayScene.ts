@@ -213,29 +213,46 @@ export class PlayScene extends Phaser.Scene {
   }
 
   private spawnPlayer(x: number, y: number) {
-    const useArin =
-      this.hero.id === 'arin' &&
-      this.textures.exists('arin') &&
-      this.textures.get('arin').has('arin_idle_0');
-    if (useArin) {
-      this.player = this.physics.add.sprite(x, y, 'arin', 'arin_idle_0');
+    // Use the illustrated Sector I champion art when available. Keep physics bodies
+    // independent from artwork dimensions so detailed sprites remain controllable.
+    const customKeys: Record<string, string> = {
+      arin: 'halcyon_arin_hero',
+      kaela: 'halcyon_kaela_hero',
+      varkhul: 'halcyon_varkhul_hero',
+    };
+    const customKey = customKeys[this.hero.id];
+    if (customKey && this.textures.exists(customKey)) {
+      this.player = this.physics.add.sprite(x, y, customKey);
       this.player.setOrigin(0.5, 1);
-      this.player.setScale(this.hero.scale);
+      this.player.setScale(this.hero.id === 'arin' ? 0.43 : 0.31);
       const body = this.player.body as Phaser.Physics.Arcade.Body;
       body.setSize(this.hero.bodyW, this.hero.bodyH);
-      body.setOffset((this.player.width - this.hero.bodyW) / 2, this.player.height - this.hero.bodyH - 4);
-      if (this.anims.exists('arin_idle')) this.player.play('arin_idle');
+      body.setOffset((this.player.width - this.hero.bodyW) / 2, this.player.height - this.hero.bodyH);
     } else {
-      const tex =
-        this.hero.id === 'kaela' ? 'hero_kaela' : this.hero.id === 'varkhul' ? 'hero_varkhul' : 'hero_arin_fb';
-      const key = this.textures.exists(tex) ? tex : 'player';
-      this.player = this.physics.add.sprite(x, y, key);
-      this.player.setOrigin(0.5, 1);
-      this.player.setScale(this.hero.scale * 1.35);
-      this.player.setTint(this.hero.color);
-      const body = this.player.body as Phaser.Physics.Arcade.Body;
-      body.setSize(this.hero.bodyW * 0.7, this.hero.bodyH * 0.75);
-      body.setOffset((this.player.width - body.width) / 2, this.player.height - body.height);
+      const useArin =
+        this.hero.id === 'arin' &&
+        this.textures.exists('arin') &&
+        this.textures.get('arin').has('arin_idle_0');
+      if (useArin) {
+        this.player = this.physics.add.sprite(x, y, 'arin', 'arin_idle_0');
+        this.player.setOrigin(0.5, 1);
+        this.player.setScale(this.hero.scale);
+        const body = this.player.body as Phaser.Physics.Arcade.Body;
+        body.setSize(this.hero.bodyW, this.hero.bodyH);
+        body.setOffset((this.player.width - this.hero.bodyW) / 2, this.player.height - this.hero.bodyH - 4);
+        if (this.anims.exists('arin_idle')) this.player.play('arin_idle');
+      } else {
+        const tex =
+          this.hero.id === 'kaela' ? 'hero_kaela' : this.hero.id === 'varkhul' ? 'hero_varkhul' : 'hero_arin_fb';
+        const key = this.textures.exists(tex) ? tex : 'player';
+        this.player = this.physics.add.sprite(x, y, key);
+        this.player.setOrigin(0.5, 1);
+        this.player.setScale(this.hero.scale * 1.35);
+        this.player.setTint(this.hero.color);
+        const body = this.player.body as Phaser.Physics.Arcade.Body;
+        body.setSize(this.hero.bodyW * 0.7, this.hero.bodyH * 0.75);
+        body.setOffset((this.player.width - body.width) / 2, this.player.height - body.height);
+      }
     }
     this.player.setCollideWorldBounds(true);
     this.player.setBounce(0.02);
