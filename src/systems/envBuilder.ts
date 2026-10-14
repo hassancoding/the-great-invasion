@@ -122,7 +122,7 @@ export function buildEnvironment(
       sector.id === 'trade-isles' ? 'trade_isles_platform' :
       sector.id === 'heart-of-rift' ? 'heart_rift_platform' : '';
     if (platformKey && scene.textures.exists(platformKey)) {
-      scene.add.image(p.x + (p.tiles * 32) / 2, p.y + 8, platformKey)
+      scene.add.image(p.x + (p.tiles * 32) / 2, p.y + 4, platformKey)
         .setDisplaySize(p.tiles * 32, 48)
         .setDepth(2);
     }
