@@ -545,9 +545,9 @@
     }
   ],
   "validation": {
-    "typescriptBuild": "not yet confirmed",
+    "typescriptBuild": "Vercel deployment status succeeded for latest checked main commit 0b9dbc640c99abdfc3284023dd2fe6819158aa73; this is deployment evidence, not a separately run local npm build",
     "browserVisualQA": "not run in this connector session",
     "collisionGeometry": "kept separate from artwork",
-    "lastStatusCheck": "Vercel status pending at latest checked commit"
+    "lastStatusCheck": "Vercel status success for commit 0b9dbc640c99abdfc3284023dd2fe6819158aa73"
   }
 }
