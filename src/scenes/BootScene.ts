@@ -78,6 +78,10 @@ export class BootScene extends Phaser.Scene {
     this.load.svg('heart_rift_foreground', 'assets/env/heart-of-rift/foreground-effects.svg', { width: 2400, height: 540 });
     this.load.svg('heart_rift_platform', 'assets/env/heart-of-rift/platform.svg', { width: 256, height: 96 });
     this.load.svg('heart_rift_energy_cluster', 'assets/env/heart-of-rift/energy-cluster.svg', { width: 256, height: 256 });
+    this.load.svg('shared_bounce_pad', 'assets/env/shared/bounce-pad.svg', { width: 192, height: 96 });
+    this.load.svg('shared_spike_hazard', 'assets/env/shared/spike-hazard.svg', { width: 256, height: 96 });
+    this.load.svg('shared_rift_gate', 'assets/env/shared/rift-gate.svg', { width: 256, height: 384 });
+    this.load.svg('shared_energy_burst', 'assets/env/shared/energy-burst.svg', { width: 256, height: 256 });
     this.load.image('menu_hero', 'assets/menu/hero.png');
     this.load.image('portrait_arin', 'assets/sprites/arin/arin_portrait.png');
 
