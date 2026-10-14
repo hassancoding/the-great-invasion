@@ -108,11 +108,24 @@ export function buildEnvironment(
   for (let i = 0; i < sector.platforms.length; i += 2) {
     const p = sector.platforms[i];
     const cx = p.x + (p.tiles * 32) / 2;
-    const crystal = scene.add.graphics().setDepth(5);
-    crystal.fillStyle(sector.accent, 0.85);
-    crystal.fillTriangle(cx, p.y - 28, cx - 6, p.y - 8, cx + 6, p.y - 8);
-    crystal.fillStyle(sector.fog, 0.35);
-    crystal.fillCircle(cx, p.y - 22, 10);
+    if (sector.id === 'halcyon' && scene.textures.exists('halcyon_crystal_cluster')) {
+      scene.add.image(cx, p.y - 20, 'halcyon_crystal_cluster')
+        .setDisplaySize(38, 42)
+        .setDepth(5);
+    } else {
+      const crystal = scene.add.graphics().setDepth(5);
+      crystal.fillStyle(sector.accent, 0.85);
+      crystal.fillTriangle(cx, p.y - 28, cx - 6, p.y - 8, cx + 6, p.y - 8);
+      crystal.fillStyle(sector.fog, 0.35);
+      crystal.fillCircle(cx, p.y - 22, 10);
+    }
+  }
+
+  if (sector.id === 'halcyon' && scene.textures.exists('halcyon_ancient_arch')) {
+    scene.add.image(1760, groundY - 88, 'halcyon_ancient_arch')
+      .setDisplaySize(92, 112)
+      .setDepth(4)
+      .setAlpha(0.82);
   }
 
   const label = scene.add
