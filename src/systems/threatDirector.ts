@@ -24,22 +24,24 @@ export interface EnemyUnit {
 
 export function buildWaveTimeline(sector: SectorDef): WavePlan[] {
   const accent = sector.accent;
+  // Halcyon is the current campaign focus: the escalating siege must be survived,
+  // not bypassed by simply standing on the Aether Well.
   const base: WavePlan[] = [
-    { kind: 'SWARM', label: 'SWARM', count: 4, hp: 1, speed: 90, tint: accent, scale: 0.85, atMs: 4000 },
-    { kind: 'WALL', label: 'WALL', count: 2, hp: 3, speed: 55, tint: 0xf87171, scale: 1.25, atMs: 14000 },
-    { kind: 'REAVER', label: 'REAVER', count: 3, hp: 2, speed: 140, tint: 0xfbbf24, scale: 0.95, atMs: 24000 },
-    { kind: 'MIXED', label: 'MIXED SURGE', count: 5, hp: 2, speed: 100, tint: 0xc084fc, scale: 1.0, atMs: 36000 },
-    { kind: 'ORUN', label: 'ORUN REAVER', count: 1, hp: 8, speed: 70, tint: 0xf43f5e, scale: 1.6, atMs: 50000 },
+    { kind: 'SWARM', label: 'SCOUTS — FIRST CONTACT', count: 3, hp: 1, speed: 82, tint: accent, scale: 0.72, atMs: 3500 },
+    { kind: 'SWARM', label: 'GRAVELING PACK', count: 5, hp: 1, speed: 100, tint: 0x7dd3fc, scale: 0.82, atMs: 11000 },
+    { kind: 'WALL', label: 'SHARD LEGIONNAIRES', count: 2, hp: 3, speed: 48, tint: 0xf87171, scale: 1.25, atMs: 19500 },
+    { kind: 'REAVER', label: 'AETHER STALKERS', count: 4, hp: 2, speed: 145, tint: 0xfbbf24, scale: 0.88, atMs: 28000 },
+    { kind: 'MIXED', label: 'THE SECOND BREACH', count: 6, hp: 2, speed: 105, tint: 0xc084fc, scale: 1, atMs: 39000 },
+    { kind: 'WALL', label: 'ARMORED BREAKERS', count: 3, hp: 4, speed: 58, tint: 0xfb7185, scale: 1.4, atMs: 51000 },
+    { kind: 'REAVER', label: 'RIFT HOUNDS', count: 5, hp: 2, speed: 165, tint: 0xf59e0b, scale: 0.78, atMs: 63000 },
+    { kind: 'MIXED', label: 'SIEGE WAVE', count: 8, hp: 3, speed: 112, tint: 0xe879f9, scale: 1.05, atMs: 76000 },
+    { kind: 'WALL', label: 'ELITE LEGION', count: 4, hp: 5, speed: 62, tint: 0xef4444, scale: 1.5, atMs: 90000 },
+    { kind: 'ORUN', label: 'ORUN, RIFT-BOUND COLOSSUS', count: 1, hp: 18, speed: 74, tint: 0xf43f5e, scale: 2.05, atMs: 106000 },
+    { kind: 'MIXED', label: 'FINAL BREACH — HOLD THE WELL', count: 8, hp: 3, speed: 125, tint: 0x67e8f9, scale: 1.12, atMs: 124000 },
   ];
-  if (sector.id === 'ashfall') {
-    base[2].count += 1;
-    base[3].count += 1;
-  }
-  if (sector.id === 'ruins') {
-    base[1].hp += 1;
-    base[4].hp += 2;
-  }
-  return base;
+  if (sector.id === 'halcyon') return base;
+  // Other sectors retain their existing prototype difficulty until their own pass.
+  return base.slice(0, 5);
 }
 
 export class ThreatDirector {
