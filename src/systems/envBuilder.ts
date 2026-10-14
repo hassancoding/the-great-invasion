@@ -26,7 +26,7 @@ export function buildEnvironment(
   if (themedSkyKey && scene.textures.exists(themedSkyKey)) {
     scene.add.image(worldW / 2, worldH / 2, themedSkyKey)
       .setDisplaySize(worldW, worldH)
-      .setScrollFactor(0)
+      .setScrollFactor(1, 1)
       .setDepth(-22);
   } else if (scene.textures.exists(sector.skyKey)) {
     const sky = scene.add
