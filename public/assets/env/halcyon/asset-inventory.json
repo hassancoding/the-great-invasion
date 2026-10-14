@@ -1,0 +1,177 @@
+{
+  "schemaVersion": 1,
+  "repository": "hassancoding/the-great-invasion",
+  "branch": "assets/halcyon-spire-production-pack",
+  "note": "Inventory describes the initial Halcyon Spire vector pack. Alpha is not marked verified until the assets are loaded and visually checked in-browser.",
+  "assets": [
+    {
+      "asset_id": "halcyon-sky",
+      "filename": "sky.svg",
+      "path": "assets/env/halcyon/sky.svg",
+      "dimensions": {
+        "width": 2048,
+        "height": 1152
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "background",
+      "status": "created; runtime loading added; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-far-islands",
+      "filename": "far-islands.svg",
+      "path": "assets/env/halcyon/far-islands.svg",
+      "dimensions": {
+        "width": 2048,
+        "height": 1152
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-far",
+      "status": "created; runtime loading added; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-distant-citadel",
+      "filename": "distant-citadel.svg",
+      "path": "assets/env/halcyon/distant-citadel.svg",
+      "dimensions": {
+        "width": 2048,
+        "height": 1152
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-distant-architecture",
+      "status": "created; runtime loading added; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-midground-ruins",
+      "filename": "midground-ruins.svg",
+      "path": "assets/env/halcyon/midground-ruins.svg",
+      "dimensions": {
+        "width": 2048,
+        "height": 1152
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-midground",
+      "status": "created; runtime loading added; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-foreground-crystals",
+      "filename": "foreground-crystals.svg",
+      "path": "assets/env/halcyon/foreground-crystals.svg",
+      "dimensions": {
+        "width": 2048,
+        "height": 1152
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-foreground",
+      "status": "created; runtime loading added; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-platform-top",
+      "filename": "platform-top.svg",
+      "path": "assets/env/halcyon/platform-top.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-visual",
+      "status": "created; runtime loading added; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-platform-middle",
+      "filename": "platform-middle.svg",
+      "path": "assets/env/halcyon/platform-middle.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-visual",
+      "status": "created; runtime loading added; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-platform-edge-left",
+      "filename": "platform-edge-left.svg",
+      "path": "assets/env/halcyon/platform-edge-left.svg",
+      "dimensions": {
+        "width": 128,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-visual",
+      "status": "created; runtime loading added; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-platform-edge-right",
+      "filename": "platform-edge-right.svg",
+      "path": "assets/env/halcyon/platform-edge-right.svg",
+      "dimensions": {
+        "width": 128,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-visual",
+      "status": "created; runtime loading added; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-cliff-face",
+      "filename": "cliff-face.svg",
+      "path": "assets/env/halcyon/cliff-face.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-visual",
+      "status": "created; runtime loading added; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-crystal-cluster",
+      "filename": "crystal-cluster.svg",
+      "path": "assets/env/halcyon/crystal-cluster.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "prop",
+      "status": "created; runtime loading added; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-ancient-arch",
+      "filename": "ancient-arch.svg",
+      "path": "assets/env/halcyon/ancient-arch.svg",
+      "dimensions": {
+        "width": 320,
+        "height": 384
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "prop",
+      "status": "created; runtime loading added; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-aether-well",
+      "filename": "aether-well.svg",
+      "path": "assets/env/halcyon/aether-well.svg",
+      "dimensions": {
+        "width": 320,
+        "height": 320
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "gameplay-object-visual",
+      "status": "created; runtime loading added; visual QA pending"
+    }
+  ]
+}
