@@ -1,0 +1,54 @@
+{
+  "sector": "Halcyon Spire",
+  "sectorId": "halcyon",
+  "assets": [
+    {
+      "key": "halcyonSky",
+      "path": "/assets/env/halcyon/backgrounds/halcyon-sky.svg",
+      "type": "background",
+      "width": 1920,
+      "height": 1080,
+      "description": "Sky gradient and distant floating-island silhouettes"
+    },
+    {
+      "key": "arinIdle",
+      "path": "/assets/env/halcyon/sprites/arin-idle.svg",
+      "type": "character",
+      "width": 256,
+      "height": 256,
+      "description": "Arin idle pose concept sprite; transparent SVG"
+    },
+    {
+      "key": "graveling",
+      "path": "/assets/env/halcyon/sprites/graveling.svg",
+      "type": "enemy",
+      "width": 192,
+      "height": 192,
+      "description": "Small rocky Graveling enemy; transparent SVG"
+    },
+    {
+      "key": "aetherWell",
+      "path": "/assets/env/halcyon/props/aether-well.svg",
+      "type": "gameplay-prop",
+      "width": 320,
+      "height": 320,
+      "description": "Aether Well objective prop with crystal and glow"
+    },
+    {
+      "key": "ancientArch",
+      "path": "/assets/env/halcyon/props/ancient-arch.svg",
+      "type": "environment-prop",
+      "width": 256,
+      "height": 256,
+      "description": "Ancient stone arch prop; transparent SVG"
+    },
+    {
+      "key": "skyCrystal",
+      "path": "/assets/env/halcyon/props/sky-crystal.svg",
+      "type": "collectible-prop",
+      "width": 160,
+      "height": 192,
+      "description": "Glowing blue crystal prop; transparent SVG"
+    }
+  ]
+}
