@@ -48,8 +48,8 @@ export function buildEnvironment(
   vignette.fillStyle(sector.skyBot, 0.45);
   vignette.fillRect(0, sh * 0.75, sw, sh * 0.25);
 
-  const themedLayers: Record<string, { far: string; mid: string; foreground: string }> = {
-    halcyon: { far: 'halcyon_far_islands', mid: 'halcyon_midground_ruins', foreground: 'halcyon_foreground_crystals' },
+  const themedLayers: Record<string, { far: string; mid: string; foreground: string; architecture?: string }> = {
+    halcyon: { far: 'halcyon_far_islands', architecture: 'halcyon_distant_citadel', mid: 'halcyon_midground_ruins', foreground: 'halcyon_foreground_crystals' },
     ashfall: { far: 'ashfall_far', mid: 'ashfall_mid', foreground: 'ashfall_foreground' },
     ruins: { far: 'ruins_far', mid: 'ruins_mid', foreground: 'ruins_foreground' },
     'trade-isles': { far: 'trade_isles_far', mid: 'trade_isles_mid', foreground: 'trade_isles_foreground' },
@@ -65,6 +65,7 @@ export function buildEnvironment(
         .setAlpha(alpha);
     };
     addLayer(layerKeys.far, 0.12, -16, 0.9);
+    if (layerKeys.architecture && scene.textures.exists(layerKeys.architecture)) addLayer(layerKeys.architecture, 0.24, -13, 0.94);
     if (scene.textures.exists(layerKeys.mid)) addLayer(layerKeys.mid, 0.42, -11, 0.95);
     if (scene.textures.exists(layerKeys.foreground)) addLayer(layerKeys.foreground, 0.72, 8, 0.55);
   } else {
