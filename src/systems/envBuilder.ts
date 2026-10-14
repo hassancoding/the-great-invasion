@@ -22,7 +22,13 @@ export function buildEnvironment(
   scene.cameras.main.setBounds(0, 0, worldW, worldH);
   scene.cameras.main.setBackgroundColor(sector.skyBot);
 
-  if (scene.textures.exists(sector.skyKey)) {
+  const themedSkyKey = sector.id === 'halcyon' ? 'halcyon_sky' : sector.id === 'ashfall' ? 'ashfall_sky' : sector.id === 'ruins' ? 'ruins_sky' : '';
+  if (themedSkyKey && scene.textures.exists(themedSkyKey)) {
+    scene.add.image(worldW / 2, worldH / 2, themedSkyKey)
+      .setDisplaySize(worldW, worldH)
+      .setScrollFactor(0)
+      .setDepth(-22);
+  } else if (scene.textures.exists(sector.skyKey)) {
     const sky = scene.add
       .image(sw / 2, sh / 2, sector.skyKey)
       .setScrollFactor(0)
@@ -42,9 +48,13 @@ export function buildEnvironment(
   vignette.fillStyle(sector.skyBot, 0.45);
   vignette.fillRect(0, sh * 0.75, sw, sh * 0.25);
 
-  const hasHalcyonLayers = sector.id === 'halcyon' && scene.textures.exists('halcyon_far_islands');
-
-  if (hasHalcyonLayers) {
+  const themedLayers: Record<string, { far: string; mid: string; foreground: string }> = {
+    halcyon: { far: 'halcyon_far_islands', mid: 'halcyon_midground_ruins', foreground: 'halcyon_foreground_crystals' },
+    ashfall: { far: 'ashfall_far', mid: 'ashfall_mid', foreground: 'ashfall_foreground' },
+    ruins: { far: 'ruins_far', mid: 'ruins_mid', foreground: 'ruins_foreground' },
+  };
+  const layerKeys = themedLayers[sector.id];
+  if (layerKeys && scene.textures.exists(layerKeys.far)) {
     const addLayer = (key: string, scroll: number, depth: number, alpha = 1) => {
       scene.add.image(worldW / 2, worldH / 2, key)
         .setDisplaySize(worldW, worldH)
@@ -52,11 +62,9 @@ export function buildEnvironment(
         .setDepth(depth)
         .setAlpha(alpha);
     };
-    if (scene.textures.exists('halcyon_sky')) addLayer('halcyon_sky', 0.02, -21, 0.98);
-    addLayer('halcyon_far_islands', 0.12, -16, 0.88);
-    addLayer('halcyon_distant_citadel', 0.24, -13, 0.94);
-    addLayer('halcyon_midground_ruins', 0.43, -11, 0.92);
-    addLayer('halcyon_foreground_crystals', 0.72, 8, 0.72);
+    addLayer(layerKeys.far, 0.12, -16, 0.9);
+    if (scene.textures.exists(layerKeys.mid)) addLayer(layerKeys.mid, 0.42, -11, 0.95);
+    if (scene.textures.exists(layerKeys.foreground)) addLayer(layerKeys.foreground, 0.72, 8, 0.55);
   } else {
     drawSilhouetteBand(scene, {
       depth: -15,
@@ -69,7 +77,6 @@ export function buildEnvironment(
       amp: 90,
       seed: sector.id.charCodeAt(0),
     });
-
     drawSilhouetteBand(scene, {
       depth: -12,
       scroll: 0.35,
@@ -108,8 +115,9 @@ export function buildEnvironment(
   for (let i = 0; i < sector.platforms.length; i += 2) {
     const p = sector.platforms[i];
     const cx = p.x + (p.tiles * 32) / 2;
-    if (sector.id === 'halcyon' && scene.textures.exists('halcyon_crystal_cluster')) {
-      scene.add.image(cx, p.y - 20, 'halcyon_crystal_cluster')
+    const crystalKey = sector.id === 'halcyon' ? 'halcyon_crystal_cluster' : sector.id === 'ashfall' ? 'ashfall_energy_cluster' : sector.id === 'ruins' ? 'ruins_energy_cluster' : '';
+    if (crystalKey && scene.textures.exists(crystalKey)) {
+      scene.add.image(cx, p.y - 20, crystalKey)
         .setDisplaySize(38, 42)
         .setDepth(5);
     } else {
