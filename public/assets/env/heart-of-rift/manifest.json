@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "biome": "heart-of-rift",
+  "backgroundSize": {
+    "width": 2400,
+    "height": 540
+  },
+  "terrainSize": {
+    "width": 256,
+    "height": 96
+  },
+  "propSize": {
+    "width": 256,
+    "height": 256
+  },
+  "layers": [
+    {
+      "key": "heart-of-rift_sky",
+      "file": "sky.svg",
+      "scrollFactor": 0,
+      "depth": -22
+    },
+    {
+      "key": "heart-of-rift_far",
+      "file": "far-landscape.svg",
+      "scrollFactor": 0.12,
+      "depth": -16
+    },
+    {
+      "key": "heart-of-rift_mid",
+      "file": "midground-structures.svg",
+      "scrollFactor": 0.42,
+      "depth": -11
+    },
+    {
+      "key": "heart-of-rift_foreground",
+      "file": "foreground-effects.svg",
+      "scrollFactor": 0.72,
+      "depth": 8
+    }
+  ],
+  "collision": "defined separately by sector platform data",
+  "alphaVerified": false
+}
