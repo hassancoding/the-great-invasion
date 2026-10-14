@@ -24,6 +24,7 @@ export class PlayScene extends Phaser.Scene {
   private hudObjective!: Phaser.GameObjects.Text;
   private hudLives!: Phaser.GameObjects.Text;
   private hudWaves!: Phaser.GameObjects.Text;
+  private hudBoss!: Phaser.GameObjects.Text;
   private waveClearAnnounced = false;
   private ended = false;
 
@@ -167,6 +168,10 @@ export class PlayScene extends Phaser.Scene {
         fontFamily: 'system-ui,sans-serif', fontSize: '12px', color: '#fde68a',
         backgroundColor: '#020617aa', padding: { x: 8, y: 4 },
       }).setOrigin(1, 0).setScrollFactor(0).setDepth(100);
+    this.hudBoss = this.add.text(this.scale.width / 2, 82, '', {
+      fontFamily: 'system-ui,sans-serif', fontSize: '13px', color: '#fda4af',
+      fontStyle: 'bold', backgroundColor: '#450a0acc', padding: { x: 12, y: 5 },
+    }).setOrigin(0.5).setScrollFactor(0).setDepth(110).setVisible(false);
     this.add
       .text(this.scale.width - 12, 12, 'MOVE: A/D or ←/→   JUMP: W/↑/SPACE   ATTACK: J/K   MENU: ESC', {
         fontFamily: 'system-ui,sans-serif',
@@ -187,6 +192,14 @@ export class PlayScene extends Phaser.Scene {
     const pct = Math.floor(this.well.claimProgress * 100);
     const wave = this.threat.waveProgress;
     this.hudWaves.setText(`SIEGE ${wave.current}/${wave.total} · ACTIVE ${this.threat.activeEnemies.length} · DEFEATED ${wave.defeated}`);
+    const boss = this.threat.activeEnemies.find((enemy) => enemy.kind === 'ORUN');
+    if (boss) {
+      const blocks = Math.max(0, Math.ceil((boss.hp / boss.maxHp) * 16));
+      this.hudBoss.setText(`ORUN · RIFT-BOUND COLOSSUS  [${'█'.repeat(blocks)}${'░'.repeat(16 - blocks)}]`);
+      this.hudBoss.setVisible(true);
+    } else {
+      this.hudBoss.setVisible(false);
+    }
     if (!this.threat.isClear) {
       this.hudObjective.setText(`${this.sector.name} · Defeat every siege wave before claiming the Well`);
       this.hudObjective.setColor('#fcd34d');
