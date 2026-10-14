@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
+import { ensureHeroTextures } from '../systems/envBuilder';
 
-/** Boot — preload menu + Arin art, generate fallbacks, enter Menu. */
+/** Boot — preload menu + skies + Arin art, generate fallbacks, enter Menu. */
 export class BootScene extends Phaser.Scene {
   constructor() {
     super('Boot');
@@ -38,7 +39,6 @@ export class BootScene extends Phaser.Scene {
     this.load.image('menu_hero', 'assets/menu/hero.png');
     this.load.image('portrait_arin', 'assets/menu/portrait_arin.png');
 
-    // Arin gameplay
     this.load.atlas(
       'arin',
       'assets/sprites/arin/arin_sheet.png',
@@ -49,7 +49,6 @@ export class BootScene extends Phaser.Scene {
   }
 
   create() {
-    // Placeholder tiles / enemy if missing
     const g = this.make.graphics({ x: 0, y: 0 }, false);
     if (!this.textures.exists('tile')) {
       g.fillStyle(0x64748b, 1);
@@ -70,11 +69,14 @@ export class BootScene extends Phaser.Scene {
       g.clear();
       g.fillStyle(0x7c3aed, 1);
       g.fillCircle(16, 16, 14);
+      g.fillStyle(0xc4b5fd, 0.9);
+      g.fillCircle(16, 12, 6);
       g.generateTexture('enemy', 32, 32);
     }
     g.destroy();
 
-    // Arin anims from atlas
+    ensureHeroTextures(this);
+
     if (this.textures.exists('arin')) {
       const mk = (key: string, frames: string[], rate: number, repeat: number) => {
         if (this.anims.exists(key)) this.anims.remove(key);
