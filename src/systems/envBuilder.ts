@@ -22,7 +22,7 @@ export function buildEnvironment(
   scene.cameras.main.setBounds(0, 0, worldW, worldH);
   scene.cameras.main.setBackgroundColor(sector.skyBot);
 
-  const themedSkyKey = sector.id === 'halcyon' ? 'halcyon_sky' : sector.id === 'ashfall' ? 'ashfall_sky' : sector.id === 'ruins' ? 'ruins_sky' : '';
+  const themedSkyKey = sector.id === 'halcyon' ? 'halcyon_sky' : sector.id === 'ashfall' ? 'ashfall_sky' : sector.id === 'ruins' ? 'ruins_sky' : sector.id === 'trade-isles' ? 'trade_isles_sky' : sector.id === 'heart-of-rift' ? 'heart_rift_sky' : '';
   if (themedSkyKey && scene.textures.exists(themedSkyKey)) {
     scene.add.image(worldW / 2, worldH / 2, themedSkyKey)
       .setDisplaySize(worldW, worldH)
@@ -52,6 +52,8 @@ export function buildEnvironment(
     halcyon: { far: 'halcyon_far_islands', mid: 'halcyon_midground_ruins', foreground: 'halcyon_foreground_crystals' },
     ashfall: { far: 'ashfall_far', mid: 'ashfall_mid', foreground: 'ashfall_foreground' },
     ruins: { far: 'ruins_far', mid: 'ruins_mid', foreground: 'ruins_foreground' },
+    'trade-isles': { far: 'trade_isles_far', mid: 'trade_isles_mid', foreground: 'trade_isles_foreground' },
+    'heart-of-rift': { far: 'heart_rift_far', mid: 'heart_rift_mid', foreground: 'heart_rift_foreground' },
   };
   const layerKeys = themedLayers[sector.id];
   if (layerKeys && scene.textures.exists(layerKeys.far)) {
@@ -115,7 +117,7 @@ export function buildEnvironment(
   for (let i = 0; i < sector.platforms.length; i += 2) {
     const p = sector.platforms[i];
     const cx = p.x + (p.tiles * 32) / 2;
-    const crystalKey = sector.id === 'halcyon' ? 'halcyon_crystal_cluster' : sector.id === 'ashfall' ? 'ashfall_energy_cluster' : sector.id === 'ruins' ? 'ruins_energy_cluster' : '';
+    const crystalKey = sector.id === 'halcyon' ? 'halcyon_crystal_cluster' : sector.id === 'ashfall' ? 'ashfall_energy_cluster' : sector.id === 'ruins' ? 'ruins_energy_cluster' : sector.id === 'trade-isles' ? 'trade_isles_energy_cluster' : sector.id === 'heart-of-rift' ? 'heart_rift_energy_cluster' : '';
     if (crystalKey && scene.textures.exists(crystalKey)) {
       scene.add.image(cx, p.y - 20, crystalKey)
         .setDisplaySize(38, 42)
