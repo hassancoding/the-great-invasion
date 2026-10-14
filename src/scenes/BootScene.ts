@@ -49,6 +49,11 @@ export class BootScene extends Phaser.Scene {
     this.load.svg('halcyon_platform_tile_prop', 'assets/env/halcyon/props/platform-tile.svg', { width: 256, height: 96 });
     this.load.svg('halcyon_spike_trap_prop', 'assets/env/halcyon/props/spike-trap.svg', { width: 256, height: 96 });
     this.load.svg('halcyon_rift_burst_effect', 'assets/env/halcyon/effects/rift-burst.svg', { width: 256, height: 256 });
+    this.load.svg('halcyon_arin_hero', 'assets/env/halcyon/sprites/arin-idle.svg', { width: 256, height: 256 });
+    this.load.svg('halcyon_kaela_hero', 'assets/env/halcyon/sprites/kaela-verdant-warden.svg', { width: 320, height: 400 });
+    this.load.svg('halcyon_varkhul_hero', 'assets/env/halcyon/sprites/varkhul-riftbound.svg', { width: 320, height: 400 });
+    this.load.svg('portrait_kaela', 'assets/env/halcyon/sprites/kaela-verdant-warden.svg', { width: 320, height: 400 });
+    this.load.svg('portrait_varkhul', 'assets/env/halcyon/sprites/varkhul-riftbound.svg', { width: 320, height: 400 });
 
     // Halcyon Spire layered vector environment pack (standalone assets)
     this.load.svg('halcyon_sky', 'assets/env/halcyon/sky.svg', { width: 2400, height: 540 });
