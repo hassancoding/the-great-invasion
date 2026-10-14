@@ -1,0 +1,73 @@
+{
+  "frames": {
+    "arin_idle_0": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 311,
+        "h": 192
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 311,
+        "h": 192
+      },
+      "sourceSize": {
+        "w": 311,
+        "h": 192
+      }
+    },
+    "arin_run_0": {
+      "frame": {
+        "x": 311,
+        "y": 0,
+        "w": 311,
+        "h": 192
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 311,
+        "h": 192
+      },
+      "sourceSize": {
+        "w": 311,
+        "h": 192
+      }
+    },
+    "arin_attack_0": {
+      "frame": {
+        "x": 622,
+        "y": 0,
+        "w": 311,
+        "h": 192
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 311,
+        "h": 192
+      },
+      "sourceSize": {
+        "w": 311,
+        "h": 192
+      }
+    }
+  },
+  "meta": {
+    "app": "TGI Arin",
+    "image": "arin_sheet.png",
+    "size": {
+      "w": 933,
+      "h": 192
+    },
+    "scale": "1"
+  }
+}
