@@ -1,84 +1,68 @@
 import Phaser from 'phaser';
+import { getHero, type HeroDef } from '../data/heroes';
+import { getSector, nextSector, type SectorDef, type SectorId } from '../data/environments';
+import { buildEnvironment } from '../systems/envBuilder';
+import { ThreatDirector } from '../systems/threatDirector';
+import { AetherWell } from '../systems/well';
 
-/**
- * Play sandbox — Arin sprite when atlas present.
- */
+/** Play — sector runner with Well claim + Threat Director surges. */
 export class PlayScene extends Phaser.Scene {
   private player!: Phaser.Physics.Arcade.Sprite;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
-  private wasd!: {
-    a: Phaser.Input.Keyboard.Key;
-    d: Phaser.Input.Keyboard.Key;
-    w: Phaser.Input.Keyboard.Key;
-  };
+  private wasd!: { a: Phaser.Input.Keyboard.Key; d: Phaser.Input.Keyboard.Key; w: Phaser.Input.Keyboard.Key };
   private attacking = false;
+  private hero!: HeroDef;
+  private sector!: SectorDef;
+  private threat!: ThreatDirector;
+  private well!: AetherWell;
+  private platforms!: Phaser.Physics.Arcade.StaticGroup;
+  private groundY = 524;
+  private lives = 3;
+  private kills = 0;
+  private invulnUntil = 0;
+  private hudHero!: Phaser.GameObjects.Text;
+  private hudObjective!: Phaser.GameObjects.Text;
+  private hudLives!: Phaser.GameObjects.Text;
+  private ended = false;
 
   constructor() {
     super('Play');
   }
 
-  create(data?: { hero?: string }) {
-    const hero = data?.hero || this.registry.get('hero') || 'arin';
-    this.registry.set('hero', hero);
+  create(data?: { hero?: string; sector?: string }) {
+    this.ended = false;
+    this.lives = 3;
+    this.kills = 0;
+    this.invulnUntil = 0;
+    this.attacking = false;
 
-    const worldW = 2000;
-    const worldH = 540;
-    this.cameras.main.setBackgroundColor('#0c4a6e');
-    this.physics.world.setBounds(0, 0, worldW, worldH);
-    this.cameras.main.setBounds(0, 0, worldW, worldH);
+    const heroId = data?.hero || this.registry.get('hero') || 'arin';
+    const sectorId = data?.sector || this.registry.get('sector') || 'halcyon';
+    this.hero = getHero(heroId);
+    this.sector = getSector(sectorId);
+    this.registry.set('hero', this.hero.id);
+    this.registry.set('sector', this.sector.id);
 
-    const sky = this.add.graphics().setScrollFactor(0).setDepth(-10);
-    sky.fillGradientStyle(0x38bdf8, 0x38bdf8, 0x0c4a6e, 0x020617, 1);
-    sky.fillRect(0, 0, this.scale.width, this.scale.height);
+    const built = buildEnvironment(this, this.sector);
+    this.platforms = built.platforms;
+    this.groundY = built.groundY;
 
-    const platforms = this.physics.add.staticGroup();
-    for (let x = 16; x < worldW; x += 32) {
-      platforms.create(x, worldH - 16, 'tile');
-    }
-    for (const [px, py, n] of [
-      [200, 400, 6],
-      [480, 320, 5],
-      [800, 380, 8],
-      [1200, 300, 6],
-      [1600, 360, 7],
-    ] as const) {
-      for (let i = 0; i < n; i++) platforms.create(px + i * 32, py, 'tile');
-    }
+    this.well = new AetherWell(this, this.sector, this.groundY);
+    this.threat = new ThreatDirector(this, this.sector);
 
-    // Prefer Arin atlas
-    const useArin =
-      hero === 'arin' &&
-      this.textures.exists('arin') &&
-      this.textures.get('arin').has('arin_idle_0');
-
-    if (useArin) {
-      this.player = this.physics.add.sprite(120, worldH - 80, 'arin', 'arin_idle_0');
-      this.player.setOrigin(0.5, 1);
-      this.player.setScale(0.85);
-      const body = this.player.body as Phaser.Physics.Arcade.Body;
-      body.setSize(48, 90);
-      body.setOffset(
-        (this.player.width - 48) / 2,
-        this.player.height - 90 - 4
-      );
-      if (this.anims.exists('arin_idle')) this.player.play('arin_idle');
-    } else {
-      this.player = this.physics.add.sprite(120, worldH - 80, 'player');
-      this.player.setOrigin(0.5, 1);
-    }
-
-    this.player.setCollideWorldBounds(true);
-    this.player.setBounce(0.02);
-    this.player.setDepth(10);
-    this.physics.add.collider(this.player, platforms);
-
-    const enemy = this.physics.add.sprite(600, worldH - 80, 'enemy');
-    enemy.setImmovable(true);
-    (enemy.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
-    enemy.setDepth(8);
+    this.spawnPlayer(120, this.groundY - 4);
+    this.physics.add.collider(this.player, this.platforms);
+    this.physics.add.collider(this.threat.enemyGroup, this.platforms);
+    this.physics.add.overlap(
+      this.player,
+      this.threat.enemyGroup,
+      this.onPlayerHit as Phaser.Types.Physics.Arcade.ArcadePhysicsCallback,
+      undefined,
+      this
+    );
 
     this.cameras.main.startFollow(this.player, true, 0.12, 0.12);
-    this.cameras.main.setZoom(1.1);
+    this.cameras.main.setZoom(1.12);
 
     this.cursors = this.input.keyboard!.createCursorKeys();
     this.wasd = {
@@ -87,69 +71,319 @@ export class PlayScene extends Phaser.Scene {
       w: this.input.keyboard!.addKey('W'),
     };
 
-    const heroLabel = String(hero).toUpperCase();
-    this.add
-      .text(12, 12, `${heroLabel}  ·  Arrows/WASD · SPACE jump · J attack · ESC menu`, {
+    this.buildHud();
+
+    this.input.keyboard!.on('keydown-ESC', () => {
+      this.cleanup();
+      this.scene.start('Menu');
+    });
+    this.input.keyboard!.on('keydown-SPACE', () => this.tryJump());
+    this.input.keyboard!.on('keydown-J', () => this.tryAttack());
+    this.input.keyboard!.on('keydown-K', () => this.tryAttack());
+    this.input.keyboard!.on('keydown-N', () => this.cycleSector());
+  }
+
+  private buildHud() {
+    this.hudHero = this.add
+      .text(12, 12, `${this.hero.name}  ·  ${this.hero.title}`, {
         fontFamily: 'system-ui,sans-serif',
         fontSize: '13px',
         color: '#e0f2fe',
-        backgroundColor: '#02061788',
+        backgroundColor: '#02061799',
         padding: { x: 8, y: 4 },
       })
       .setScrollFactor(0)
       .setDepth(100);
+    this.hudLives = this.add
+      .text(12, 36, '', {
+        fontFamily: 'system-ui,sans-serif',
+        fontSize: '12px',
+        color: '#fca5a5',
+        backgroundColor: '#02061788',
+        padding: { x: 8, y: 3 },
+      })
+      .setScrollFactor(0)
+      .setDepth(100);
+    this.hudObjective = this.add
+      .text(12, 58, '', {
+        fontFamily: 'system-ui,sans-serif',
+        fontSize: '12px',
+        color: '#94a3b8',
+        backgroundColor: '#02061788',
+        padding: { x: 8, y: 3 },
+      })
+      .setScrollFactor(0)
+      .setDepth(100);
+    this.add
+      .text(this.scale.width - 12, 12, 'Reach Well · Hold claim · J attack · N sector · ESC', {
+        fontFamily: 'system-ui,sans-serif',
+        fontSize: '11px',
+        color: '#94a3b8',
+        backgroundColor: '#02061788',
+        padding: { x: 6, y: 3 },
+      })
+      .setOrigin(1, 0)
+      .setScrollFactor(0)
+      .setDepth(100);
+    this.refreshHud();
+  }
 
-    this.input.keyboard!.on('keydown-ESC', () => this.scene.start('Menu'));
-    this.input.keyboard!.on('keydown-SPACE', () => this.tryJump());
-    this.input.keyboard!.on('keydown-J', () => this.tryAttack());
-    this.input.keyboard!.on('keydown-K', () => this.tryAttack());
+  private refreshHud() {
+    const hearts = '♥'.repeat(this.lives) + '♡'.repeat(Math.max(0, 3 - this.lives));
+    this.hudLives.setText(`${hearts}  ·  ${this.kills} kills`);
+    const pct = Math.floor(this.well.claimProgress * 100);
+    if (this.well.isStabilized) {
+      this.hudObjective.setText(`${this.sector.name}  ·  WELL STABILIZED`);
+      this.hudObjective.setColor('#86efac');
+    } else {
+      this.hudObjective.setText(`${this.sector.name}  ·  Claim Well ${pct}%  ·  Threat rising`);
+      this.hudObjective.setColor('#94a3b8');
+    }
+  }
+
+  private spawnPlayer(x: number, y: number) {
+    const useArin =
+      this.hero.id === 'arin' &&
+      this.textures.exists('arin') &&
+      this.textures.get('arin').has('arin_idle_0');
+    if (useArin) {
+      this.player = this.physics.add.sprite(x, y, 'arin', 'arin_idle_0');
+      this.player.setOrigin(0.5, 1);
+      this.player.setScale(this.hero.scale);
+      const body = this.player.body as Phaser.Physics.Arcade.Body;
+      body.setSize(this.hero.bodyW, this.hero.bodyH);
+      body.setOffset((this.player.width - this.hero.bodyW) / 2, this.player.height - this.hero.bodyH - 4);
+      if (this.anims.exists('arin_idle')) this.player.play('arin_idle');
+    } else {
+      const tex =
+        this.hero.id === 'kaela' ? 'hero_kaela' : this.hero.id === 'varkhul' ? 'hero_varkhul' : 'hero_arin_fb';
+      const key = this.textures.exists(tex) ? tex : 'player';
+      this.player = this.physics.add.sprite(x, y, key);
+      this.player.setOrigin(0.5, 1);
+      this.player.setScale(this.hero.scale * 1.35);
+      this.player.setTint(this.hero.color);
+      const body = this.player.body as Phaser.Physics.Arcade.Body;
+      body.setSize(this.hero.bodyW * 0.7, this.hero.bodyH * 0.75);
+      body.setOffset((this.player.width - body.width) / 2, this.player.height - body.height);
+    }
+    this.player.setCollideWorldBounds(true);
+    this.player.setBounce(0.02);
+    this.player.setDepth(10);
+  }
+
+  private cycleSector() {
+    if (this.ended) return;
+    const next = nextSector(this.sector.id as SectorId);
+    this.registry.set('sector', next.id);
+    this.cleanup();
+    this.cameras.main.fadeOut(200, 2, 6, 18);
+    this.cameras.main.once('camerafadeoutcomplete', () => {
+      this.scene.restart({ hero: this.hero.id, sector: next.id });
+    });
   }
 
   private tryJump() {
-    if (!this.player?.body) return;
+    if (!this.player?.body || this.ended) return;
     const body = this.player.body as Phaser.Physics.Arcade.Body;
-    if (body.blocked.down) {
-      this.player.setVelocityY(-520);
-      if (this.anims.exists('arin_jump')) this.player.play('arin_jump');
+    if (body.blocked.down || body.touching.down) {
+      this.player.setVelocityY(-this.hero.jump);
+      if (this.hero.id === 'arin' && this.anims.exists('arin_jump')) this.player.play('arin_jump');
     }
   }
 
   private tryAttack() {
-    if (this.attacking) return;
+    if (this.attacking || this.ended) return;
     this.attacking = true;
-    if (this.anims.exists('arin_attack')) {
+    this.player.setTint(0xffffff);
+    this.time.delayedCall(80, () => {
+      if (!this.player?.active) return;
+      if (this.hero.id !== 'arin') this.player.setTint(this.hero.color);
+      else this.player.clearTint();
+    });
+    const facing = this.player.flipX ? -1 : 1;
+    const kills = this.threat.damageAt(
+      this.player.x + facing * 42,
+      this.player.y - 40,
+      56,
+      this.hero.id === 'varkhul' ? 2 : 1
+    );
+    this.kills += kills;
+    this.refreshHud();
+    if (this.hero.id === 'arin' && this.anims.exists('arin_attack')) {
       this.player.play('arin_attack');
       this.player.once('animationcomplete', () => {
         this.attacking = false;
         if (this.anims.exists('arin_idle')) this.player.play('arin_idle');
       });
     } else {
-      this.time.delayedCall(200, () => {
+      this.tweens.add({
+        targets: this.player,
+        scaleX: this.player.scaleX * 1.12,
+        scaleY: this.player.scaleY * 0.92,
+        duration: 80,
+        yoyo: true,
+      });
+      this.time.delayedCall(220, () => {
         this.attacking = false;
       });
     }
   }
 
-  update() {
-    if (!this.player?.body || this.attacking) return;
+  private onPlayerHit: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback = (_p, enemyObj) => {
+    if (this.ended || this.time.now < this.invulnUntil) return;
+    const enemy = enemyObj as Phaser.Physics.Arcade.Sprite;
+    if (!enemy.active) return;
+    this.lives -= 1;
+    this.invulnUntil = this.time.now + 1200;
+    this.refreshHud();
+    this.player.setTint(0xf87171);
+    this.cameras.main.shake(120, 0.008);
+    const knock = enemy.x < this.player.x ? 180 : -180;
+    this.player.setVelocity(knock, -220);
+    this.time.delayedCall(200, () => {
+      if (this.player?.active) {
+        if (this.hero.id !== 'arin') this.player.setTint(this.hero.color);
+        else this.player.clearTint();
+      }
+    });
+    this.tweens.add({
+      targets: this.player,
+      alpha: 0.3,
+      duration: 100,
+      yoyo: true,
+      repeat: 5,
+      onComplete: () => {
+        if (this.player?.active) this.player.setAlpha(1);
+      },
+    });
+    if (this.lives <= 0) this.failRun();
+  };
+
+  private failRun() {
+    if (this.ended) return;
+    this.ended = true;
+    this.showEndCard(false);
+  }
+
+  private winRun() {
+    if (this.ended) return;
+    this.ended = true;
+    this.showEndCard(true);
+  }
+
+  private showEndCard(won: boolean) {
+    const { width: w, height: h } = this.scale;
+    this.add.rectangle(w / 2, h / 2, w, h, 0x020617, 0.72).setScrollFactor(0).setDepth(200);
+    this.add
+      .text(w / 2, h * 0.32, won ? 'WELL STABILIZED' : 'OVERRUN', {
+        fontFamily: 'system-ui,sans-serif',
+        fontSize: '28px',
+        color: won ? '#86efac' : '#fca5a5',
+        fontStyle: 'bold',
+      })
+      .setOrigin(0.5)
+      .setScrollFactor(0)
+      .setDepth(201);
+    this.add
+      .text(w / 2, h * 0.44, `${this.sector.name}\n${this.kills} kills  ·  ${this.hero.name}`, {
+        fontFamily: 'system-ui,sans-serif',
+        fontSize: '14px',
+        color: '#cbd5e1',
+        align: 'center',
+      })
+      .setOrigin(0.5)
+      .setScrollFactor(0)
+      .setDepth(201);
+    const retry = this.add
+      .text(w / 2, h * 0.6, 'RETRY', {
+        fontFamily: 'system-ui,sans-serif',
+        fontSize: '16px',
+        color: '#0f172a',
+        backgroundColor: '#38bdf8',
+        padding: { x: 24, y: 10 },
+        fontStyle: 'bold',
+      })
+      .setOrigin(0.5)
+      .setScrollFactor(0)
+      .setDepth(201)
+      .setInteractive({ useHandCursor: true });
+    retry.on('pointerdown', () => {
+      this.cleanup();
+      this.scene.restart({ hero: this.hero.id, sector: this.sector.id });
+    });
+    const menu = this.add
+      .text(w / 2, h * 0.72, 'MENU', {
+        fontFamily: 'system-ui,sans-serif',
+        fontSize: '14px',
+        color: '#94a3b8',
+      })
+      .setOrigin(0.5)
+      .setScrollFactor(0)
+      .setDepth(201)
+      .setInteractive({ useHandCursor: true });
+    menu.on('pointerdown', () => {
+      this.cleanup();
+      this.scene.start('Menu');
+    });
+    if (won && typeof navigator !== 'undefined' && navigator.share) {
+      const share = this.add
+        .text(w / 2, h * 0.84, 'SHARE RUN', {
+          fontFamily: 'system-ui,sans-serif',
+          fontSize: '13px',
+          color: '#7dd3fc',
+        })
+        .setOrigin(0.5)
+        .setScrollFactor(0)
+        .setDepth(201)
+        .setInteractive({ useHandCursor: true });
+      share.on('pointerdown', () => {
+        navigator
+          .share({
+            title: 'The Great Invasion',
+            text: `Stabilized ${this.sector.name} as ${this.hero.name} — ${this.kills} kills!`,
+            url: window.location.href,
+          })
+          .catch(() => undefined);
+      });
+    }
+  }
+
+  private cleanup() {
+    this.threat?.destroy();
+    this.well?.destroy();
+  }
+
+  update(_time: number, delta: number) {
+    if (this.ended || !this.player?.body) return;
+    this.well.update(delta, this.player.x, this.player.y);
+    this.threat.setClaimPressure(this.well.claimProgress);
+    this.threat.update(delta, this.player.x, this.groundY);
+    if (this.well.isStabilized) this.winRun();
+    this.refreshHud();
+    if (this.attacking) return;
     const body = this.player.body as Phaser.Physics.Arcade.Body;
     const left = this.cursors.left.isDown || this.wasd.a.isDown;
     const right = this.cursors.right.isDown || this.wasd.d.isDown;
     const up = this.cursors.up.isDown || this.wasd.w.isDown;
-
+    const speed = this.hero.speed;
     if (left) {
-      this.player.setVelocityX(-240);
+      this.player.setVelocityX(-speed);
       this.player.setFlipX(true);
-      if (body.blocked.down && this.anims.exists('arin_run')) this.player.play('arin_run', true);
+      if (body.blocked.down && this.hero.id === 'arin' && this.anims.exists('arin_run')) {
+        this.player.play('arin_run', true);
+      }
     } else if (right) {
-      this.player.setVelocityX(240);
+      this.player.setVelocityX(speed);
       this.player.setFlipX(false);
-      if (body.blocked.down && this.anims.exists('arin_run')) this.player.play('arin_run', true);
+      if (body.blocked.down && this.hero.id === 'arin' && this.anims.exists('arin_run')) {
+        this.player.play('arin_run', true);
+      }
     } else {
       this.player.setVelocityX(0);
-      if (body.blocked.down && this.anims.exists('arin_idle')) this.player.play('arin_idle', true);
+      if (body.blocked.down && this.hero.id === 'arin' && this.anims.exists('arin_idle')) {
+        this.player.play('arin_idle', true);
+      }
     }
-
-    if (up && body.blocked.down) this.tryJump();
+    if (up && (body.blocked.down || body.touching.down)) this.tryJump();
   }
 }
