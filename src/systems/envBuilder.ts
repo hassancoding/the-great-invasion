@@ -102,6 +102,16 @@ export function buildEnvironment(
     motes.fillCircle(mx, my, r);
   }
 
+  // Halcyon wind motes drift at different depths to keep the skyline alive.
+  if (sector.id === 'halcyon') {
+    for (let i = 0; i < 22; i++) {
+      const x = 80 + ((i * 173) % (worldW - 160));
+      const y = 70 + ((i * 67) % 310);
+      const mote = scene.add.circle(x, y, i % 6 === 0 ? 2.4 : 1.3, i % 4 === 0 ? 0xfde68a : 0x9be7ff, 0.25 + (i % 4) * 0.1).setDepth(-6).setScrollFactor(0.35 + (i % 3) * 0.12);
+      scene.tweens.add({ targets: mote, x: x + 25 + (i % 5) * 8, y: y - 18 - (i % 4) * 9, alpha: { from: 0.12, to: 0.6 }, duration: 2600 + (i * 149) % 2600, yoyo: true, repeat: -1, delay: i * 85, ease: 'Sine.easeInOut' });
+    }
+  }
+
   const platforms = scene.physics.add.staticGroup();
   const tileKey = ensureSectorTile(scene, sector);
 
@@ -133,9 +143,12 @@ export function buildEnvironment(
     const cx = p.x + (p.tiles * 32) / 2;
     const crystalKey = sector.id === 'halcyon' ? 'halcyon_crystal_cluster' : sector.id === 'ashfall' ? 'ashfall_energy_cluster' : sector.id === 'ruins' ? 'ruins_energy_cluster' : sector.id === 'trade-isles' ? 'trade_isles_energy_cluster' : sector.id === 'heart-of-rift' ? 'heart_rift_energy_cluster' : '';
     if (crystalKey && scene.textures.exists(crystalKey)) {
-      scene.add.image(cx, p.y - 20, crystalKey)
+      const crystal = scene.add.image(cx, p.y - 20, crystalKey)
         .setDisplaySize(38, 42)
         .setDepth(5);
+      scene.tweens.add({ targets: crystal, y: crystal.y - 5, angle: { from: -3, to: 3 }, alpha: { from: 0.82, to: 1 }, duration: 1700 + (i * 137) % 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      const aura = scene.add.circle(cx, p.y - 14, 17, sector.accent, 0.12).setDepth(4);
+      scene.tweens.add({ targets: aura, scale: { from: 0.75, to: 1.35 }, alpha: { from: 0.06, to: 0.22 }, duration: 1900 + (i * 113) % 700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
     } else {
       const crystal = scene.add.graphics().setDepth(5);
       crystal.fillStyle(sector.accent, 0.85);
