@@ -1,0 +1,553 @@
+{
+  "schemaVersion": 1,
+  "repository": "hassancoding/the-great-invasion",
+  "branch": "main",
+  "regions": [
+    "Halcyon Spire",
+    "Verdant Scar",
+    "Obsidian Depths",
+    "Collapsed Trade Isles",
+    "Heart of the Rift"
+  ],
+  "assets": [
+    {
+      "asset_id": "halcyon-sky",
+      "filename": "sky.svg",
+      "path": "public/assets/env/halcyon/sky.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "background",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-far-islands",
+      "filename": "far-islands.svg",
+      "path": "public/assets/env/halcyon/far-islands.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-far",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-distant-citadel",
+      "filename": "distant-citadel.svg",
+      "path": "public/assets/env/halcyon/distant-citadel.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-architecture",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-midground-ruins",
+      "filename": "midground-ruins.svg",
+      "path": "public/assets/env/halcyon/midground-ruins.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-midground",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-foreground-crystals",
+      "filename": "foreground-crystals.svg",
+      "path": "public/assets/env/halcyon/foreground-crystals.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-foreground",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-platform-top",
+      "filename": "platform-top.svg",
+      "path": "public/assets/env/halcyon/platform-top.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-surface",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-platform-middle",
+      "filename": "platform-middle.svg",
+      "path": "public/assets/env/halcyon/platform-middle.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-fill",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-platform-edge-left",
+      "filename": "platform-edge-left.svg",
+      "path": "public/assets/env/halcyon/platform-edge-left.svg",
+      "dimensions": {
+        "width": 128,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-edge",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-platform-edge-right",
+      "filename": "platform-edge-right.svg",
+      "path": "public/assets/env/halcyon/platform-edge-right.svg",
+      "dimensions": {
+        "width": 128,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-edge",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-cliff-face",
+      "filename": "cliff-face.svg",
+      "path": "public/assets/env/halcyon/cliff-face.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-cliff",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-crystal-cluster",
+      "filename": "crystal-cluster.svg",
+      "path": "public/assets/env/halcyon/crystal-cluster.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "prop",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-ancient-arch",
+      "filename": "ancient-arch.svg",
+      "path": "public/assets/env/halcyon/ancient-arch.svg",
+      "dimensions": {
+        "width": 320,
+        "height": 384
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "prop",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-aether-well",
+      "filename": "aether-well.svg",
+      "path": "public/assets/env/halcyon/aether-well.svg",
+      "dimensions": {
+        "width": 320,
+        "height": 320
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "objective-visual",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "ashfall-sky",
+      "filename": "sky.svg",
+      "path": "public/assets/env/ashfall/sky.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "background",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "ashfall-far-landscape",
+      "filename": "far-landscape.svg",
+      "path": "public/assets/env/ashfall/far-landscape.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-far",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "ashfall-midground-structures",
+      "filename": "midground-structures.svg",
+      "path": "public/assets/env/ashfall/midground-structures.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-midground",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "ashfall-foreground-effects",
+      "filename": "foreground-effects.svg",
+      "path": "public/assets/env/ashfall/foreground-effects.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-foreground",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "ashfall-platform",
+      "filename": "platform.svg",
+      "path": "public/assets/env/ashfall/platform.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-surface",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "ashfall-energy-cluster",
+      "filename": "energy-cluster.svg",
+      "path": "public/assets/env/ashfall/energy-cluster.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "prop",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "ruins-sky",
+      "filename": "sky.svg",
+      "path": "public/assets/env/ruins/sky.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "background",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "ruins-far-landscape",
+      "filename": "far-landscape.svg",
+      "path": "public/assets/env/ruins/far-landscape.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-far",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "ruins-midground-structures",
+      "filename": "midground-structures.svg",
+      "path": "public/assets/env/ruins/midground-structures.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-midground",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "ruins-foreground-effects",
+      "filename": "foreground-effects.svg",
+      "path": "public/assets/env/ruins/foreground-effects.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-foreground",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "ruins-platform",
+      "filename": "platform.svg",
+      "path": "public/assets/env/ruins/platform.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-surface",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "ruins-energy-cluster",
+      "filename": "energy-cluster.svg",
+      "path": "public/assets/env/ruins/energy-cluster.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "prop",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "trade-isles-sky",
+      "filename": "sky.svg",
+      "path": "public/assets/env/trade-isles/sky.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "background",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "trade-isles-far-landscape",
+      "filename": "far-landscape.svg",
+      "path": "public/assets/env/trade-isles/far-landscape.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-far",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "trade-isles-midground-structures",
+      "filename": "midground-structures.svg",
+      "path": "public/assets/env/trade-isles/midground-structures.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-midground",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "trade-isles-foreground-effects",
+      "filename": "foreground-effects.svg",
+      "path": "public/assets/env/trade-isles/foreground-effects.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-foreground",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "trade-isles-platform",
+      "filename": "platform.svg",
+      "path": "public/assets/env/trade-isles/platform.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-surface",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "trade-isles-energy-cluster",
+      "filename": "energy-cluster.svg",
+      "path": "public/assets/env/trade-isles/energy-cluster.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "prop",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "heart-of-rift-sky",
+      "filename": "sky.svg",
+      "path": "public/assets/env/heart-of-rift/sky.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "background",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "heart-of-rift-far-landscape",
+      "filename": "far-landscape.svg",
+      "path": "public/assets/env/heart-of-rift/far-landscape.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-far",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "heart-of-rift-midground-structures",
+      "filename": "midground-structures.svg",
+      "path": "public/assets/env/heart-of-rift/midground-structures.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-midground",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "heart-of-rift-foreground-effects",
+      "filename": "foreground-effects.svg",
+      "path": "public/assets/env/heart-of-rift/foreground-effects.svg",
+      "dimensions": {
+        "width": 2400,
+        "height": 540
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "parallax-foreground",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "heart-of-rift-platform",
+      "filename": "platform.svg",
+      "path": "public/assets/env/heart-of-rift/platform.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "terrain-surface",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "heart-of-rift-energy-cluster",
+      "filename": "energy-cluster.svg",
+      "path": "public/assets/env/heart-of-rift/energy-cluster.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "prop",
+      "status": "created and preloaded; visual QA pending"
+    },
+    {
+      "asset_id": "shared-bounce-pad",
+      "filename": "bounce-pad.svg",
+      "path": "public/assets/env/shared/bounce-pad.svg",
+      "dimensions": {
+        "width": 192,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "traversal-object",
+      "status": "created and preloaded; placement depends on supported gameplay system"
+    },
+    {
+      "asset_id": "shared-spike-hazard",
+      "filename": "spike-hazard.svg",
+      "path": "public/assets/env/shared/spike-hazard.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 96
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "hazard-visual",
+      "status": "created and preloaded; placement depends on supported gameplay system"
+    },
+    {
+      "asset_id": "shared-rift-gate",
+      "filename": "rift-gate.svg",
+      "path": "public/assets/env/shared/rift-gate.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 384
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "rift-object",
+      "status": "created and preloaded; placement depends on supported gameplay system"
+    },
+    {
+      "asset_id": "shared-energy-burst",
+      "filename": "energy-burst.svg",
+      "path": "public/assets/env/shared/energy-burst.svg",
+      "dimensions": {
+        "width": 256,
+        "height": 256
+      },
+      "format": "SVG",
+      "alpha_verified": false,
+      "intended_layer": "effect",
+      "status": "created and preloaded; placement depends on supported gameplay system"
+    }
+  ],
+  "validation": {
+    "typescriptBuild": "not yet confirmed",
+    "browserVisualQA": "not run in this connector session",
+    "collisionGeometry": "kept separate from artwork",
+    "lastStatusCheck": "Vercel status pending at latest checked commit"
+  }
+}
