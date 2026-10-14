@@ -21,6 +21,7 @@ export class AetherWell {
   private barFill!: Phaser.GameObjects.Rectangle;
   private label!: Phaser.GameObjects.Text;
   private pulseTween?: Phaser.Tweens.Tween;
+  private artwork?: Phaser.GameObjects.Image;
 
   constructor(scene: Phaser.Scene, sector: SectorDef, groundY: number) {
     this.scene = scene;
@@ -61,6 +62,19 @@ export class AetherWell {
   private buildVisuals() {
     const accent = this.sector.accent;
     const fog = this.sector.fog;
+    const artworkKey =
+      this.sector.id === 'halcyon' ? 'halcyon_aether_well' :
+      this.sector.id === 'ashfall' ? 'ashfall_energy_cluster' :
+      this.sector.id === 'ruins' ? 'ruins_energy_cluster' :
+      this.sector.id === 'trade-isles' ? 'trade_isles_energy_cluster' :
+      this.sector.id === 'heart-of-rift' ? 'heart_rift_energy_cluster' : '';
+    if (artworkKey && this.scene.textures.exists(artworkKey)) {
+      this.artwork = this.scene.add.image(this.x, this.y - 42, artworkKey)
+        .setDisplaySize(this.sector.id === 'halcyon' ? 94 : 76, this.sector.id === 'halcyon' ? 94 : 76)
+        .setDepth(5)
+        .setAlpha(0.88);
+    }
+
     this.beacon = this.scene.add.graphics().setDepth(6);
     this.beacon.fillStyle(accent, 0.25);
     this.beacon.fillCircle(this.x, this.y - 4, this.radius);
@@ -147,6 +161,7 @@ export class AetherWell {
 
   destroy() {
     this.pulseTween?.stop();
+    this.artwork?.destroy();
     this.beacon.destroy();
     this.ring.destroy();
     this.barBg.destroy();
