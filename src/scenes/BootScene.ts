@@ -1,7 +1,12 @@
 import Phaser from 'phaser';
 import { ensureHeroTextures } from '../systems/envBuilder';
+import {
+  ARIN_SHEET_DATA_URI,
+  ARIN_PORTRAIT_DATA_URI,
+  ARIN_ATLAS_JSON,
+} from '../assets/arinEmbedded';
 
-/** Boot — preload menu + skies + Arin art, generate fallbacks, enter Menu. */
+/** Boot — preload menu + skies + embedded Arin art, enter Menu. */
 export class BootScene extends Phaser.Scene {
   constructor() {
     super('Boot');
@@ -37,18 +42,18 @@ export class BootScene extends Phaser.Scene {
     this.load.image('sky_citadel', 'assets/env/sky_citadel.jpg');
     this.load.image('sky_ruins', 'assets/env/sky_ruins.jpg');
     this.load.image('menu_hero', 'assets/menu/hero.png');
-    this.load.image('portrait_arin', 'assets/menu/portrait_arin.png');
 
-    this.load.atlas(
-      'arin',
-      'assets/sprites/arin/arin_sheet.png',
-      'assets/sprites/arin/arin_atlas.json'
-    );
-    this.load.image('arin_run', 'assets/sprites/arin/arin_run.png');
-    this.load.image('arin_attack', 'assets/sprites/arin/arin_attack.png');
+    // Embedded production Arin (from turnaround sheet)
+    this.load.image('arin_sheet', ARIN_SHEET_DATA_URI);
+    this.load.image('portrait_arin', ARIN_PORTRAIT_DATA_URI);
   }
 
   create() {
+    if (this.textures.exists('arin_sheet') && !this.textures.exists('arin')) {
+      const src = this.textures.get('arin_sheet').getSourceImage() as HTMLImageElement;
+      this.textures.addAtlas('arin', src, ARIN_ATLAS_JSON as unknown as object);
+    }
+
     const g = this.make.graphics({ x: 0, y: 0 }, false);
     if (!this.textures.exists('tile')) {
       g.fillStyle(0x64748b, 1);
@@ -89,10 +94,10 @@ export class BootScene extends Phaser.Scene {
           repeat,
         });
       };
-      mk('arin_idle', ['arin_idle_0'], 4, -1);
-      mk('arin_run', ['arin_run_0'], 8, -1);
-      mk('arin_attack', ['arin_attack_0'], 10, 0);
-      mk('arin_jump', ['arin_run_0'], 6, 0);
+      mk('arin_idle', ['arin_idle_0', 'arin_idle_1'], 3, -1);
+      mk('arin_run', ['arin_run_0', 'arin_run_1', 'arin_run_2'], 10, -1);
+      mk('arin_attack', ['arin_attack_0', 'arin_attack_1', 'arin_attack_2'], 12, 0);
+      mk('arin_jump', ['arin_jump_0'], 6, 0);
     }
 
     this.scene.start('Menu');
