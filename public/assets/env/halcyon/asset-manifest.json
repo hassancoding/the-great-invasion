@@ -81,6 +81,22 @@
       "width": 256,
       "height": 256,
       "description": "Blue Aether / Rift impact burst"
+    },
+    {
+      "key": "kaelaHero",
+      "path": "/assets/env/halcyon/sprites/kaela-verdant-warden.svg",
+      "type": "playable-hero",
+      "width": 320,
+      "height": 400,
+      "description": "Kaela, Verdant Warden champion illustration"
+    },
+    {
+      "key": "varkhulHero",
+      "path": "/assets/env/halcyon/sprites/varkhul-riftbound.svg",
+      "type": "playable-hero",
+      "width": 320,
+      "height": 400,
+      "description": "Varkhul, Riftbound champion illustration"
     }
   ]
 }
