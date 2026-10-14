@@ -45,6 +45,10 @@ export class BootScene extends Phaser.Scene {
     this.load.svg('halcyon_aether_well_prop', 'assets/env/halcyon/props/aether-well.svg', { width: 320, height: 320 });
     this.load.svg('halcyon_ancient_arch_prop', 'assets/env/halcyon/props/ancient-arch.svg', { width: 256, height: 256 });
     this.load.svg('halcyon_sky_crystal_prop', 'assets/env/halcyon/props/sky-crystal.svg', { width: 160, height: 192 });
+    this.load.svg('halcyon_orun_boss_sprite', 'assets/env/halcyon/sprites/orun-boss.svg', { width: 384, height: 384 });
+    this.load.svg('halcyon_platform_tile_prop', 'assets/env/halcyon/props/platform-tile.svg', { width: 256, height: 96 });
+    this.load.svg('halcyon_spike_trap_prop', 'assets/env/halcyon/props/spike-trap.svg', { width: 256, height: 96 });
+    this.load.svg('halcyon_rift_burst_effect', 'assets/env/halcyon/effects/rift-burst.svg', { width: 256, height: 256 });
 
     // Halcyon Spire layered vector environment pack (standalone assets)
     this.load.svg('halcyon_sky', 'assets/env/halcyon/sky.svg', { width: 2400, height: 540 });
