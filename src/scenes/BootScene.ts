@@ -66,6 +66,18 @@ export class BootScene extends Phaser.Scene {
     this.load.svg('ruins_foreground', 'assets/env/ruins/foreground-effects.svg', { width: 2400, height: 540 });
     this.load.svg('ruins_platform', 'assets/env/ruins/platform.svg', { width: 256, height: 96 });
     this.load.svg('ruins_energy_cluster', 'assets/env/ruins/energy-cluster.svg', { width: 256, height: 256 });
+    this.load.svg('trade_isles_sky', 'assets/env/trade-isles/sky.svg', { width: 2400, height: 540 });
+    this.load.svg('trade_isles_far', 'assets/env/trade-isles/far-landscape.svg', { width: 2400, height: 540 });
+    this.load.svg('trade_isles_mid', 'assets/env/trade-isles/midground-structures.svg', { width: 2400, height: 540 });
+    this.load.svg('trade_isles_foreground', 'assets/env/trade-isles/foreground-effects.svg', { width: 2400, height: 540 });
+    this.load.svg('trade_isles_platform', 'assets/env/trade-isles/platform.svg', { width: 256, height: 96 });
+    this.load.svg('trade_isles_energy_cluster', 'assets/env/trade-isles/energy-cluster.svg', { width: 256, height: 256 });
+    this.load.svg('heart_rift_sky', 'assets/env/heart-of-rift/sky.svg', { width: 2400, height: 540 });
+    this.load.svg('heart_rift_far', 'assets/env/heart-of-rift/far-landscape.svg', { width: 2400, height: 540 });
+    this.load.svg('heart_rift_mid', 'assets/env/heart-of-rift/midground-structures.svg', { width: 2400, height: 540 });
+    this.load.svg('heart_rift_foreground', 'assets/env/heart-of-rift/foreground-effects.svg', { width: 2400, height: 540 });
+    this.load.svg('heart_rift_platform', 'assets/env/heart-of-rift/platform.svg', { width: 256, height: 96 });
+    this.load.svg('heart_rift_energy_cluster', 'assets/env/heart-of-rift/energy-cluster.svg', { width: 256, height: 256 });
     this.load.image('menu_hero', 'assets/menu/hero.png');
     this.load.image('portrait_arin', 'assets/sprites/arin/arin_portrait.png');
 
