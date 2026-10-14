@@ -49,6 +49,38 @@
       "width": 160,
       "height": 192,
       "description": "Glowing blue crystal prop; transparent SVG"
+    },
+    {
+      "key": "orunBoss",
+      "path": "/assets/env/halcyon/sprites/orun-boss.svg",
+      "type": "boss",
+      "width": 384,
+      "height": 384,
+      "description": "Orun, Rift-Bound Colossus boss sprite"
+    },
+    {
+      "key": "platformTile",
+      "path": "/assets/env/halcyon/props/platform-tile.svg",
+      "type": "terrain",
+      "width": 256,
+      "height": 96,
+      "description": "Modular Halcyon stone platform tile"
+    },
+    {
+      "key": "spikeTrap",
+      "path": "/assets/env/halcyon/props/spike-trap.svg",
+      "type": "hazard",
+      "width": 256,
+      "height": 96,
+      "description": "Crystalline spike trap artwork"
+    },
+    {
+      "key": "riftBurst",
+      "path": "/assets/env/halcyon/effects/rift-burst.svg",
+      "type": "effect",
+      "width": 256,
+      "height": 256,
+      "description": "Blue Aether / Rift impact burst"
     }
   ]
 }
