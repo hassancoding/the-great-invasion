@@ -23,6 +23,8 @@ export class PlayScene extends Phaser.Scene {
   private hudHero!: Phaser.GameObjects.Text;
   private hudObjective!: Phaser.GameObjects.Text;
   private hudLives!: Phaser.GameObjects.Text;
+  private hudWaves!: Phaser.GameObjects.Text;
+  private waveClearAnnounced = false;
   private ended = false;
 
   constructor() {
@@ -80,7 +82,7 @@ export class PlayScene extends Phaser.Scene {
     this.input.keyboard!.on('keydown-SPACE', () => this.tryJump());
     this.input.keyboard!.on('keydown-J', () => this.tryAttack());
     this.input.keyboard!.on('keydown-K', () => this.tryAttack());
-    this.input.keyboard!.on('keydown-N', () => this.cycleSector());
+    // Sector advancement is intentionally locked: only Halcyon Spire is open in this build.
   }
 
   private buildHud() {
@@ -114,8 +116,13 @@ export class PlayScene extends Phaser.Scene {
       })
       .setScrollFactor(0)
       .setDepth(100);
+    this.hudWaves = this.add
+      .text(this.scale.width - 12, 40, '', {
+        fontFamily: 'system-ui,sans-serif', fontSize: '12px', color: '#fde68a',
+        backgroundColor: '#020617aa', padding: { x: 8, y: 4 },
+      }).setOrigin(1, 0).setScrollFactor(0).setDepth(100);
     this.add
-      .text(this.scale.width - 12, 12, 'Reach Well · Hold claim · J attack · N sector · ESC', {
+      .text(this.scale.width - 12, 12, 'MOVE: A/D or ←/→   JUMP: W/↑/SPACE   ATTACK: J/K   MENU: ESC', {
         fontFamily: 'system-ui,sans-serif',
         fontSize: '11px',
         color: '#94a3b8',
@@ -132,7 +139,12 @@ export class PlayScene extends Phaser.Scene {
     const hearts = '♥'.repeat(this.lives) + '♡'.repeat(Math.max(0, 3 - this.lives));
     this.hudLives.setText(`${hearts}  ·  ${this.kills} kills`);
     const pct = Math.floor(this.well.claimProgress * 100);
-    if (this.well.isStabilized) {
+    const wave = this.threat.waveProgress;
+    this.hudWaves.setText(`SIEGE ${wave.current}/${wave.total} · ACTIVE ${this.threat.activeEnemies.length} · DEFEATED ${wave.defeated}`);
+    if (!this.threat.isClear) {
+      this.hudObjective.setText(`${this.sector.name} · Defeat every siege wave before claiming the Well`);
+      this.hudObjective.setColor('#fcd34d');
+    } else if (this.well.isStabilized) {
       this.hudObjective.setText(`${this.sector.name}  ·  WELL STABILIZED`);
       this.hudObjective.setColor('#86efac');
     } else {
@@ -259,6 +271,14 @@ export class PlayScene extends Phaser.Scene {
     if (this.lives <= 0) this.failRun();
   };
 
+  private showBanner(message: string) {
+    const text = this.add.text(this.scale.width / 2, 130, message, {
+      fontFamily: 'system-ui,sans-serif', fontSize: '16px', color: '#e0f2fe',
+      fontStyle: 'bold', backgroundColor: '#082f49dd', padding: { x: 16, y: 9 }, align: 'center',
+    }).setOrigin(0.5).setScrollFactor(0).setDepth(150).setAlpha(0);
+    this.tweens.add({ targets: text, alpha: 1, y: 112, duration: 320, hold: 2600, yoyo: true, onComplete: () => text.destroy() });
+  }
+
   private failRun() {
     if (this.ended) return;
     this.ended = true;
@@ -355,10 +375,18 @@ export class PlayScene extends Phaser.Scene {
 
   update(_time: number, delta: number) {
     if (this.ended || !this.player?.body) return;
-    this.well.update(delta, this.player.x, this.player.y);
-    this.threat.setClaimPressure(this.well.claimProgress);
     this.threat.update(delta, this.player.x, this.groundY);
-    if (this.well.isStabilized) this.winRun();
+    const siegeClear = this.threat.isClear;
+    this.threat.setClaimPressure(siegeClear ? this.well.claimProgress : 0);
+    if (siegeClear) {
+      this.well.update(delta, this.player.x, this.player.y);
+      if (!this.waveClearAnnounced) {
+        this.waveClearAnnounced = true;
+        this.cameras.main.flash(450, 90, 210, 255, false);
+        this.showBanner('ALL WAVES DEFEATED — STABILIZE THE AETHER WELL');
+      }
+    }
+    if (this.well.isStabilized && siegeClear) this.winRun();
     this.refreshHud();
     if (this.attacking) return;
     const body = this.player.body as Phaser.Physics.Arcade.Body;
