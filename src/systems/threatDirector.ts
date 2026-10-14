@@ -172,6 +172,21 @@ export class ThreatDirector {
         });
         if (e.hp <= 0) {
           this.defeatedCount++;
+          if (this.sector.id === 'halcyon' && this.scene.textures.exists('halcyon_rift_burst_effect')) {
+            const burst = this.scene.add.image(e.sprite.x, e.sprite.y - 24, 'halcyon_rift_burst_effect')
+              .setDisplaySize(e.kind === 'ORUN' ? 132 : 64, e.kind === 'ORUN' ? 132 : 64)
+              .setDepth(9)
+              .setBlendMode(Phaser.BlendModes.ADD)
+              .setAlpha(0.9);
+            this.scene.tweens.add({
+              targets: burst,
+              scale: { from: 0.45, to: 1.35 },
+              alpha: { from: 0.9, to: 0 },
+              angle: { from: 0, to: 35 },
+              duration: e.kind === 'ORUN' ? 420 : 230,
+              onComplete: () => burst.destroy(),
+            });
+          }
           this.scene.tweens.add({
             targets: e.sprite,
             alpha: 0,
