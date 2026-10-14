@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "biome": "ruins",
+  "dimensions": {
+    "background": {
+      "width": 2400,
+      "height": 540
+    },
+    "platform": {
+      "width": 256,
+      "height": 96
+    },
+    "prop": {
+      "width": 256,
+      "height": 256
+    }
+  },
+  "layers": [
+    {
+      "key": "ruins_sky",
+      "file": "sky.svg",
+      "scrollFactor": 0.02,
+      "depth": -21
+    },
+    {
+      "key": "ruins_far",
+      "file": "far-landscape.svg",
+      "scrollFactor": 0.12,
+      "depth": -16
+    },
+    {
+      "key": "ruins_mid",
+      "file": "midground-structures.svg",
+      "scrollFactor": 0.42,
+      "depth": -11
+    },
+    {
+      "key": "ruins_foreground",
+      "file": "foreground-effects.svg",
+      "scrollFactor": 0.72,
+      "depth": 8
+    }
+  ],
+  "notes": [
+    "Visual artwork only; gameplay collision stays in level data.",
+    "Standalone SVG sources; alpha should be checked in-browser before production sign-off."
+  ]
+}
