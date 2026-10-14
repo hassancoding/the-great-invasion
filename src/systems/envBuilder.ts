@@ -112,6 +112,19 @@ export function buildEnvironment(
     for (let i = 0; i < p.tiles; i++) {
       platforms.create(p.x + i * 32, p.y, tileKey);
     }
+
+    // Decorative surface artwork is independent of the static collision tiles above.
+    const platformKey =
+      sector.id === 'halcyon' ? 'halcyon_platform_top' :
+      sector.id === 'ashfall' ? 'ashfall_platform' :
+      sector.id === 'ruins' ? 'ruins_platform' :
+      sector.id === 'trade-isles' ? 'trade_isles_platform' :
+      sector.id === 'heart-of-rift' ? 'heart_rift_platform' : '';
+    if (platformKey && scene.textures.exists(platformKey)) {
+      scene.add.image(p.x + (p.tiles * 32) / 2, p.y + 8, platformKey)
+        .setDisplaySize(p.tiles * 32, 48)
+        .setDepth(2);
+    }
   }
 
   for (let i = 0; i < sector.platforms.length; i += 2) {
