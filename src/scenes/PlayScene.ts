@@ -91,8 +91,9 @@ export class PlayScene extends Phaser.Scene {
   private buildHalcyonChallenges() {
     const spikeXs = [590, 1080, 1510, 1980];
     for (const x of spikeXs) {
-      if (!this.textures.exists('shared_spike_hazard')) continue;
-      const spike = this.physics.add.staticImage(x, this.groundY - 30, 'shared_spike_hazard')
+      const spikeKey = this.textures.exists('halcyon_spike_trap_prop') ? 'halcyon_spike_trap_prop' : 'shared_spike_hazard';
+      if (!this.textures.exists(spikeKey)) continue;
+      const spike = this.physics.add.staticImage(x, this.groundY - 30, spikeKey)
         .setDisplaySize(112, 42)
         .setDepth(6);
       const body = spike.body as Phaser.Physics.Arcade.StaticBody;
