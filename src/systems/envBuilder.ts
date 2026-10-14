@@ -22,7 +22,7 @@ export function buildEnvironment(
   scene.cameras.main.setBounds(0, 0, worldW, worldH);
   scene.cameras.main.setBackgroundColor(sector.skyBot);
 
-  const themedSkyKey = sector.id === 'halcyon' ? 'halcyon_sky' : sector.id === 'ashfall' ? 'ashfall_sky' : sector.id === 'ruins' ? 'ruins_sky' : sector.id === 'trade-isles' ? 'trade_isles_sky' : sector.id === 'heart-of-rift' ? 'heart_rift_sky' : '';
+  const themedSkyKey = sector.id === 'halcyon' && scene.textures.exists('halcyon_custom_sky') ? 'halcyon_custom_sky' : sector.id === 'halcyon' ? 'halcyon_sky' : sector.id === 'ashfall' ? 'ashfall_sky' : sector.id === 'ruins' ? 'ruins_sky' : sector.id === 'trade-isles' ? 'trade_isles_sky' : sector.id === 'heart-of-rift' ? 'heart_rift_sky' : '';
   if (themedSkyKey && scene.textures.exists(themedSkyKey)) {
     scene.add.image(worldW / 2, worldH / 2, themedSkyKey)
       .setDisplaySize(worldW, worldH)
@@ -158,11 +158,35 @@ export function buildEnvironment(
     }
   }
 
-  if (sector.id === 'halcyon' && scene.textures.exists('halcyon_ancient_arch')) {
-    scene.add.image(1760, groundY - 88, 'halcyon_ancient_arch')
-      .setDisplaySize(92, 112)
-      .setDepth(4)
-      .setAlpha(0.82);
+  if (sector.id === 'halcyon') {
+    if (scene.textures.exists('halcyon_ancient_arch_prop')) {
+      scene.add.image(1760, groundY - 82, 'halcyon_ancient_arch_prop')
+        .setDisplaySize(96, 104)
+        .setDepth(4)
+        .setAlpha(0.94);
+    } else if (scene.textures.exists('halcyon_ancient_arch')) {
+      scene.add.image(1760, groundY - 88, 'halcyon_ancient_arch')
+        .setDisplaySize(92, 112)
+        .setDepth(4)
+        .setAlpha(0.82);
+    }
+
+    // New standalone crystals and aether well are decorative until the objective
+    // interaction system claims the well; collision remains controlled separately.
+    if (scene.textures.exists('halcyon_sky_crystal_prop')) {
+      [350, 890, 1460, 2050].forEach((x, i) => {
+        const crystal = scene.add.image(x, groundY - 72 - (i % 2) * 22, 'halcyon_sky_crystal_prop')
+          .setDisplaySize(26, 34)
+          .setDepth(5);
+        scene.tweens.add({ targets: crystal, y: crystal.y - 5, angle: { from: -4, to: 4 }, duration: 1500 + i * 170, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      });
+    }
+    if (scene.textures.exists('halcyon_aether_well_prop')) {
+      scene.add.image(2260, groundY - 92, 'halcyon_aether_well_prop')
+        .setDisplaySize(76, 84)
+        .setDepth(5)
+        .setAlpha(0.9);
+    }
   }
 
   const label = scene.add
