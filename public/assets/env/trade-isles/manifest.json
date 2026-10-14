@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "biome": "trade-isles",
+  "backgroundSize": {
+    "width": 2400,
+    "height": 540
+  },
+  "terrainSize": {
+    "width": 256,
+    "height": 96
+  },
+  "propSize": {
+    "width": 256,
+    "height": 256
+  },
+  "layers": [
+    {
+      "key": "trade-isles_sky",
+      "file": "sky.svg",
+      "scrollFactor": 0,
+      "depth": -22
+    },
+    {
+      "key": "trade-isles_far",
+      "file": "far-landscape.svg",
+      "scrollFactor": 0.12,
+      "depth": -16
+    },
+    {
+      "key": "trade-isles_mid",
+      "file": "midground-structures.svg",
+      "scrollFactor": 0.42,
+      "depth": -11
+    },
+    {
+      "key": "trade-isles_foreground",
+      "file": "foreground-effects.svg",
+      "scrollFactor": 0.72,
+      "depth": 8
+    }
+  ],
+  "collision": "defined separately by sector platform data",
+  "alphaVerified": false
+}
