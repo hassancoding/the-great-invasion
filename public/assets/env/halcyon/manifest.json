@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "biome": "halcyon-spire",
+  "rendering": "SVG assets are authored individually with viewBox dimensions; load with Phaser's SVG/image support and tune display sizes in scene config.",
+  "backgroundLayers": [
+    {
+      "id": "sky",
+      "file": "sky.svg",
+      "scrollFactor": 0.03,
+      "depth": -30,
+      "alpha": 1
+    },
+    {
+      "id": "far-islands",
+      "file": "far-islands.svg",
+      "scrollFactor": 0.12,
+      "depth": -25,
+      "alpha": 0.9
+    },
+    {
+      "id": "distant-citadel",
+      "file": "distant-citadel.svg",
+      "scrollFactor": 0.22,
+      "depth": -20,
+      "alpha": 0.95
+    },
+    {
+      "id": "midground-ruins",
+      "file": "midground-ruins.svg",
+      "scrollFactor": 0.42,
+      "depth": -15,
+      "alpha": 1
+    },
+    {
+      "id": "foreground-crystals",
+      "file": "foreground-crystals.svg",
+      "scrollFactor": 0.72,
+      "depth": 20,
+      "alpha": 0.85
+    }
+  ],
+  "terrain": [
+    {
+      "id": "platform-top",
+      "file": "platform-top.svg",
+      "width": 256,
+      "height": 96,
+      "tileableHorizontally": false,
+      "collision": "top-surface-only-by-scene-configuration"
+    },
+    {
+      "id": "platform-middle",
+      "file": "platform-middle.svg",
+      "width": 256,
+      "height": 96,
+      "tileableHorizontally": true,
+      "collision": "visual-only"
+    },
+    {
+      "id": "platform-edge-left",
+      "file": "platform-edge-left.svg",
+      "width": 128,
+      "height": 96,
+      "collision": "visual-only"
+    },
+    {
+      "id": "platform-edge-right",
+      "file": "platform-edge-right.svg",
+      "width": 128,
+      "height": 96,
+      "collision": "visual-only"
+    },
+    {
+      "id": "cliff-face",
+      "file": "cliff-face.svg",
+      "width": 256,
+      "height": 256,
+      "collision": "visual-only"
+    }
+  ],
+  "props": [
+    {
+      "id": "crystal-cluster",
+      "file": "crystal-cluster.svg",
+      "width": 256,
+      "height": 256,
+      "collision": "none"
+    },
+    {
+      "id": "ancient-arch",
+      "file": "ancient-arch.svg",
+      "width": 320,
+      "height": 384,
+      "collision": "none-unless-configured"
+    },
+    {
+      "id": "aether-well",
+      "file": "aether-well.svg",
+      "width": 320,
+      "height": 320,
+      "collision": "objective-logic-separate"
+    }
+  ],
+  "quality": {
+    "textInArtwork": false,
+    "editableVectorSource": true,
+    "alpha": "SVG transparent outside painted shapes except full-canvas sky and layer silhouettes",
+    "frameExtractionRequired": false
+  },
+  "notes": [
+    "These are newly authored vector starter assets, not raster exports from earlier concept images.",
+    "Use collision bodies from level data, never infer collision from the visual artwork.",
+    "Check Phaser's SVG rasterization and scaling on target browsers before production sign-off.",
+    "Additional regions and gameplay props remain to be created."
+  ]
+}
