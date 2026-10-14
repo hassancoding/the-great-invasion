@@ -39,11 +39,11 @@ export class BootScene extends Phaser.Scene {
     this.load.image('sky_ruins', 'assets/env/sky_ruins.jpg');
 
     // Halcyon Spire layered vector environment pack (standalone assets)
-    this.load.svg('halcyon_sky', 'assets/env/halcyon/sky.svg', { width: 2048, height: 1152 });
-    this.load.svg('halcyon_far_islands', 'assets/env/halcyon/far-islands.svg', { width: 2048, height: 1152 });
-    this.load.svg('halcyon_distant_citadel', 'assets/env/halcyon/distant-citadel.svg', { width: 2048, height: 1152 });
-    this.load.svg('halcyon_midground_ruins', 'assets/env/halcyon/midground-ruins.svg', { width: 2048, height: 1152 });
-    this.load.svg('halcyon_foreground_crystals', 'assets/env/halcyon/foreground-crystals.svg', { width: 2048, height: 1152 });
+    this.load.svg('halcyon_sky', 'assets/env/halcyon/sky.svg', { width: 2400, height: 540 });
+    this.load.svg('halcyon_far_islands', 'assets/env/halcyon/far-islands.svg', { width: 2400, height: 540 });
+    this.load.svg('halcyon_distant_citadel', 'assets/env/halcyon/distant-citadel.svg', { width: 2400, height: 540 });
+    this.load.svg('halcyon_midground_ruins', 'assets/env/halcyon/midground-ruins.svg', { width: 2400, height: 540 });
+    this.load.svg('halcyon_foreground_crystals', 'assets/env/halcyon/foreground-crystals.svg', { width: 2400, height: 540 });
     this.load.svg('halcyon_platform_top', 'assets/env/halcyon/platform-top.svg', { width: 256, height: 96 });
     this.load.svg('halcyon_platform_middle', 'assets/env/halcyon/platform-middle.svg', { width: 256, height: 96 });
     this.load.svg('halcyon_platform_edge_left', 'assets/env/halcyon/platform-edge-left.svg', { width: 128, height: 96 });
