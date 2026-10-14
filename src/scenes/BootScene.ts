@@ -1,12 +1,8 @@
 import Phaser from 'phaser';
 import { ensureHeroTextures } from '../systems/envBuilder';
-import {
-  ARIN_SHEET_DATA_URI,
-  ARIN_PORTRAIT_DATA_URI,
-  ARIN_ATLAS_JSON,
-} from '../assets/arinEmbedded';
+import { ARIN_ATLAS_JSON } from '../assets/arinAtlasJson';
 
-/** Boot — preload menu + skies + embedded Arin art, enter Menu. */
+/** Boot — preload menu + skies + Arin production atlas, enter Menu. */
 export class BootScene extends Phaser.Scene {
   constructor() {
     super('Boot');
@@ -42,10 +38,10 @@ export class BootScene extends Phaser.Scene {
     this.load.image('sky_citadel', 'assets/env/sky_citadel.jpg');
     this.load.image('sky_ruins', 'assets/env/sky_ruins.jpg');
     this.load.image('menu_hero', 'assets/menu/hero.png');
+    this.load.image('portrait_arin', 'assets/sprites/arin/arin_portrait.png');
 
-    // Embedded production Arin (from turnaround sheet)
-    this.load.image('arin_sheet', ARIN_SHEET_DATA_URI);
-    this.load.image('portrait_arin', ARIN_PORTRAIT_DATA_URI);
+    // Production Arin atlas (cropped from provided sheets)
+    this.load.image('arin_sheet', 'assets/sprites/arin/arin_sprites.png');
   }
 
   create() {
@@ -94,10 +90,41 @@ export class BootScene extends Phaser.Scene {
           repeat,
         });
       };
-      mk('arin_idle', ['arin_idle_0', 'arin_idle_1'], 3, -1);
-      mk('arin_run', ['arin_run_0', 'arin_run_1', 'arin_run_2'], 10, -1);
-      mk('arin_attack', ['arin_attack_0', 'arin_attack_1', 'arin_attack_2'], 12, 0);
-      mk('arin_jump', ['arin_jump_0'], 6, 0);
+
+      // Idle: first 8 front/standing variations (smooth loop)
+      mk(
+        'arin_idle',
+        Array.from({ length: 8 }, (_, i) => `arin_idle_${i}`),
+        4,
+        -1,
+      );
+
+      // Run: full 24-frame cycle
+      mk(
+        'arin_run',
+        Array.from({ length: 24 }, (_, i) => `arin_run_${i}`),
+        14,
+        -1,
+      );
+
+      // Jump: ascending + peak + fall (use first ~12 of jump sheet)
+      mk(
+        'arin_jump',
+        Array.from({ length: 12 }, (_, i) => `arin_jump_${i}`),
+        12,
+        0,
+      );
+
+      // Landing / recover (remaining jump frames)
+      mk(
+        'arin_land',
+        Array.from({ length: 10 }, (_, i) => `arin_jump_${12 + i}`),
+        10,
+        0,
+      );
+
+      // Keep attack placeholder if old frames still present; otherwise reuse a few idle
+      mk('arin_attack', ['arin_idle_0', 'arin_idle_1', 'arin_idle_2'], 12, 0);
     }
 
     this.scene.start('Menu');
