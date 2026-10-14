@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "biome": "ashfall",
+  "dimensions": {
+    "background": {
+      "width": 2400,
+      "height": 540
+    },
+    "platform": {
+      "width": 256,
+      "height": 96
+    },
+    "prop": {
+      "width": 256,
+      "height": 256
+    }
+  },
+  "layers": [
+    {
+      "key": "ashfall_sky",
+      "file": "sky.svg",
+      "scrollFactor": 0.02,
+      "depth": -21
+    },
+    {
+      "key": "ashfall_far",
+      "file": "far-landscape.svg",
+      "scrollFactor": 0.12,
+      "depth": -16
+    },
+    {
+      "key": "ashfall_mid",
+      "file": "midground-structures.svg",
+      "scrollFactor": 0.42,
+      "depth": -11
+    },
+    {
+      "key": "ashfall_foreground",
+      "file": "foreground-effects.svg",
+      "scrollFactor": 0.72,
+      "depth": 8
+    }
+  ],
+  "notes": [
+    "Visual artwork only; gameplay collision stays in level data.",
+    "Standalone SVG sources; alpha should be checked in-browser before production sign-off."
+  ]
+}
