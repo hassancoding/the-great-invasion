@@ -123,11 +123,12 @@ export class ThreatDirector {
   }
 
   private spawnOne(plan: WavePlan, x: number, y: number) {
-    const key = ensureEnemyTexture(this.scene, plan.kind);
+    const useGraveling = this.sector.id === 'halcyon' && plan.kind === 'SWARM' && this.scene.textures.exists('halcyon_graveling_sprite');
+    const key = useGraveling ? 'halcyon_graveling_sprite' : ensureEnemyTexture(this.scene, plan.kind);
     const spr = this.group.create(x, y, key) as Phaser.Physics.Arcade.Sprite;
     spr.setOrigin(0.5, 1);
-    spr.setScale(plan.scale);
-    spr.setTint(plan.tint);
+    spr.setScale(useGraveling ? 0.34 : plan.scale);
+    if (!useGraveling) spr.setTint(plan.tint);
     spr.setDepth(8);
     spr.setCollideWorldBounds(true);
     const body = spr.body as Phaser.Physics.Arcade.Body;
