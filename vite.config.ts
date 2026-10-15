@@ -7,6 +7,18 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico'],
+      workbox: {
+        globPatterns: [
+          '**/*.{js,css,html,ico}',
+          'assets/menu/**/*',
+          'assets/sprites/arin/arin_sprites.png',
+          'assets/sprites/arin/arin_atlas.json',
+          'assets/sprites/arin/arin_portrait.png',
+          'assets/env/halcyon/backgrounds/fortress/*.png',
+          'assets/env/halcyon/props/fortress/*.png',
+        ],
+        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+      },
       manifest: {
         name: 'The Great Invasion',
         short_name: 'TGI',

@@ -19,6 +19,7 @@ export class HeroSelectScene extends Phaser.Scene {
 
   create() {
     const { width: w, height: h } = this.scale;
+    this.cards = [];
     this.cameras.main.setBackgroundColor('#020617');
     this.cameras.main.fadeIn(350, 2, 6, 18);
 
@@ -70,24 +71,13 @@ export class HeroSelectScene extends Phaser.Scene {
       .setOrigin(0.5)
       .setDepth(10);
 
-    const saved = (this.registry.get('hero') as HeroId) || this.loadSavedHero();
+    const registryHero = this.registry.get('hero');
+    const saved = HEROES.some((hero) => hero.id === registryHero)
+      ? registryHero as HeroId
+      : this.loadSavedHero();
     this.selectHero(saved);
 
-    this.makeCta(w / 2, h * 0.88, 'ENTER THE RIFT', () => {
-      const sector = getSector('halcyon');
-      this.registry.set('hero', this.selected);
-      this.registry.set('sector', sector.id);
-      try {
-        localStorage.setItem('tgi_hero', this.selected);
-        localStorage.setItem('tgi_sector', sector.id);
-      } catch {
-        /* ignore */
-      }
-      this.cameras.main.fadeOut(280, 2, 6, 18);
-      this.cameras.main.once('camerafadeoutcomplete', () => {
-        this.scene.start('Play', { hero: this.selected, sector: sector.id });
-      });
-    });
+    this.makeCta(w / 2, h * 0.88, 'ENTER THE RIFT', () => this.enterGameplay());
 
     const back = this.add
       .text(24, 24, '← Back', {
@@ -102,6 +92,44 @@ export class HeroSelectScene extends Phaser.Scene {
     back.on('pointerdown', () => {
       this.cameras.main.fadeOut(200, 2, 6, 18);
       this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('Menu'));
+    });
+
+    this.input.keyboard?.off('keydown', this.handleHeroKey, this);
+    this.input.keyboard?.on('keydown', this.handleHeroKey, this);
+  }
+
+  private handleHeroKey(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      this.scene.start('Menu');
+      return;
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.enterGameplay();
+      return;
+    }
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      const current = HEROES.findIndex((hero) => hero.id === this.selected);
+      const step = event.key === 'ArrowRight' ? 1 : -1;
+      const next = (current + step + HEROES.length) % HEROES.length;
+      this.selectHero(HEROES[next].id);
+    }
+  }
+
+  private enterGameplay() {
+    const sector = getSector('halcyon');
+    this.registry.set('hero', this.selected);
+    this.registry.set('sector', sector.id);
+    try {
+      localStorage.setItem('tgi_hero', this.selected);
+      localStorage.setItem('tgi_sector', sector.id);
+    } catch {
+      /* ignore */
+    }
+    this.cameras.main.fadeOut(280, 2, 6, 18);
+    this.cameras.main.once('camerafadeoutcomplete', () => {
+      this.scene.start('Play', { hero: this.selected, sector: sector.id });
     });
   }
 
@@ -124,16 +152,17 @@ export class HeroSelectScene extends Phaser.Scene {
     root.add(bg);
     const ring = this.add.graphics();
     root.add(ring);
-    const key = hero.id === 'arin' ? 'halcyon_arin_hero' : `portrait_${hero.id}`;
+    const key = `portrait_${hero.id}`;
     if (this.textures.exists(key)) {
       const img = this.add.image(0, -28, key);
       img.setScale(Math.min((cardW - 24) / img.width, 140 / img.height));
       root.add(img);
     } else {
-      const tex =
-        hero.id === 'kaela' ? 'hero_kaela' : hero.id === 'varkhul' ? 'hero_varkhul' : 'hero_arin_fb';
-      if (this.textures.exists(tex)) root.add(this.add.image(0, -24, tex).setScale(1.8));
-      else root.add(this.add.circle(0, -36, 48, hero.color, 0.85));
+      root.add(this.add.text(0, -30, 'PORTRAIT UNAVAILABLE', {
+        fontFamily: 'system-ui,sans-serif',
+        fontSize: '10px',
+        color: '#fca5a5',
+      }).setOrigin(0.5));
     }
     root.add(
       this.add
@@ -182,8 +211,9 @@ export class HeroSelectScene extends Phaser.Scene {
   }
 
   private selectHero(id: HeroId) {
-    this.selected = id;
-    const meta = HEROES.find((h) => h.id === id)!;
+    const meta = HEROES.find((hero) => hero.id === id);
+    if (!meta) return;
+    this.selected = meta.id;
     this.detailText.setText(`${meta.blurb}  ·  ${meta.faction}`);
     for (const c of this.cards) {
       const metaC = HEROES.find((h) => h.id === c.id)!;

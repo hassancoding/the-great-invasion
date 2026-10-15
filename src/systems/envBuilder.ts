@@ -93,6 +93,27 @@ export function buildEnvironment(
     });
   }
 
+  if (sector.id === 'halcyon' && scene.textures.exists('halcyon_fortress_skyline')) {
+    const skyline = scene.add.image(worldW / 2, worldH * 0.38, 'halcyon_fortress_skyline');
+    skyline.setDisplaySize(worldW, worldW * skyline.height / skyline.width);
+    skyline.setScrollFactor(0.08, 0.06).setDepth(-18).setAlpha(0.5);
+
+    if (scene.textures.exists('halcyon_fortress_bridge')) {
+      scene.add.image(worldW * 0.4, worldH * 0.5, 'halcyon_fortress_bridge')
+        .setDisplaySize(540, 314)
+        .setScrollFactor(0.2)
+        .setDepth(-14)
+        .setAlpha(0.76);
+    }
+    if (scene.textures.exists('halcyon_fortress_clouds')) {
+      scene.add.image(worldW * 0.72, worldH * 0.48, 'halcyon_fortress_clouds')
+        .setDisplaySize(700, 203)
+        .setScrollFactor(0.3)
+        .setDepth(-12)
+        .setAlpha(0.66);
+    }
+  }
+
   const motes = scene.add.graphics().setDepth(-8).setScrollFactor(0.6);
   for (let i = 0; i < 28; i++) {
     const mx = ((i * 97 + 13) % worldW) + (i % 5) * 17;
@@ -159,7 +180,12 @@ export function buildEnvironment(
   }
 
   if (sector.id === 'halcyon') {
-    if (scene.textures.exists('halcyon_ancient_arch_prop')) {
+    if (scene.textures.exists('halcyon_fortress_arch')) {
+      scene.add.image(1760, groundY - 92, 'halcyon_fortress_arch')
+        .setDisplaySize(164, 178)
+        .setDepth(4)
+        .setAlpha(0.95);
+    } else if (scene.textures.exists('halcyon_ancient_arch_prop')) {
       scene.add.image(1760, groundY - 82, 'halcyon_ancient_arch_prop')
         .setDisplaySize(96, 104)
         .setDepth(4)
@@ -173,10 +199,13 @@ export function buildEnvironment(
 
     // New standalone crystals and aether well are decorative until the objective
     // interaction system claims the well; collision remains controlled separately.
-    if (scene.textures.exists('halcyon_sky_crystal_prop')) {
+    const crystalKey = scene.textures.exists('halcyon_fortress_crystal')
+      ? 'halcyon_fortress_crystal'
+      : 'halcyon_sky_crystal_prop';
+    if (scene.textures.exists(crystalKey)) {
       [350, 890, 1460, 2050].forEach((x, i) => {
-        const crystal = scene.add.image(x, groundY - 72 - (i % 2) * 22, 'halcyon_sky_crystal_prop')
-          .setDisplaySize(26, 34)
+        const crystal = scene.add.image(x, groundY - 72 - (i % 2) * 22, crystalKey)
+          .setDisplaySize(30, 46)
           .setDepth(5);
         scene.tweens.add({ targets: crystal, y: crystal.y - 5, angle: { from: -4, to: 4 }, duration: 1500 + i * 170, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       });

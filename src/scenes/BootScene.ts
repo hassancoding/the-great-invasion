@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import { ensureHeroTextures } from '../systems/envBuilder';
-import { ARIN_ATLAS_JSON } from '../assets/arinAtlasJson';
 
 /** Boot — preload menu + skies + Arin production atlas, enter Menu. */
 export class BootScene extends Phaser.Scene {
@@ -100,18 +99,16 @@ export class BootScene extends Phaser.Scene {
     this.load.svg('shared_rift_gate', 'assets/env/shared/rift-gate.svg', { width: 256, height: 384 });
     this.load.svg('shared_energy_burst', 'assets/env/shared/energy-burst.svg', { width: 256, height: 256 });
     this.load.image('menu_hero', 'assets/menu/hero.png');
+    this.load.atlas('arin', 'assets/sprites/arin/arin_sprites.png', 'assets/sprites/arin/arin_atlas.json');
     this.load.image('portrait_arin', 'assets/sprites/arin/arin_portrait.png');
-
-    // Production Arin atlas (cropped from provided sheets)
-    this.load.image('arin_sheet', 'assets/sprites/arin/arin_sprites.png');
+    this.load.image('halcyon_fortress_skyline', 'assets/env/halcyon/backgrounds/fortress/skyline.png');
+    this.load.image('halcyon_fortress_bridge', 'assets/env/halcyon/backgrounds/fortress/island-bridge.png');
+    this.load.image('halcyon_fortress_clouds', 'assets/env/halcyon/backgrounds/fortress/cloud-bank.png');
+    this.load.image('halcyon_fortress_arch', 'assets/env/halcyon/props/fortress/arch-island.png');
+    this.load.image('halcyon_fortress_crystal', 'assets/env/halcyon/props/fortress/aether-crystal.png');
   }
 
   create() {
-    if (this.textures.exists('arin_sheet') && !this.textures.exists('arin')) {
-      const src = this.textures.get('arin_sheet').getSourceImage() as HTMLImageElement;
-      this.textures.addAtlas('arin', src, ARIN_ATLAS_JSON as unknown as object);
-    }
-
     const g = this.make.graphics({ x: 0, y: 0 }, false);
     if (!this.textures.exists('tile')) {
       g.fillStyle(0x64748b, 1);
@@ -139,56 +136,28 @@ export class BootScene extends Phaser.Scene {
     g.destroy();
 
     ensureHeroTextures(this);
-
-    if (this.textures.exists('arin')) {
-      const mk = (key: string, frames: string[], rate: number, repeat: number) => {
-        if (this.anims.exists(key)) this.anims.remove(key);
-        const valid = frames.filter((f) => this.textures.get('arin').has(f));
-        if (!valid.length) return;
-        this.anims.create({
-          key,
-          frames: valid.map((f) => ({ key: 'arin', frame: f })),
-          frameRate: rate,
-          repeat,
-        });
-      };
-
-      // Idle: first 8 front/standing variations (smooth loop)
-      mk(
-        'arin_idle',
-        Array.from({ length: 8 }, (_, i) => `arin_idle_${i}`),
-        4,
-        -1,
-      );
-
-      // Run: full 24-frame cycle
-      mk(
-        'arin_run',
-        Array.from({ length: 24 }, (_, i) => `arin_run_${i}`),
-        14,
-        -1,
-      );
-
-      // Jump: ascending + peak + fall (use first ~12 of jump sheet)
-      mk(
-        'arin_jump',
-        Array.from({ length: 12 }, (_, i) => `arin_jump_${i}`),
-        12,
-        0,
-      );
-
-      // Landing / recover (remaining jump frames)
-      mk(
-        'arin_land',
-        Array.from({ length: 10 }, (_, i) => `arin_jump_${12 + i}`),
-        10,
-        0,
-      );
-
-      // Keep attack placeholder if old frames still present; otherwise reuse a few idle
-      mk('arin_attack', ['arin_idle_0', 'arin_idle_1', 'arin_idle_2'], 12, 0);
-    }
+    this.createArinAnimations();
 
     this.scene.start('Menu');
+  }
+
+  private createArinAnimations() {
+    if (!this.textures.exists('arin')) return;
+
+    const createAnimation = (key: string, state: string, count: number, frameRate: number, repeat: number) => {
+      const frames = Array.from({ length: count }, (_, index) => `arin_${state}_${index}`)
+        .filter((frame) => this.textures.get('arin').has(frame));
+      if (!frames.length || this.anims.exists(key)) return;
+      this.anims.create({
+        key,
+        frames: frames.map((frame) => ({ key: 'arin', frame })),
+        frameRate,
+        repeat,
+      });
+    };
+
+    createAnimation('arin_idle', 'idle', 8, 6, -1);
+    createAnimation('arin_run', 'run', 24, 14, -1);
+    createAnimation('arin_jump', 'jump', 22, 12, 0);
   }
 }
