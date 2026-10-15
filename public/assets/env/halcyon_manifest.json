@@ -1,0 +1,2786 @@
+[
+  {
+    "file": "platforms/terrain_00.png",
+    "w": 930,
+    "h": 140,
+    "area": 51750,
+    "cat": "platforms",
+    "src": "terrain"
+  },
+  {
+    "file": "trees/terrain_01.png",
+    "w": 410,
+    "h": 292,
+    "area": 40714,
+    "cat": "trees",
+    "src": "terrain"
+  },
+  {
+    "file": "trees/terrain_02.png",
+    "w": 339,
+    "h": 294,
+    "area": 38053,
+    "cat": "trees",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_03.png",
+    "w": 551,
+    "h": 257,
+    "area": 35634,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_04.png",
+    "w": 438,
+    "h": 237,
+    "area": 35022,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_05.png",
+    "w": 485,
+    "h": 165,
+    "area": 23677,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "platforms/terrain_06.png",
+    "w": 442,
+    "h": 144,
+    "area": 20602,
+    "cat": "platforms",
+    "src": "terrain"
+  },
+  {
+    "file": "arches/terrain_07.png",
+    "w": 173,
+    "h": 267,
+    "area": 18358,
+    "cat": "arches",
+    "src": "terrain"
+  },
+  {
+    "file": "arches/terrain_08.png",
+    "w": 227,
+    "h": 187,
+    "area": 17899,
+    "cat": "arches",
+    "src": "terrain"
+  },
+  {
+    "file": "arches/terrain_09.png",
+    "w": 184,
+    "h": 253,
+    "area": 15883,
+    "cat": "arches",
+    "src": "terrain"
+  },
+  {
+    "file": "arches/terrain_10.png",
+    "w": 136,
+    "h": 264,
+    "area": 14549,
+    "cat": "arches",
+    "src": "terrain"
+  },
+  {
+    "file": "arches/terrain_11.png",
+    "w": 232,
+    "h": 203,
+    "area": 13073,
+    "cat": "arches",
+    "src": "terrain"
+  },
+  {
+    "file": "arches/terrain_12.png",
+    "w": 145,
+    "h": 200,
+    "area": 12524,
+    "cat": "arches",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_13.png",
+    "w": 188,
+    "h": 194,
+    "area": 11682,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_14.png",
+    "w": 155,
+    "h": 131,
+    "area": 11133,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_15.png",
+    "w": 216,
+    "h": 146,
+    "area": 10615,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_16.png",
+    "w": 143,
+    "h": 158,
+    "area": 9964,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_17.png",
+    "w": 145,
+    "h": 130,
+    "area": 7541,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_18.png",
+    "w": 117,
+    "h": 143,
+    "area": 7383,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_19.png",
+    "w": 101,
+    "h": 122,
+    "area": 7261,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_20.png",
+    "w": 133,
+    "h": 151,
+    "area": 7178,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_21.png",
+    "w": 137,
+    "h": 142,
+    "area": 6594,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_22.png",
+    "w": 177,
+    "h": 137,
+    "area": 5667,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_23.png",
+    "w": 125,
+    "h": 217,
+    "area": 4993,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "platforms/terrain_24.png",
+    "w": 152,
+    "h": 64,
+    "area": 4208,
+    "cat": "platforms",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_25.png",
+    "w": 64,
+    "h": 125,
+    "area": 3649,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "plants/terrain_26.png",
+    "w": 105,
+    "h": 110,
+    "area": 3235,
+    "cat": "plants",
+    "src": "terrain"
+  },
+  {
+    "file": "plants/terrain_27.png",
+    "w": 99,
+    "h": 87,
+    "area": 3208,
+    "cat": "plants",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_28.png",
+    "w": 66,
+    "h": 124,
+    "area": 3134,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_29.png",
+    "w": 75,
+    "h": 137,
+    "area": 2905,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "plants/terrain_30.png",
+    "w": 98,
+    "h": 78,
+    "area": 2835,
+    "cat": "plants",
+    "src": "terrain"
+  },
+  {
+    "file": "plants/terrain_31.png",
+    "w": 111,
+    "h": 80,
+    "area": 2778,
+    "cat": "plants",
+    "src": "terrain"
+  },
+  {
+    "file": "platforms/terrain_32.png",
+    "w": 142,
+    "h": 56,
+    "area": 2751,
+    "cat": "platforms",
+    "src": "terrain"
+  },
+  {
+    "file": "props/terrain_33.png",
+    "w": 95,
+    "h": 155,
+    "area": 2532,
+    "cat": "props",
+    "src": "terrain"
+  },
+  {
+    "file": "plants/terrain_34.png",
+    "w": 73,
+    "h": 76,
+    "area": 2169,
+    "cat": "plants",
+    "src": "terrain"
+  },
+  {
+    "file": "plants/terrain_35.png",
+    "w": 54,
+    "h": 101,
+    "area": 1969,
+    "cat": "plants",
+    "src": "terrain"
+  },
+  {
+    "file": "plants/terrain_36.png",
+    "w": 96,
+    "h": 48,
+    "area": 1829,
+    "cat": "plants",
+    "src": "terrain"
+  },
+  {
+    "file": "plants/terrain_37.png",
+    "w": 61,
+    "h": 108,
+    "area": 1449,
+    "cat": "plants",
+    "src": "terrain"
+  },
+  {
+    "file": "platforms/terrain_38.png",
+    "w": 76,
+    "h": 37,
+    "area": 1360,
+    "cat": "platforms",
+    "src": "terrain"
+  },
+  {
+    "file": "platforms/terrain_39.png",
+    "w": 90,
+    "h": 38,
+    "area": 1209,
+    "cat": "platforms",
+    "src": "terrain"
+  },
+  {
+    "file": "trees/foliage_00.png",
+    "w": 394,
+    "h": 436,
+    "area": 80349,
+    "cat": "trees",
+    "src": "foliage"
+  },
+  {
+    "file": "trees/foliage_01.png",
+    "w": 426,
+    "h": 428,
+    "area": 76264,
+    "cat": "trees",
+    "src": "foliage"
+  },
+  {
+    "file": "trees/foliage_02.png",
+    "w": 361,
+    "h": 410,
+    "area": 58249,
+    "cat": "trees",
+    "src": "foliage"
+  },
+  {
+    "file": "trees/foliage_03.png",
+    "w": 287,
+    "h": 350,
+    "area": 37815,
+    "cat": "trees",
+    "src": "foliage"
+  },
+  {
+    "file": "trees/foliage_04.png",
+    "w": 311,
+    "h": 244,
+    "area": 36906,
+    "cat": "trees",
+    "src": "foliage"
+  },
+  {
+    "file": "trees/foliage_05.png",
+    "w": 286,
+    "h": 236,
+    "area": 28768,
+    "cat": "trees",
+    "src": "foliage"
+  },
+  {
+    "file": "arches/foliage_06.png",
+    "w": 280,
+    "h": 209,
+    "area": 24919,
+    "cat": "arches",
+    "src": "foliage"
+  },
+  {
+    "file": "arches/foliage_07.png",
+    "w": 257,
+    "h": 270,
+    "area": 24566,
+    "cat": "arches",
+    "src": "foliage"
+  },
+  {
+    "file": "arches/foliage_08.png",
+    "w": 215,
+    "h": 214,
+    "area": 17617,
+    "cat": "arches",
+    "src": "foliage"
+  },
+  {
+    "file": "props/foliage_09.png",
+    "w": 276,
+    "h": 154,
+    "area": 16374,
+    "cat": "props",
+    "src": "foliage"
+  },
+  {
+    "file": "arches/foliage_10.png",
+    "w": 222,
+    "h": 213,
+    "area": 16272,
+    "cat": "arches",
+    "src": "foliage"
+  },
+  {
+    "file": "arches/foliage_11.png",
+    "w": 192,
+    "h": 178,
+    "area": 15659,
+    "cat": "arches",
+    "src": "foliage"
+  },
+  {
+    "file": "platforms/foliage_12.png",
+    "w": 280,
+    "h": 138,
+    "area": 15290,
+    "cat": "platforms",
+    "src": "foliage"
+  },
+  {
+    "file": "arches/foliage_13.png",
+    "w": 183,
+    "h": 193,
+    "area": 14995,
+    "cat": "arches",
+    "src": "foliage"
+  },
+  {
+    "file": "props/foliage_14.png",
+    "w": 146,
+    "h": 183,
+    "area": 8451,
+    "cat": "props",
+    "src": "foliage"
+  },
+  {
+    "file": "props/foliage_15.png",
+    "w": 64,
+    "h": 149,
+    "area": 3626,
+    "cat": "props",
+    "src": "foliage"
+  },
+  {
+    "file": "props/foliage_16.png",
+    "w": 60,
+    "h": 208,
+    "area": 3275,
+    "cat": "props",
+    "src": "foliage"
+  },
+  {
+    "file": "props/foliage_17.png",
+    "w": 44,
+    "h": 143,
+    "area": 1576,
+    "cat": "props",
+    "src": "foliage"
+  },
+  {
+    "file": "trees/veg_00.png",
+    "w": 324,
+    "h": 309,
+    "area": 44337,
+    "cat": "trees",
+    "src": "veg"
+  },
+  {
+    "file": "arches/veg_01.png",
+    "w": 268,
+    "h": 220,
+    "area": 24129,
+    "cat": "arches",
+    "src": "veg"
+  },
+  {
+    "file": "arches/veg_02.png",
+    "w": 237,
+    "h": 244,
+    "area": 22267,
+    "cat": "arches",
+    "src": "veg"
+  },
+  {
+    "file": "arches/veg_03.png",
+    "w": 216,
+    "h": 237,
+    "area": 20769,
+    "cat": "arches",
+    "src": "veg"
+  },
+  {
+    "file": "arches/veg_04.png",
+    "w": 202,
+    "h": 262,
+    "area": 20211,
+    "cat": "arches",
+    "src": "veg"
+  },
+  {
+    "file": "arches/veg_05.png",
+    "w": 206,
+    "h": 165,
+    "area": 15083,
+    "cat": "arches",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_06.png",
+    "w": 200,
+    "h": 139,
+    "area": 14014,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "arches/veg_07.png",
+    "w": 122,
+    "h": 216,
+    "area": 13139,
+    "cat": "arches",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_08.png",
+    "w": 168,
+    "h": 140,
+    "area": 12689,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "arches/veg_09.png",
+    "w": 179,
+    "h": 141,
+    "area": 12453,
+    "cat": "arches",
+    "src": "veg"
+  },
+  {
+    "file": "arches/veg_10.png",
+    "w": 169,
+    "h": 146,
+    "area": 12373,
+    "cat": "arches",
+    "src": "veg"
+  },
+  {
+    "file": "arches/veg_11.png",
+    "w": 147,
+    "h": 164,
+    "area": 12119,
+    "cat": "arches",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_12.png",
+    "w": 130,
+    "h": 143,
+    "area": 10855,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_13.png",
+    "w": 195,
+    "h": 126,
+    "area": 10830,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_14.png",
+    "w": 172,
+    "h": 130,
+    "area": 10574,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_15.png",
+    "w": 110,
+    "h": 256,
+    "area": 10502,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_16.png",
+    "w": 187,
+    "h": 122,
+    "area": 10171,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_17.png",
+    "w": 113,
+    "h": 186,
+    "area": 9883,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_18.png",
+    "w": 202,
+    "h": 109,
+    "area": 9412,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_19.png",
+    "w": 164,
+    "h": 126,
+    "area": 8903,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_20.png",
+    "w": 139,
+    "h": 119,
+    "area": 8565,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_21.png",
+    "w": 135,
+    "h": 125,
+    "area": 7648,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_22.png",
+    "w": 103,
+    "h": 168,
+    "area": 7403,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_23.png",
+    "w": 132,
+    "h": 143,
+    "area": 7381,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_24.png",
+    "w": 138,
+    "h": 127,
+    "area": 7142,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_25.png",
+    "w": 112,
+    "h": 150,
+    "area": 7119,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_26.png",
+    "w": 136,
+    "h": 126,
+    "area": 6885,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_27.png",
+    "w": 136,
+    "h": 143,
+    "area": 6269,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_28.png",
+    "w": 132,
+    "h": 137,
+    "area": 6233,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_29.png",
+    "w": 60,
+    "h": 257,
+    "area": 5824,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_30.png",
+    "w": 147,
+    "h": 126,
+    "area": 5765,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_31.png",
+    "w": 94,
+    "h": 142,
+    "area": 5528,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_32.png",
+    "w": 66,
+    "h": 246,
+    "area": 5498,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_33.png",
+    "w": 89,
+    "h": 138,
+    "area": 5413,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_34.png",
+    "w": 121,
+    "h": 124,
+    "area": 5104,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_35.png",
+    "w": 130,
+    "h": 130,
+    "area": 5034,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "plants/veg_36.png",
+    "w": 138,
+    "h": 116,
+    "area": 5005,
+    "cat": "plants",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_37.png",
+    "w": 112,
+    "h": 131,
+    "area": 4888,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_38.png",
+    "w": 100,
+    "h": 138,
+    "area": 4798,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_39.png",
+    "w": 125,
+    "h": 127,
+    "area": 4734,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_40.png",
+    "w": 119,
+    "h": 137,
+    "area": 4628,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_41.png",
+    "w": 97,
+    "h": 120,
+    "area": 4357,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_42.png",
+    "w": 116,
+    "h": 138,
+    "area": 4312,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "plants/veg_43.png",
+    "w": 102,
+    "h": 112,
+    "area": 4138,
+    "cat": "plants",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_44.png",
+    "w": 53,
+    "h": 234,
+    "area": 4125,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_45.png",
+    "w": 112,
+    "h": 125,
+    "area": 4022,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_46.png",
+    "w": 60,
+    "h": 204,
+    "area": 3973,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "plants/veg_47.png",
+    "w": 119,
+    "h": 117,
+    "area": 3954,
+    "cat": "plants",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_48.png",
+    "w": 81,
+    "h": 132,
+    "area": 3800,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "props/veg_49.png",
+    "w": 101,
+    "h": 123,
+    "area": 3623,
+    "cat": "props",
+    "src": "veg"
+  },
+  {
+    "file": "trees/glowveg_00.png",
+    "w": 467,
+    "h": 386,
+    "area": 81269,
+    "cat": "trees",
+    "src": "glowveg"
+  },
+  {
+    "file": "trees/glowveg_01.png",
+    "w": 356,
+    "h": 350,
+    "area": 39167,
+    "cat": "trees",
+    "src": "glowveg"
+  },
+  {
+    "file": "trees/glowveg_02.png",
+    "w": 249,
+    "h": 306,
+    "area": 35369,
+    "cat": "trees",
+    "src": "glowveg"
+  },
+  {
+    "file": "platforms/glowveg_03.png",
+    "w": 452,
+    "h": 150,
+    "area": 30529,
+    "cat": "platforms",
+    "src": "glowveg"
+  },
+  {
+    "file": "trees/glowveg_04.png",
+    "w": 283,
+    "h": 275,
+    "area": 28397,
+    "cat": "trees",
+    "src": "glowveg"
+  },
+  {
+    "file": "props/glowveg_05.png",
+    "w": 309,
+    "h": 188,
+    "area": 26847,
+    "cat": "props",
+    "src": "glowveg"
+  },
+  {
+    "file": "trees/glowveg_06.png",
+    "w": 282,
+    "h": 202,
+    "area": 25779,
+    "cat": "trees",
+    "src": "glowveg"
+  },
+  {
+    "file": "trees/glowveg_07.png",
+    "w": 234,
+    "h": 322,
+    "area": 25422,
+    "cat": "trees",
+    "src": "glowveg"
+  },
+  {
+    "file": "props/glowveg_08.png",
+    "w": 396,
+    "h": 188,
+    "area": 22892,
+    "cat": "props",
+    "src": "glowveg"
+  },
+  {
+    "file": "arches/glowveg_09.png",
+    "w": 265,
+    "h": 202,
+    "area": 22510,
+    "cat": "arches",
+    "src": "glowveg"
+  },
+  {
+    "file": "props/glowveg_10.png",
+    "w": 346,
+    "h": 160,
+    "area": 22360,
+    "cat": "props",
+    "src": "glowveg"
+  },
+  {
+    "file": "arches/glowveg_11.png",
+    "w": 244,
+    "h": 224,
+    "area": 22139,
+    "cat": "arches",
+    "src": "glowveg"
+  },
+  {
+    "file": "props/glowveg_12.png",
+    "w": 264,
+    "h": 163,
+    "area": 19803,
+    "cat": "props",
+    "src": "glowveg"
+  },
+  {
+    "file": "arches/glowveg_13.png",
+    "w": 238,
+    "h": 202,
+    "area": 17911,
+    "cat": "arches",
+    "src": "glowveg"
+  },
+  {
+    "file": "platforms/glowveg_14.png",
+    "w": 302,
+    "h": 145,
+    "area": 17720,
+    "cat": "platforms",
+    "src": "glowveg"
+  },
+  {
+    "file": "props/glowveg_15.png",
+    "w": 284,
+    "h": 150,
+    "area": 16850,
+    "cat": "props",
+    "src": "glowveg"
+  },
+  {
+    "file": "arches/glowveg_16.png",
+    "w": 217,
+    "h": 206,
+    "area": 16558,
+    "cat": "arches",
+    "src": "glowveg"
+  },
+  {
+    "file": "arches/glowveg_17.png",
+    "w": 226,
+    "h": 187,
+    "area": 16011,
+    "cat": "arches",
+    "src": "glowveg"
+  },
+  {
+    "file": "arches/glowveg_18.png",
+    "w": 189,
+    "h": 198,
+    "area": 14816,
+    "cat": "arches",
+    "src": "glowveg"
+  },
+  {
+    "file": "arches/glowveg_19.png",
+    "w": 206,
+    "h": 185,
+    "area": 14469,
+    "cat": "arches",
+    "src": "glowveg"
+  },
+  {
+    "file": "props/plat_00.png",
+    "w": 535,
+    "h": 297,
+    "area": 60270,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "trees/plat_01.png",
+    "w": 406,
+    "h": 308,
+    "area": 53738,
+    "cat": "trees",
+    "src": "plat"
+  },
+  {
+    "file": "trees/plat_02.png",
+    "w": 350,
+    "h": 302,
+    "area": 40425,
+    "cat": "trees",
+    "src": "plat"
+  },
+  {
+    "file": "platforms/plat_03.png",
+    "w": 438,
+    "h": 140,
+    "area": 26958,
+    "cat": "platforms",
+    "src": "plat"
+  },
+  {
+    "file": "arches/plat_04.png",
+    "w": 280,
+    "h": 248,
+    "area": 24989,
+    "cat": "arches",
+    "src": "plat"
+  },
+  {
+    "file": "platforms/plat_05.png",
+    "w": 398,
+    "h": 132,
+    "area": 21921,
+    "cat": "platforms",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_06.png",
+    "w": 254,
+    "h": 139,
+    "area": 16914,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "platforms/plat_07.png",
+    "w": 247,
+    "h": 120,
+    "area": 14255,
+    "cat": "platforms",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_08.png",
+    "w": 187,
+    "h": 120,
+    "area": 12459,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_09.png",
+    "w": 199,
+    "h": 149,
+    "area": 10864,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_10.png",
+    "w": 123,
+    "h": 135,
+    "area": 9831,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_11.png",
+    "w": 128,
+    "h": 170,
+    "area": 9802,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_12.png",
+    "w": 245,
+    "h": 192,
+    "area": 9563,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "platforms/plat_13.png",
+    "w": 184,
+    "h": 76,
+    "area": 9491,
+    "cat": "platforms",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_14.png",
+    "w": 121,
+    "h": 142,
+    "area": 9210,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_15.png",
+    "w": 123,
+    "h": 164,
+    "area": 8123,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "platforms/plat_16.png",
+    "w": 277,
+    "h": 98,
+    "area": 8051,
+    "cat": "platforms",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_17.png",
+    "w": 119,
+    "h": 115,
+    "area": 7660,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_18.png",
+    "w": 170,
+    "h": 105,
+    "area": 6820,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_19.png",
+    "w": 77,
+    "h": 153,
+    "area": 6659,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_20.png",
+    "w": 106,
+    "h": 182,
+    "area": 6625,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_21.png",
+    "w": 124,
+    "h": 82,
+    "area": 6327,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_22.png",
+    "w": 141,
+    "h": 83,
+    "area": 6227,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_23.png",
+    "w": 81,
+    "h": 150,
+    "area": 5705,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_24.png",
+    "w": 85,
+    "h": 111,
+    "area": 5343,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_25.png",
+    "w": 77,
+    "h": 135,
+    "area": 5336,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_26.png",
+    "w": 150,
+    "h": 120,
+    "area": 5315,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_27.png",
+    "w": 92,
+    "h": 117,
+    "area": 5269,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_28.png",
+    "w": 105,
+    "h": 119,
+    "area": 5172,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "platforms/plat_29.png",
+    "w": 158,
+    "h": 66,
+    "area": 5165,
+    "cat": "platforms",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_30.png",
+    "w": 135,
+    "h": 88,
+    "area": 5145,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_31.png",
+    "w": 135,
+    "h": 115,
+    "area": 5031,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_32.png",
+    "w": 112,
+    "h": 134,
+    "area": 4927,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_33.png",
+    "w": 98,
+    "h": 114,
+    "area": 4738,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_34.png",
+    "w": 96,
+    "h": 76,
+    "area": 4736,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_35.png",
+    "w": 87,
+    "h": 159,
+    "area": 4600,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_36.png",
+    "w": 96,
+    "h": 104,
+    "area": 4559,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_37.png",
+    "w": 75,
+    "h": 91,
+    "area": 4412,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_38.png",
+    "w": 78,
+    "h": 83,
+    "area": 4392,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_39.png",
+    "w": 129,
+    "h": 65,
+    "area": 4359,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_40.png",
+    "w": 108,
+    "h": 83,
+    "area": 4290,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_41.png",
+    "w": 72,
+    "h": 132,
+    "area": 3875,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "plants/plat_42.png",
+    "w": 86,
+    "h": 107,
+    "area": 3872,
+    "cat": "plants",
+    "src": "plat"
+  },
+  {
+    "file": "platforms/plat_43.png",
+    "w": 251,
+    "h": 74,
+    "area": 3842,
+    "cat": "platforms",
+    "src": "plat"
+  },
+  {
+    "file": "props/plat_44.png",
+    "w": 55,
+    "h": 127,
+    "area": 3690,
+    "cat": "props",
+    "src": "plat"
+  },
+  {
+    "file": "trees/propsheet_00.png",
+    "w": 425,
+    "h": 365,
+    "area": 66094,
+    "cat": "trees",
+    "src": "propsheet"
+  },
+  {
+    "file": "props/propsheet_01.png",
+    "w": 488,
+    "h": 190,
+    "area": 39035,
+    "cat": "props",
+    "src": "propsheet"
+  },
+  {
+    "file": "trees/propsheet_02.png",
+    "w": 352,
+    "h": 268,
+    "area": 37516,
+    "cat": "trees",
+    "src": "propsheet"
+  },
+  {
+    "file": "trees/propsheet_03.png",
+    "w": 327,
+    "h": 259,
+    "area": 36449,
+    "cat": "trees",
+    "src": "propsheet"
+  },
+  {
+    "file": "props/propsheet_04.png",
+    "w": 529,
+    "h": 246,
+    "area": 32766,
+    "cat": "props",
+    "src": "propsheet"
+  },
+  {
+    "file": "trees/propsheet_05.png",
+    "w": 291,
+    "h": 294,
+    "area": 32476,
+    "cat": "trees",
+    "src": "propsheet"
+  },
+  {
+    "file": "arches/propsheet_06.png",
+    "w": 254,
+    "h": 197,
+    "area": 22230,
+    "cat": "arches",
+    "src": "propsheet"
+  },
+  {
+    "file": "arches/propsheet_07.png",
+    "w": 282,
+    "h": 281,
+    "area": 20038,
+    "cat": "arches",
+    "src": "propsheet"
+  },
+  {
+    "file": "arches/propsheet_08.png",
+    "w": 194,
+    "h": 269,
+    "area": 19825,
+    "cat": "arches",
+    "src": "propsheet"
+  },
+  {
+    "file": "arches/propsheet_09.png",
+    "w": 291,
+    "h": 245,
+    "area": 16936,
+    "cat": "arches",
+    "src": "propsheet"
+  },
+  {
+    "file": "arches/propsheet_10.png",
+    "w": 261,
+    "h": 284,
+    "area": 15326,
+    "cat": "arches",
+    "src": "propsheet"
+  },
+  {
+    "file": "props/propsheet_11.png",
+    "w": 142,
+    "h": 208,
+    "area": 5014,
+    "cat": "props",
+    "src": "propsheet"
+  },
+  {
+    "file": "plants/propsheet_12.png",
+    "w": 124,
+    "h": 70,
+    "area": 3056,
+    "cat": "plants",
+    "src": "propsheet"
+  },
+  {
+    "file": "plants/propsheet_13.png",
+    "w": 131,
+    "h": 86,
+    "area": 2901,
+    "cat": "plants",
+    "src": "propsheet"
+  },
+  {
+    "file": "plants/propsheet_14.png",
+    "w": 103,
+    "h": 101,
+    "area": 2309,
+    "cat": "plants",
+    "src": "propsheet"
+  },
+  {
+    "file": "plants/propsheet_15.png",
+    "w": 107,
+    "h": 105,
+    "area": 2303,
+    "cat": "plants",
+    "src": "propsheet"
+  },
+  {
+    "file": "plants/propsheet_16.png",
+    "w": 88,
+    "h": 95,
+    "area": 2106,
+    "cat": "plants",
+    "src": "propsheet"
+  },
+  {
+    "file": "plants/propsheet_17.png",
+    "w": 50,
+    "h": 117,
+    "area": 1605,
+    "cat": "plants",
+    "src": "propsheet"
+  },
+  {
+    "file": "props/propsheet_18.png",
+    "w": 46,
+    "h": 130,
+    "area": 1562,
+    "cat": "props",
+    "src": "propsheet"
+  },
+  {
+    "file": "plants/propsheet_19.png",
+    "w": 73,
+    "h": 86,
+    "area": 1512,
+    "cat": "plants",
+    "src": "propsheet"
+  },
+  {
+    "file": "trees/ruins_00.png",
+    "w": 475,
+    "h": 378,
+    "area": 75676,
+    "cat": "trees",
+    "src": "ruins"
+  },
+  {
+    "file": "trees/ruins_01.png",
+    "w": 363,
+    "h": 387,
+    "area": 59047,
+    "cat": "trees",
+    "src": "ruins"
+  },
+  {
+    "file": "trees/ruins_02.png",
+    "w": 314,
+    "h": 387,
+    "area": 37249,
+    "cat": "trees",
+    "src": "ruins"
+  },
+  {
+    "file": "trees/ruins_03.png",
+    "w": 376,
+    "h": 254,
+    "area": 36880,
+    "cat": "trees",
+    "src": "ruins"
+  },
+  {
+    "file": "trees/ruins_04.png",
+    "w": 243,
+    "h": 360,
+    "area": 34063,
+    "cat": "trees",
+    "src": "ruins"
+  },
+  {
+    "file": "trees/ruins_05.png",
+    "w": 417,
+    "h": 292,
+    "area": 30339,
+    "cat": "trees",
+    "src": "ruins"
+  },
+  {
+    "file": "arches/ruins_06.png",
+    "w": 325,
+    "h": 218,
+    "area": 24771,
+    "cat": "arches",
+    "src": "ruins"
+  },
+  {
+    "file": "arches/ruins_07.png",
+    "w": 245,
+    "h": 243,
+    "area": 23626,
+    "cat": "arches",
+    "src": "ruins"
+  },
+  {
+    "file": "arches/ruins_08.png",
+    "w": 212,
+    "h": 257,
+    "area": 20252,
+    "cat": "arches",
+    "src": "ruins"
+  },
+  {
+    "file": "arches/ruins_09.png",
+    "w": 204,
+    "h": 247,
+    "area": 15294,
+    "cat": "arches",
+    "src": "ruins"
+  },
+  {
+    "file": "arches/ruins_10.png",
+    "w": 216,
+    "h": 159,
+    "area": 13388,
+    "cat": "arches",
+    "src": "ruins"
+  },
+  {
+    "file": "props/ruins_11.png",
+    "w": 136,
+    "h": 179,
+    "area": 8812,
+    "cat": "props",
+    "src": "ruins"
+  },
+  {
+    "file": "props/ruins_12.png",
+    "w": 139,
+    "h": 184,
+    "area": 8758,
+    "cat": "props",
+    "src": "ruins"
+  },
+  {
+    "file": "props/ruins_13.png",
+    "w": 108,
+    "h": 120,
+    "area": 7181,
+    "cat": "props",
+    "src": "ruins"
+  },
+  {
+    "file": "plants/ruins_14.png",
+    "w": 118,
+    "h": 118,
+    "area": 6844,
+    "cat": "plants",
+    "src": "ruins"
+  },
+  {
+    "file": "props/ruins_15.png",
+    "w": 130,
+    "h": 134,
+    "area": 6708,
+    "cat": "props",
+    "src": "ruins"
+  },
+  {
+    "file": "plants/ruins_16.png",
+    "w": 144,
+    "h": 118,
+    "area": 6624,
+    "cat": "plants",
+    "src": "ruins"
+  },
+  {
+    "file": "props/ruins_17.png",
+    "w": 129,
+    "h": 120,
+    "area": 6302,
+    "cat": "props",
+    "src": "ruins"
+  },
+  {
+    "file": "plants/ruins_18.png",
+    "w": 156,
+    "h": 111,
+    "area": 6258,
+    "cat": "plants",
+    "src": "ruins"
+  },
+  {
+    "file": "props/ruins_19.png",
+    "w": 110,
+    "h": 124,
+    "area": 5663,
+    "cat": "props",
+    "src": "ruins"
+  },
+  {
+    "file": "plants/ruins_20.png",
+    "w": 132,
+    "h": 113,
+    "area": 5626,
+    "cat": "plants",
+    "src": "ruins"
+  },
+  {
+    "file": "plants/ruins_21.png",
+    "w": 88,
+    "h": 112,
+    "area": 5592,
+    "cat": "plants",
+    "src": "ruins"
+  },
+  {
+    "file": "props/ruins_22.png",
+    "w": 101,
+    "h": 125,
+    "area": 5435,
+    "cat": "props",
+    "src": "ruins"
+  },
+  {
+    "file": "props/ruins_23.png",
+    "w": 96,
+    "h": 154,
+    "area": 4270,
+    "cat": "props",
+    "src": "ruins"
+  },
+  {
+    "file": "props/ruins_24.png",
+    "w": 144,
+    "h": 142,
+    "area": 3929,
+    "cat": "props",
+    "src": "ruins"
+  },
+  {
+    "file": "plants/ruins_25.png",
+    "w": 124,
+    "h": 97,
+    "area": 3669,
+    "cat": "plants",
+    "src": "ruins"
+  },
+  {
+    "file": "plants/ruins_26.png",
+    "w": 119,
+    "h": 104,
+    "area": 3641,
+    "cat": "plants",
+    "src": "ruins"
+  },
+  {
+    "file": "plants/ruins_27.png",
+    "w": 100,
+    "h": 89,
+    "area": 3156,
+    "cat": "plants",
+    "src": "ruins"
+  },
+  {
+    "file": "plants/ruins_28.png",
+    "w": 109,
+    "h": 106,
+    "area": 3117,
+    "cat": "plants",
+    "src": "ruins"
+  },
+  {
+    "file": "plants/ruins_29.png",
+    "w": 77,
+    "h": 103,
+    "area": 3099,
+    "cat": "plants",
+    "src": "ruins"
+  },
+  {
+    "file": "props/ruins_30.png",
+    "w": 57,
+    "h": 149,
+    "area": 2497,
+    "cat": "props",
+    "src": "ruins"
+  },
+  {
+    "file": "props/ruins_31.png",
+    "w": 92,
+    "h": 156,
+    "area": 2341,
+    "cat": "props",
+    "src": "ruins"
+  },
+  {
+    "file": "props/ruins_32.png",
+    "w": 52,
+    "h": 147,
+    "area": 2318,
+    "cat": "props",
+    "src": "ruins"
+  },
+  {
+    "file": "plants/ruins_33.png",
+    "w": 60,
+    "h": 80,
+    "area": 2147,
+    "cat": "plants",
+    "src": "ruins"
+  },
+  {
+    "file": "props/ruins_34.png",
+    "w": 38,
+    "h": 121,
+    "area": 1585,
+    "cat": "props",
+    "src": "ruins"
+  },
+  {
+    "file": "enemies/enemy1_00.png",
+    "w": 216,
+    "h": 174,
+    "area": 19877,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_01.png",
+    "w": 217,
+    "h": 163,
+    "area": 16345,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_02.png",
+    "w": 191,
+    "h": 183,
+    "area": 15618,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_03.png",
+    "w": 161,
+    "h": 176,
+    "area": 14255,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_04.png",
+    "w": 178,
+    "h": 156,
+    "area": 13465,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_05.png",
+    "w": 205,
+    "h": 160,
+    "area": 13160,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_06.png",
+    "w": 148,
+    "h": 157,
+    "area": 11768,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_07.png",
+    "w": 165,
+    "h": 160,
+    "area": 11726,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_08.png",
+    "w": 201,
+    "h": 167,
+    "area": 10465,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_09.png",
+    "w": 140,
+    "h": 158,
+    "area": 10430,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_10.png",
+    "w": 164,
+    "h": 149,
+    "area": 9406,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_11.png",
+    "w": 142,
+    "h": 139,
+    "area": 9236,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_12.png",
+    "w": 143,
+    "h": 165,
+    "area": 9208,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_13.png",
+    "w": 138,
+    "h": 145,
+    "area": 8767,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_14.png",
+    "w": 192,
+    "h": 160,
+    "area": 8700,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_15.png",
+    "w": 149,
+    "h": 150,
+    "area": 8595,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_16.png",
+    "w": 153,
+    "h": 112,
+    "area": 8576,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_17.png",
+    "w": 132,
+    "h": 163,
+    "area": 8254,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_18.png",
+    "w": 140,
+    "h": 114,
+    "area": 7973,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_19.png",
+    "w": 142,
+    "h": 139,
+    "area": 7972,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_20.png",
+    "w": 164,
+    "h": 149,
+    "area": 7890,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_21.png",
+    "w": 256,
+    "h": 146,
+    "area": 7881,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_22.png",
+    "w": 156,
+    "h": 129,
+    "area": 7829,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_23.png",
+    "w": 144,
+    "h": 128,
+    "area": 7793,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_24.png",
+    "w": 115,
+    "h": 153,
+    "area": 7734,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_25.png",
+    "w": 131,
+    "h": 130,
+    "area": 7722,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_26.png",
+    "w": 128,
+    "h": 148,
+    "area": 7629,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_27.png",
+    "w": 156,
+    "h": 112,
+    "area": 7486,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_28.png",
+    "w": 155,
+    "h": 121,
+    "area": 7414,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_29.png",
+    "w": 128,
+    "h": 158,
+    "area": 7381,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_30.png",
+    "w": 131,
+    "h": 153,
+    "area": 7171,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_31.png",
+    "w": 116,
+    "h": 160,
+    "area": 7138,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_32.png",
+    "w": 109,
+    "h": 153,
+    "area": 7072,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_33.png",
+    "w": 124,
+    "h": 150,
+    "area": 7024,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_34.png",
+    "w": 91,
+    "h": 187,
+    "area": 6993,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_35.png",
+    "w": 122,
+    "h": 158,
+    "area": 6963,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_36.png",
+    "w": 127,
+    "h": 132,
+    "area": 6616,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_37.png",
+    "w": 149,
+    "h": 169,
+    "area": 6599,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_38.png",
+    "w": 109,
+    "h": 176,
+    "area": 6559,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_39.png",
+    "w": 118,
+    "h": 156,
+    "area": 6538,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_40.png",
+    "w": 133,
+    "h": 117,
+    "area": 6500,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_41.png",
+    "w": 105,
+    "h": 183,
+    "area": 6436,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_42.png",
+    "w": 121,
+    "h": 131,
+    "area": 6414,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_43.png",
+    "w": 144,
+    "h": 123,
+    "area": 6260,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_44.png",
+    "w": 114,
+    "h": 138,
+    "area": 5951,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_45.png",
+    "w": 131,
+    "h": 108,
+    "area": 5700,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_46.png",
+    "w": 155,
+    "h": 148,
+    "area": 5424,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_47.png",
+    "w": 115,
+    "h": 165,
+    "area": 5357,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_48.png",
+    "w": 106,
+    "h": 141,
+    "area": 5280,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy1_49.png",
+    "w": 114,
+    "h": 119,
+    "area": 5153,
+    "cat": "enemies",
+    "src": "enemy1"
+  },
+  {
+    "file": "enemies/enemy2_00.png",
+    "w": 561,
+    "h": 234,
+    "area": 46596,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_01.png",
+    "w": 237,
+    "h": 260,
+    "area": 29432,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_02.png",
+    "w": 278,
+    "h": 250,
+    "area": 27513,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_03.png",
+    "w": 182,
+    "h": 238,
+    "area": 18195,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_04.png",
+    "w": 309,
+    "h": 194,
+    "area": 18154,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_05.png",
+    "w": 183,
+    "h": 196,
+    "area": 13633,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_06.png",
+    "w": 141,
+    "h": 179,
+    "area": 13158,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_07.png",
+    "w": 164,
+    "h": 175,
+    "area": 12954,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_08.png",
+    "w": 143,
+    "h": 177,
+    "area": 12770,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_09.png",
+    "w": 301,
+    "h": 148,
+    "area": 12433,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_10.png",
+    "w": 189,
+    "h": 144,
+    "area": 12060,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_11.png",
+    "w": 155,
+    "h": 174,
+    "area": 11473,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_12.png",
+    "w": 188,
+    "h": 136,
+    "area": 10961,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_13.png",
+    "w": 137,
+    "h": 174,
+    "area": 10046,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_14.png",
+    "w": 109,
+    "h": 211,
+    "area": 9847,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_15.png",
+    "w": 144,
+    "h": 173,
+    "area": 9498,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_16.png",
+    "w": 118,
+    "h": 167,
+    "area": 8686,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_17.png",
+    "w": 117,
+    "h": 169,
+    "area": 8656,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_18.png",
+    "w": 149,
+    "h": 167,
+    "area": 8608,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_19.png",
+    "w": 174,
+    "h": 124,
+    "area": 8450,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_20.png",
+    "w": 149,
+    "h": 154,
+    "area": 8016,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_21.png",
+    "w": 136,
+    "h": 169,
+    "area": 7674,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_22.png",
+    "w": 172,
+    "h": 145,
+    "area": 7534,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_23.png",
+    "w": 150,
+    "h": 97,
+    "area": 7495,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_24.png",
+    "w": 97,
+    "h": 169,
+    "area": 6343,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_25.png",
+    "w": 138,
+    "h": 153,
+    "area": 5899,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_26.png",
+    "w": 138,
+    "h": 144,
+    "area": 5735,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_27.png",
+    "w": 124,
+    "h": 141,
+    "area": 5417,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_28.png",
+    "w": 132,
+    "h": 86,
+    "area": 4639,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_29.png",
+    "w": 156,
+    "h": 58,
+    "area": 3662,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_30.png",
+    "w": 85,
+    "h": 91,
+    "area": 3616,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_31.png",
+    "w": 156,
+    "h": 46,
+    "area": 3344,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_32.png",
+    "w": 81,
+    "h": 90,
+    "area": 2960,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_33.png",
+    "w": 138,
+    "h": 57,
+    "area": 2922,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_34.png",
+    "w": 82,
+    "h": 84,
+    "area": 2845,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_35.png",
+    "w": 70,
+    "h": 68,
+    "area": 2533,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_36.png",
+    "w": 76,
+    "h": 83,
+    "area": 2423,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_37.png",
+    "w": 64,
+    "h": 60,
+    "area": 1642,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_38.png",
+    "w": 64,
+    "h": 55,
+    "area": 1234,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy2_39.png",
+    "w": 54,
+    "h": 84,
+    "area": 1180,
+    "cat": "enemies",
+    "src": "enemy2"
+  },
+  {
+    "file": "enemies/enemy3_00.png",
+    "w": 437,
+    "h": 476,
+    "area": 112804,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_01.png",
+    "w": 299,
+    "h": 222,
+    "area": 30300,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_02.png",
+    "w": 282,
+    "h": 202,
+    "area": 25104,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_03.png",
+    "w": 454,
+    "h": 248,
+    "area": 24914,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_04.png",
+    "w": 223,
+    "h": 240,
+    "area": 20559,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_05.png",
+    "w": 226,
+    "h": 256,
+    "area": 19900,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_06.png",
+    "w": 185,
+    "h": 249,
+    "area": 19838,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_07.png",
+    "w": 238,
+    "h": 197,
+    "area": 18572,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_08.png",
+    "w": 181,
+    "h": 289,
+    "area": 15217,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_09.png",
+    "w": 267,
+    "h": 213,
+    "area": 14971,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_10.png",
+    "w": 235,
+    "h": 152,
+    "area": 14830,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_11.png",
+    "w": 145,
+    "h": 206,
+    "area": 13719,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_12.png",
+    "w": 159,
+    "h": 206,
+    "area": 12816,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_13.png",
+    "w": 260,
+    "h": 180,
+    "area": 12609,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_14.png",
+    "w": 194,
+    "h": 83,
+    "area": 8184,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_15.png",
+    "w": 97,
+    "h": 213,
+    "area": 8021,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_16.png",
+    "w": 221,
+    "h": 60,
+    "area": 6856,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_17.png",
+    "w": 218,
+    "h": 90,
+    "area": 6645,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_18.png",
+    "w": 177,
+    "h": 95,
+    "area": 6622,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_19.png",
+    "w": 98,
+    "h": 163,
+    "area": 6258,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_20.png",
+    "w": 196,
+    "h": 60,
+    "area": 5509,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_21.png",
+    "w": 72,
+    "h": 132,
+    "area": 5358,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_22.png",
+    "w": 169,
+    "h": 68,
+    "area": 4888,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_23.png",
+    "w": 90,
+    "h": 124,
+    "area": 4715,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_24.png",
+    "w": 66,
+    "h": 125,
+    "area": 4694,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_25.png",
+    "w": 164,
+    "h": 73,
+    "area": 4446,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_26.png",
+    "w": 82,
+    "h": 118,
+    "area": 4329,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_27.png",
+    "w": 73,
+    "h": 77,
+    "area": 3447,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_28.png",
+    "w": 64,
+    "h": 156,
+    "area": 3162,
+    "cat": "enemies",
+    "src": "enemy3"
+  },
+  {
+    "file": "enemies/enemy3_29.png",
+    "w": 78,
+    "h": 98,
+    "area": 3048,
+    "cat": "enemies",
+    "src": "enemy3"
+  }
+]
