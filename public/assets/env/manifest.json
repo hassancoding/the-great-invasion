@@ -1,0 +1,702 @@
+[
+  {
+    "file": "skyline/cel_00.png",
+    "w": 502,
+    "h": 386,
+    "area": 76292,
+    "cat": "skyline"
+  },
+  {
+    "file": "islands/cel_01.png",
+    "w": 289,
+    "h": 216,
+    "area": 30129,
+    "cat": "islands"
+  },
+  {
+    "file": "islands/cel_02.png",
+    "w": 299,
+    "h": 258,
+    "area": 25693,
+    "cat": "islands"
+  },
+  {
+    "file": "props/cel_03.png",
+    "w": 467,
+    "h": 156,
+    "area": 24892,
+    "cat": "props"
+  },
+  {
+    "file": "props/cel_04.png",
+    "w": 266,
+    "h": 137,
+    "area": 21020,
+    "cat": "props"
+  },
+  {
+    "file": "props/cel_05.png",
+    "w": 261,
+    "h": 166,
+    "area": 15902,
+    "cat": "props"
+  },
+  {
+    "file": "platforms/cel_06.png",
+    "w": 338,
+    "h": 108,
+    "area": 15420,
+    "cat": "platforms"
+  },
+  {
+    "file": "arches/cel_07.png",
+    "w": 160,
+    "h": 193,
+    "area": 15144,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/cel_08.png",
+    "w": 195,
+    "h": 170,
+    "area": 14705,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/cel_09.png",
+    "w": 164,
+    "h": 191,
+    "area": 12465,
+    "cat": "arches"
+  },
+  {
+    "file": "platforms/cel_10.png",
+    "w": 303,
+    "h": 117,
+    "area": 11930,
+    "cat": "platforms"
+  },
+  {
+    "file": "arches/cel_11.png",
+    "w": 130,
+    "h": 333,
+    "area": 11452,
+    "cat": "arches"
+  },
+  {
+    "file": "platforms/cel_12.png",
+    "w": 351,
+    "h": 82,
+    "area": 11330,
+    "cat": "platforms"
+  },
+  {
+    "file": "arches/cel_13.png",
+    "w": 179,
+    "h": 169,
+    "area": 10964,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/cel_14.png",
+    "w": 123,
+    "h": 178,
+    "area": 10076,
+    "cat": "arches"
+  },
+  {
+    "file": "platforms/cel_15.png",
+    "w": 243,
+    "h": 89,
+    "area": 9984,
+    "cat": "platforms"
+  },
+  {
+    "file": "arches/cel_16.png",
+    "w": 130,
+    "h": 191,
+    "area": 9129,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/cel_17.png",
+    "w": 140,
+    "h": 143,
+    "area": 8924,
+    "cat": "arches"
+  },
+  {
+    "file": "platforms/cel_18.png",
+    "w": 213,
+    "h": 96,
+    "area": 8322,
+    "cat": "platforms"
+  },
+  {
+    "file": "arches/cel_19.png",
+    "w": 181,
+    "h": 152,
+    "area": 8007,
+    "cat": "arches"
+  },
+  {
+    "file": "props/cel_20.png",
+    "w": 143,
+    "h": 136,
+    "area": 7965,
+    "cat": "props"
+  },
+  {
+    "file": "arches/cel_21.png",
+    "w": 142,
+    "h": 142,
+    "area": 7934,
+    "cat": "arches"
+  },
+  {
+    "file": "props/cel_22.png",
+    "w": 144,
+    "h": 136,
+    "area": 7738,
+    "cat": "props"
+  },
+  {
+    "file": "platforms/cel_23.png",
+    "w": 287,
+    "h": 76,
+    "area": 7621,
+    "cat": "platforms"
+  },
+  {
+    "file": "arches/cel_24.png",
+    "w": 90,
+    "h": 188,
+    "area": 7519,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/cel_25.png",
+    "w": 142,
+    "h": 154,
+    "area": 7324,
+    "cat": "arches"
+  },
+  {
+    "file": "props/cel_26.png",
+    "w": 109,
+    "h": 137,
+    "area": 7255,
+    "cat": "props"
+  },
+  {
+    "file": "props/cel_27.png",
+    "w": 183,
+    "h": 119,
+    "area": 7103,
+    "cat": "props"
+  },
+  {
+    "file": "arches/cel_28.png",
+    "w": 82,
+    "h": 183,
+    "area": 6480,
+    "cat": "arches"
+  },
+  {
+    "file": "props/cel_29.png",
+    "w": 140,
+    "h": 112,
+    "area": 6403,
+    "cat": "props"
+  },
+  {
+    "file": "arches/cel_30.png",
+    "w": 99,
+    "h": 177,
+    "area": 5901,
+    "cat": "arches"
+  },
+  {
+    "file": "props/cel_31.png",
+    "w": 152,
+    "h": 85,
+    "area": 5296,
+    "cat": "props"
+  },
+  {
+    "file": "platforms/cel_32.png",
+    "w": 186,
+    "h": 88,
+    "area": 5275,
+    "cat": "platforms"
+  },
+  {
+    "file": "props/cel_33.png",
+    "w": 136,
+    "h": 114,
+    "area": 5256,
+    "cat": "props"
+  },
+  {
+    "file": "arches/cel_34.png",
+    "w": 85,
+    "h": 141,
+    "area": 5095,
+    "cat": "arches"
+  },
+  {
+    "file": "skyline/flt_00.png",
+    "w": 417,
+    "h": 397,
+    "area": 76492,
+    "cat": "skyline"
+  },
+  {
+    "file": "skyline/flt_01.png",
+    "w": 415,
+    "h": 314,
+    "area": 57370,
+    "cat": "skyline"
+  },
+  {
+    "file": "islands/flt_02.png",
+    "w": 346,
+    "h": 232,
+    "area": 31503,
+    "cat": "islands"
+  },
+  {
+    "file": "islands/flt_03.png",
+    "w": 218,
+    "h": 311,
+    "area": 27355,
+    "cat": "islands"
+  },
+  {
+    "file": "islands/flt_04.png",
+    "w": 392,
+    "h": 184,
+    "area": 27301,
+    "cat": "islands"
+  },
+  {
+    "file": "islands/flt_05.png",
+    "w": 217,
+    "h": 235,
+    "area": 26376,
+    "cat": "islands"
+  },
+  {
+    "file": "platforms/flt_06.png",
+    "w": 380,
+    "h": 127,
+    "area": 23413,
+    "cat": "platforms"
+  },
+  {
+    "file": "islands/flt_07.png",
+    "w": 232,
+    "h": 199,
+    "area": 22717,
+    "cat": "islands"
+  },
+  {
+    "file": "islands/flt_08.png",
+    "w": 207,
+    "h": 262,
+    "area": 20661,
+    "cat": "islands"
+  },
+  {
+    "file": "arches/flt_09.png",
+    "w": 142,
+    "h": 225,
+    "area": 13599,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/flt_10.png",
+    "w": 177,
+    "h": 158,
+    "area": 12910,
+    "cat": "arches"
+  },
+  {
+    "file": "props/flt_11.png",
+    "w": 181,
+    "h": 131,
+    "area": 12515,
+    "cat": "props"
+  },
+  {
+    "file": "arches/flt_12.png",
+    "w": 156,
+    "h": 181,
+    "area": 11024,
+    "cat": "arches"
+  },
+  {
+    "file": "platforms/flt_13.png",
+    "w": 252,
+    "h": 95,
+    "area": 10375,
+    "cat": "platforms"
+  },
+  {
+    "file": "arches/flt_14.png",
+    "w": 117,
+    "h": 212,
+    "area": 9294,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/flt_15.png",
+    "w": 170,
+    "h": 148,
+    "area": 8699,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/flt_16.png",
+    "w": 90,
+    "h": 200,
+    "area": 8581,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/flt_17.png",
+    "w": 87,
+    "h": 197,
+    "area": 8192,
+    "cat": "arches"
+  },
+  {
+    "file": "platforms/flt_18.png",
+    "w": 219,
+    "h": 94,
+    "area": 7876,
+    "cat": "platforms"
+  },
+  {
+    "file": "arches/flt_19.png",
+    "w": 127,
+    "h": 235,
+    "area": 7462,
+    "cat": "arches"
+  },
+  {
+    "file": "props/flt_20.png",
+    "w": 135,
+    "h": 132,
+    "area": 7384,
+    "cat": "props"
+  },
+  {
+    "file": "arches/flt_21.png",
+    "w": 90,
+    "h": 163,
+    "area": 7241,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/flt_22.png",
+    "w": 73,
+    "h": 199,
+    "area": 7141,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/flt_23.png",
+    "w": 115,
+    "h": 161,
+    "area": 6987,
+    "cat": "arches"
+  },
+  {
+    "file": "props/flt_24.png",
+    "w": 166,
+    "h": 108,
+    "area": 6905,
+    "cat": "props"
+  },
+  {
+    "file": "arches/flt_25.png",
+    "w": 81,
+    "h": 165,
+    "area": 6725,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/flt_26.png",
+    "w": 93,
+    "h": 200,
+    "area": 6648,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/flt_27.png",
+    "w": 90,
+    "h": 147,
+    "area": 6580,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/flt_28.png",
+    "w": 104,
+    "h": 213,
+    "area": 6203,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/flt_29.png",
+    "w": 66,
+    "h": 220,
+    "area": 5873,
+    "cat": "arches"
+  },
+  {
+    "file": "props/flt_30.png",
+    "w": 123,
+    "h": 112,
+    "area": 5461,
+    "cat": "props"
+  },
+  {
+    "file": "props/flt_31.png",
+    "w": 125,
+    "h": 105,
+    "area": 5298,
+    "cat": "props"
+  },
+  {
+    "file": "props/flt_32.png",
+    "w": 150,
+    "h": 84,
+    "area": 5135,
+    "cat": "props"
+  },
+  {
+    "file": "props/flt_33.png",
+    "w": 129,
+    "h": 72,
+    "area": 4871,
+    "cat": "props"
+  },
+  {
+    "file": "arches/flt_34.png",
+    "w": 57,
+    "h": 186,
+    "area": 4804,
+    "cat": "arches"
+  },
+  {
+    "file": "skyline/frt_00.png",
+    "w": 1672,
+    "h": 475,
+    "area": 294557,
+    "cat": "skyline"
+  },
+  {
+    "file": "skyline/frt_01.png",
+    "w": 712,
+    "h": 146,
+    "area": 38984,
+    "cat": "skyline"
+  },
+  {
+    "file": "islands/frt_02.png",
+    "w": 381,
+    "h": 221,
+    "area": 31717,
+    "cat": "islands"
+  },
+  {
+    "file": "islands/frt_03.png",
+    "w": 430,
+    "h": 166,
+    "area": 29290,
+    "cat": "islands"
+  },
+  {
+    "file": "islands/frt_04.png",
+    "w": 254,
+    "h": 200,
+    "area": 21326,
+    "cat": "islands"
+  },
+  {
+    "file": "props/frt_05.png",
+    "w": 321,
+    "h": 149,
+    "area": 21256,
+    "cat": "props"
+  },
+  {
+    "file": "arches/frt_06.png",
+    "w": 189,
+    "h": 154,
+    "area": 20046,
+    "cat": "arches"
+  },
+  {
+    "file": "islands/frt_07.png",
+    "w": 218,
+    "h": 190,
+    "area": 19319,
+    "cat": "islands"
+  },
+  {
+    "file": "platforms/frt_08.png",
+    "w": 389,
+    "h": 113,
+    "area": 17166,
+    "cat": "platforms"
+  },
+  {
+    "file": "platforms/frt_09.png",
+    "w": 278,
+    "h": 125,
+    "area": 14779,
+    "cat": "platforms"
+  },
+  {
+    "file": "platforms/frt_10.png",
+    "w": 292,
+    "h": 113,
+    "area": 13866,
+    "cat": "platforms"
+  },
+  {
+    "file": "props/frt_11.png",
+    "w": 157,
+    "h": 122,
+    "area": 12370,
+    "cat": "props"
+  },
+  {
+    "file": "platforms/frt_12.png",
+    "w": 236,
+    "h": 104,
+    "area": 12130,
+    "cat": "platforms"
+  },
+  {
+    "file": "arches/frt_13.png",
+    "w": 161,
+    "h": 175,
+    "area": 11948,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/frt_14.png",
+    "w": 150,
+    "h": 191,
+    "area": 11485,
+    "cat": "arches"
+  },
+  {
+    "file": "props/frt_15.png",
+    "w": 124,
+    "h": 111,
+    "area": 9309,
+    "cat": "props"
+  },
+  {
+    "file": "platforms/frt_16.png",
+    "w": 390,
+    "h": 127,
+    "area": 9031,
+    "cat": "platforms"
+  },
+  {
+    "file": "props/frt_17.png",
+    "w": 193,
+    "h": 106,
+    "area": 8862,
+    "cat": "props"
+  },
+  {
+    "file": "crystals/frt_18.png",
+    "w": 91,
+    "h": 138,
+    "area": 7059,
+    "cat": "crystals"
+  },
+  {
+    "file": "arches/frt_19.png",
+    "w": 118,
+    "h": 147,
+    "area": 7042,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/frt_20.png",
+    "w": 88,
+    "h": 148,
+    "area": 6260,
+    "cat": "arches"
+  },
+  {
+    "file": "arches/frt_21.png",
+    "w": 107,
+    "h": 146,
+    "area": 6205,
+    "cat": "arches"
+  },
+  {
+    "file": "props/frt_22.png",
+    "w": 93,
+    "h": 135,
+    "area": 4930,
+    "cat": "props"
+  },
+  {
+    "file": "props/frt_23.png",
+    "w": 133,
+    "h": 88,
+    "area": 4877,
+    "cat": "props"
+  },
+  {
+    "file": "props/frt_24.png",
+    "w": 139,
+    "h": 90,
+    "area": 4547,
+    "cat": "props"
+  },
+  {
+    "file": "props/frt_25.png",
+    "w": 68,
+    "h": 124,
+    "area": 3760,
+    "cat": "props"
+  },
+  {
+    "file": "props/frt_26.png",
+    "w": 98,
+    "h": 105,
+    "area": 3636,
+    "cat": "props"
+  },
+  {
+    "file": "crystals/frt_27.png",
+    "w": 65,
+    "h": 128,
+    "area": 3579,
+    "cat": "crystals"
+  },
+  {
+    "file": "crystals/frt_28.png",
+    "w": 81,
+    "h": 120,
+    "area": 3351,
+    "cat": "crystals"
+  },
+  {
+    "file": "crystals/frt_29.png",
+    "w": 85,
+    "h": 120,
+    "area": 3346,
+    "cat": "crystals"
+  }
+]
