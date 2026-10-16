@@ -525,6 +525,8 @@ export class PlayScene extends Phaser.Scene {
     this.resourcesCleaned = true;
     this.input.keyboard?.off('keydown-ESC', this.onEscapeKey);
     this.input.keyboard?.off('keydown-SPACE', this.onJumpKey);
+    this.input.keyboard?.off('keydown-W', this.onJumpKey);
+    this.input.keyboard?.off('keydown-UP', this.onJumpKey);
     this.input.keyboard?.off('keydown-J', this.onLightAttackKey);
     this.input.keyboard?.off('keydown-K', this.onHeavyAttackKey);
     this.input.keyboard?.off('keydown-L', this.onDashAttackKey);
