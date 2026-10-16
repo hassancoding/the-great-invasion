@@ -137,6 +137,25 @@
       "width": 91,
       "height": 138,
       "description": "Fortress-pack crystal used as a non-colliding environment prop"
+    },
+    {
+      "key": "halcyonRiftHoundWalk",
+      "path": "/assets/env/halcyon/sprites/crystal-wolf-walk.png",
+      "type": "enemy-spritesheet",
+      "width": 576,
+      "height": 160,
+      "frameWidth": 192,
+      "frameHeight": 160,
+      "frameCount": 3,
+      "frameOrder": ["f0", "f1", "f2"],
+      "frameRate": 8,
+      "origin": "bottom-center",
+      "feetBaselineY": 160,
+      "facing": "faces right; flipped toward player",
+      "hitbox": "48x36 world pixels at bottom-center, configured separately from sprite art",
+      "source": "hassancoding/the-great-invasion@bb1bc6028edaf236edc355b2338406dc7fe0fbf0",
+      "license": "Not specified by the upstream repository; distribution clearance remains unverified.",
+      "description": "Three transparent, bottom-aligned crystal-wolf walk frames used by the Halcyon Rift Hounds wave"
     }
   ]
 }

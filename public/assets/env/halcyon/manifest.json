@@ -101,6 +101,30 @@
       "collision": "objective-logic-separate"
     }
   ],
+  "enemySprites": [
+    {
+      "id": "rift-hound-walk",
+      "file": "sprites/crystal-wolf-walk.png",
+      "frameWidth": 192,
+      "frameHeight": 160,
+      "frameCount": 3,
+      "frameOrder": ["f0", "f1", "f2"],
+      "frameRate": 8,
+      "animation": "halcyon_rift_hound_walk",
+      "origin": "bottom-center",
+      "feetBaselineY": 160,
+      "facing": "faces right; flipped toward player",
+      "collision": {
+        "width": 48,
+        "height": 36,
+        "unit": "world pixels",
+        "anchor": "bottom-center",
+        "source": "ThreatDirector; independent of artwork"
+      },
+      "source": "hassancoding/the-great-invasion@bb1bc6028edaf236edc355b2338406dc7fe0fbf0",
+      "license": "Not specified by the upstream repository; distribution clearance remains unverified."
+    }
+  ],
   "quality": {
     "textInArtwork": false,
     "editableVectorSource": true,

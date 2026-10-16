@@ -172,6 +172,34 @@
       "alpha_verified": false,
       "intended_layer": "gameplay-object-visual",
       "status": "created; runtime loading added; visual QA pending"
+    },
+    {
+      "asset_id": "halcyon-rift-hound-walk",
+      "filename": "crystal-wolf-walk.png",
+      "path": "assets/env/halcyon/sprites/crystal-wolf-walk.png",
+      "dimensions": {
+        "width": 576,
+        "height": 160,
+        "frame_width": 192,
+        "frame_height": 160,
+        "frame_count": 3
+      },
+      "format": "PNG",
+      "alpha_verified": true,
+      "intended_layer": "enemy-animation",
+      "frame_order": ["f0", "f1", "f2"],
+      "frame_rate": 8,
+      "origin": "bottom-center",
+      "feet_baseline_y": 160,
+      "facing": "faces right; flipped toward player",
+      "hitbox_world_px": {
+        "width": 48,
+        "height": 36,
+        "anchor": "bottom-center"
+      },
+      "source": "hassancoding/the-great-invasion@bb1bc6028edaf236edc355b2338406dc7fe0fbf0",
+      "license": "Not specified by the upstream repository; distribution clearance remains unverified.",
+      "status": "integrated and source visuals/alpha inspected; in-game animation QA pending"
     }
   ]
 }

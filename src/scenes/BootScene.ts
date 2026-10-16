@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { ARIN_ATTACKS, ARIN_ATTACK_FRAME_FILES, getArinAttackTextureKey } from '../data/arinAttacks';
 import { ensureHeroTextures } from '../systems/envBuilder';
 
 /** Boot — preload menu + skies + Arin production atlas, enter Menu. */
@@ -41,7 +42,8 @@ export class BootScene extends Phaser.Scene {
     this.load.svg('halcyon_custom_sky', 'assets/env/halcyon/backgrounds/halcyon-sky.svg', { width: 1920, height: 1080 });
     this.load.svg('halcyon_arin_idle_prop', 'assets/env/halcyon/sprites/arin-idle.svg', { width: 256, height: 256 });
     this.load.svg('halcyon_graveling_sprite', 'assets/env/halcyon/sprites/graveling.svg', { width: 192, height: 192 });
-    this.load.svg('halcyon_aether_well_prop', 'assets/env/halcyon/props/aether-well.svg', { width: 320, height: 320 });
+    this.load.svg('halcyon_aether_well_prop', 'assets/env/halcyon/aether-well.svg', { width: 320, height: 320 });
+    this.load.spritesheet('halcyon_rift_hound', 'assets/env/halcyon/sprites/crystal-wolf-walk.png', { frameWidth: 192, frameHeight: 160 });
     this.load.svg('halcyon_ancient_arch_prop', 'assets/env/halcyon/props/ancient-arch.svg', { width: 256, height: 256 });
     this.load.svg('halcyon_sky_crystal_prop', 'assets/env/halcyon/props/sky-crystal.svg', { width: 160, height: 192 });
     this.load.svg('halcyon_orun_boss_sprite', 'assets/env/halcyon/sprites/orun-boss.svg', { width: 384, height: 384 });
@@ -57,7 +59,7 @@ export class BootScene extends Phaser.Scene {
     // Halcyon Spire layered vector environment pack (standalone assets)
     this.load.svg('halcyon_sky', 'assets/env/halcyon/sky.svg', { width: 2400, height: 540 });
     this.load.svg('halcyon_far_islands', 'assets/env/halcyon/far-islands.svg', { width: 2400, height: 540 });
-    this.load.svg('halcyon_distant_citadel', 'assets/env/halcyon/distant-citadel.svg', { width: 2400, height: 540 });
+    this.load.image('halcyon_distant_citadel', 'assets/env/halcyon/backgrounds/fortress/skyline-layer.png');
     this.load.svg('halcyon_midground_ruins', 'assets/env/halcyon/midground-ruins.svg', { width: 2400, height: 540 });
     this.load.svg('halcyon_foreground_crystals', 'assets/env/halcyon/foreground-crystals.svg', { width: 2400, height: 540 });
     this.load.svg('halcyon_platform_top', 'assets/env/halcyon/platform-top.svg', { width: 256, height: 96 });
@@ -67,8 +69,6 @@ export class BootScene extends Phaser.Scene {
     this.load.svg('halcyon_cliff_face', 'assets/env/halcyon/cliff-face.svg', { width: 256, height: 256 });
     this.load.svg('halcyon_crystal_cluster', 'assets/env/halcyon/crystal-cluster.svg', { width: 256, height: 256 });
     this.load.svg('halcyon_ancient_arch', 'assets/env/halcyon/ancient-arch.svg', { width: 320, height: 384 });
-    this.load.svg('halcyon_aether_well', 'assets/env/halcyon/aether-well.svg', { width: 320, height: 320 });
-
     // Additional standalone layers for the existing Ashfall Reach and Shattered Ruins sectors.
     this.load.svg('ashfall_sky', 'assets/env/ashfall/sky.svg', { width: 2400, height: 540 });
     this.load.svg('ashfall_far', 'assets/env/ashfall/far-landscape.svg', { width: 2400, height: 540 });
@@ -101,7 +101,11 @@ export class BootScene extends Phaser.Scene {
     this.load.image('menu_hero', 'assets/menu/hero.png');
     this.load.atlas('arin', 'assets/sprites/arin/arin_sprites.png', 'assets/sprites/arin/arin_atlas.json');
     this.load.image('portrait_arin', 'assets/sprites/arin/arin_portrait.png');
+    for (const { category, file } of ARIN_ATTACK_FRAME_FILES) {
+      this.load.image(getArinAttackTextureKey(category, file), `assets/sprites/arin/attacks/${category}/${file}`);
+    }
     this.load.image('halcyon_fortress_skyline', 'assets/env/halcyon/backgrounds/fortress/skyline.png');
+    this.load.image('halcyon_fortress_skyline_layer', 'assets/env/halcyon/backgrounds/fortress/skyline-layer.png');
     this.load.image('halcyon_fortress_bridge', 'assets/env/halcyon/backgrounds/fortress/island-bridge.png');
     this.load.image('halcyon_fortress_clouds', 'assets/env/halcyon/backgrounds/fortress/cloud-bank.png');
     this.load.image('halcyon_fortress_arch', 'assets/env/halcyon/props/fortress/arch-island.png');
@@ -137,6 +141,8 @@ export class BootScene extends Phaser.Scene {
 
     ensureHeroTextures(this);
     this.createArinAnimations();
+    this.createArinAttackAnimations();
+    this.createEnemyAnimations();
 
     this.scene.start('Menu');
   }
@@ -159,5 +165,32 @@ export class BootScene extends Phaser.Scene {
     createAnimation('arin_idle', 'idle', 8, 6, -1);
     createAnimation('arin_run', 'run', 24, 14, -1);
     createAnimation('arin_jump', 'jump', 22, 12, 0);
+  }
+
+  private createEnemyAnimations() {
+    if (!this.textures.exists('halcyon_rift_hound') || this.anims.exists('halcyon_rift_hound_walk')) return;
+    this.anims.create({
+      key: 'halcyon_rift_hound_walk',
+      frames: this.anims.generateFrameNumbers('halcyon_rift_hound', { start: 0, end: 2 }),
+      frameRate: 8,
+      repeat: -1,
+    });
+  }
+
+  private createArinAttackAnimations() {
+    for (const attack of Object.values(ARIN_ATTACKS)) {
+      if (this.anims.exists(attack.animationKey)) continue;
+      const frames = attack.playbackFiles
+        .map((file) => getArinAttackTextureKey(attack.category, file))
+        .filter((key) => this.textures.exists(key))
+        .map((key) => ({ key }));
+      if (!frames.length) continue;
+      this.anims.create({
+        key: attack.animationKey,
+        frames,
+        frameRate: attack.frameRate,
+        repeat: 0,
+      });
+    }
   }
 }
