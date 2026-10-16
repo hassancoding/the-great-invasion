@@ -135,6 +135,7 @@ export class PlayScene extends Phaser.Scene {
 
     this.buildHud();
 
+    // Named handlers so cleanup() can remove the exact same references
     const keyboard = this.input.keyboard!;
     keyboard.on('keydown-ESC', this.onEscapeKey);
     keyboard.on('keydown-SPACE', this.onJumpKey);
