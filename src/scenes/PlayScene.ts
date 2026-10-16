@@ -135,16 +135,13 @@ export class PlayScene extends Phaser.Scene {
 
     this.buildHud();
 
-    this.input.keyboard!.on('keydown-ESC', this.onEscapeKey);
-    this.input.keyboard!.on('keydown-SPACE', this.onJumpKey);
-    this.input.keyboard!.on('keydown-J', this.onLightAttackKey);
-    this.input.keyboard!.on('keydown-K', this.onHeavyAttackKey);
-    this.input.keyboard!.on('keydown-L', this.onDashAttackKey);
-    this.input.keyboard!.on('keydown-U', this.onSpinAttackKey);
-    this.input.keyboard!.on('keydown-R', this.onComboAttackKey);
-    this.input.keyboard!.on('keydown-E', this.onChargeStart);
-    this.input.keyboard!.on('keyup-E', this.onChargeRelease);
-    this.events.once(Phaser.Scenes.Events.SHUTDOWN, this.cleanup, this);
+    this.input.keyboard!.on('keydown-ESC', () => {
+      this.cleanup();
+      this.scene.start('Menu');
+    });
+    this.input.keyboard!.on('keydown-SPACE', () => this.tryJump());
+    this.input.keyboard!.on('keydown-J', () => this.tryAttack('light'));
+    this.input.keyboard!.on('keydown-K', () => this.tryAttack('heavy'));
     // Sector advancement is intentionally locked: only Halcyon Spire is open in this build.
   }
 
@@ -384,6 +381,8 @@ export class PlayScene extends Phaser.Scene {
       return;
     }
     if (this.attacking) return;
+  private tryAttack(kind: 'light' | 'heavy' = 'light') {
+    if (this.attacking || this.ended) return;
     this.attacking = true;
     this.player.setTint(0xffffff);
     this.time.delayedCall(80, () => {
@@ -392,18 +391,48 @@ export class PlayScene extends Phaser.Scene {
       else this.player.clearTint();
     });
     const facing = this.player.flipX ? -1 : 1;
-    const kills = this.threat.damageAt(
-      this.player.x + facing * 42,
-      this.player.y - 40,
-      56,
-      this.hero.id === 'varkhul' ? 2 : 1
-    );
-    this.kills += kills;
-    this.refreshHud();
-    if (this.hero.id === 'arin' && this.anims.exists('arin_attack')) {
-      this.player.play('arin_attack');
+    const isHeavy = kind === 'heavy';
+    const reach = isHeavy ? 70 : 48;
+    const dmg = isHeavy ? (this.hero.id === 'varkhul' ? 3 : 2) : (this.hero.id === 'varkhul' ? 2 : 1);
+    // Active hit slightly delayed to match swing
+    this.time.delayedCall(isHeavy ? 140 : 60, () => {
+      if (!this.player?.active || this.ended) return;
+      const kills = this.threat.damageAt(
+        this.player.x + facing * reach,
+        this.player.y - 40,
+        isHeavy ? 72 : 56,
+        dmg
+      );
+      this.kills += kills;
+      this.refreshHud();
+    });
+
+    const animKey =
+      this.hero.id === 'arin'
+        ? isHeavy && this.anims.exists('arin_attack_heavy')
+          ? 'arin_attack_heavy'
+          : this.anims.exists('arin_attack_light')
+            ? 'arin_attack_light'
+            : this.anims.exists('arin_attack')
+              ? 'arin_attack'
+              : ''
+        : '';
+
+    if (animKey) {
+      // Multi-texture attack frames: keep feet anchored
+      this.player.setOrigin(0.5, 1);
+      this.player.play(animKey);
       this.player.once('animationcomplete', () => {
         this.attacking = false;
+        // Restore locomotion atlas frame if available
+        if (this.textures.exists('arin') && this.textures.get('arin').has('arin_idle_0')) {
+          this.player.setTexture('arin', 'arin_idle_0');
+          this.player.setOrigin(0.5, 1);
+          this.player.setScale(this.hero.scale);
+          const body = this.player.body as Phaser.Physics.Arcade.Body;
+          body.setSize(this.hero.bodyW, this.hero.bodyH);
+          body.setOffset((this.player.width - this.hero.bodyW) / 2, this.player.height - this.hero.bodyH - 4);
+        }
         if (this.anims.exists('arin_idle')) this.player.play('arin_idle');
       });
     } else {
@@ -414,7 +443,7 @@ export class PlayScene extends Phaser.Scene {
         duration: 80,
         yoyo: true,
       });
-      this.time.delayedCall(220, () => {
+      this.time.delayedCall(isHeavy ? 320 : 220, () => {
         this.attacking = false;
       });
     }

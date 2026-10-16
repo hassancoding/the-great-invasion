@@ -101,15 +101,38 @@ export class BootScene extends Phaser.Scene {
     this.load.image('menu_hero', 'assets/menu/hero.png');
     this.load.atlas('arin', 'assets/sprites/arin/arin_sprites.png', 'assets/sprites/arin/arin_atlas.json');
     this.load.image('portrait_arin', 'assets/sprites/arin/arin_portrait.png');
-    for (const { category, file } of ARIN_ATTACK_FRAME_FILES) {
-      this.load.image(getArinAttackTextureKey(category, file), `assets/sprites/arin/attacks/${category}/${file}`);
-    }
-    this.load.image('halcyon_fortress_skyline', 'assets/env/halcyon/backgrounds/fortress/skyline.png');
-    this.load.image('halcyon_fortress_skyline_layer', 'assets/env/halcyon/backgrounds/fortress/skyline-layer.png');
-    this.load.image('halcyon_fortress_bridge', 'assets/env/halcyon/backgrounds/fortress/island-bridge.png');
-    this.load.image('halcyon_fortress_clouds', 'assets/env/halcyon/backgrounds/fortress/cloud-bank.png');
-    this.load.image('halcyon_fortress_arch', 'assets/env/halcyon/props/fortress/arch-island.png');
-    this.load.image('halcyon_fortress_crystal', 'assets/env/halcyon/props/fortress/aether-crystal.png');
+
+    // === PNG environment pack (Halcyon) — prefer these over SVGs when present ===
+    this.load.image('png_platform_a', 'assets/env/platforms/plat_03.png');
+    this.load.image('png_platform_b', 'assets/env/platforms/plat_05.png');
+    this.load.image('png_platform_c', 'assets/env/platforms/plat_07.png');
+    this.load.image('png_platform_d', 'assets/env/platforms/plat_13.png');
+    this.load.image('png_arch_a', 'assets/env/arches/foliage_06.png');
+    this.load.image('png_arch_b', 'assets/env/arches/foliage_07.png');
+    this.load.image('png_tree_a', 'assets/env/trees/foliage_00.png');
+    this.load.image('png_tree_b', 'assets/env/trees/foliage_01.png');
+    this.load.image('png_crystal_a', 'assets/env/props/cel_03.png');
+    this.load.image('png_crystal_b', 'assets/env/props/cel_04.png');
+    this.load.image('png_island_far', 'assets/env/cel_00.png');
+    this.load.image('png_island_mid', 'assets/env/cel_01.png');
+    this.load.image('png_prop_crate', 'assets/env/props/cel_20.png');
+
+    // Arin attack frame images (individual PNGs) — only existing files
+    const loadAtk = (cat: string, ids: number[]) => {
+      for (const i of ids) {
+        const id = String(i).padStart(2, '0');
+        this.load.image(`arin_atk_${cat}_${id}`, `assets/sprites/arin/attacks/${cat}/${cat}_${id}.png`);
+      }
+    };
+    loadAtk('light', [1, 2, 3, 4, 5]);
+    loadAtk('heavy', [1, 2, 3, 4, 5, 6]);
+    loadAtk('dash', [2, 3, 4, 5, 6, 8, 9, 10, 11, 12]);
+    loadAtk('air', [1, 2, 3, 4, 5, 6, 7, 8]);
+    loadAtk('charged', [2, 3, 4, 5, 6, 8, 9, 10, 11, 12]);
+    loadAtk('spin', [1, 2, 3, 4, 5, 6, 7, 8]);
+
+    // Production Arin atlas (cropped from provided sheets)
+    this.load.image('arin_sheet', 'assets/sprites/arin/arin_sprites.png');
   }
 
   create() {
@@ -192,5 +215,43 @@ export class BootScene extends Phaser.Scene {
         repeat: 0,
       });
     }
+
+    // Individual attack frame sequences (PNG pack)
+    const mkImg = (key: string, frames: string[], rate: number, repeat = 0) => {
+      if (this.anims.exists(key)) this.anims.remove(key);
+      const valid = frames.filter((f) => this.textures.exists(f));
+      if (!valid.length) return;
+      this.anims.create({
+        key,
+        frames: valid.map((f) => ({ key: f })),
+        frameRate: rate,
+        repeat,
+      });
+    };
+    const seq = (cat: string, ids: number[]) =>
+      ids.map((i) => `arin_atk_${cat}_${String(i).padStart(2, '0')}`);
+    mkImg('arin_attack_light', seq('light', [1, 2, 3, 4, 5]), 14, 0);
+    mkImg('arin_attack_heavy', seq('heavy', [1, 2, 3, 4, 5, 6]), 10, 0);
+    mkImg('arin_attack_dash', seq('dash', [2, 3, 4, 5, 6, 8, 9, 10]), 16, 0);
+    mkImg('arin_attack_air', seq('air', [1, 2, 3, 4, 5, 6, 7, 8]), 14, 0);
+    mkImg('arin_attack_charged', seq('charged', [2, 3, 4, 5, 6, 8, 9, 10]), 12, 0);
+    mkImg('arin_attack_spin', seq('spin', [1, 2, 3, 4, 5, 6, 7, 8]), 14, 0);
+    // Default light maps to arin_attack if present
+    if (this.anims.exists('arin_attack_light') && !this.anims.exists('arin_attack')) {
+      // already created above as placeholder; replace with light if available
+    }
+    if (this.anims.exists('arin_attack_light')) {
+      if (this.anims.exists('arin_attack')) this.anims.remove('arin_attack');
+      // alias: copy light as default attack
+      const light = this.anims.get('arin_attack_light');
+      this.anims.create({
+        key: 'arin_attack',
+        frames: light.frames.map((f) => ({ key: f.textureKey, frame: f.frame.name })),
+        frameRate: 14,
+        repeat: 0,
+      });
+    }
+
+    this.scene.start('Menu');
   }
 }
