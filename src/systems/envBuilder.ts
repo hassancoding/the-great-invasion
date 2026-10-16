@@ -141,7 +141,6 @@ export function buildEnvironment(
   if (halcyonArtReady) addHalcyonGround(scene, worldW, groundY);
 
   sector.platforms.forEach((p, index) => {
-  sector.platforms.forEach((p, pi) => {
     for (let i = 0; i < p.tiles; i++) {
       const tile = platforms.create(p.x + i * 32, p.y, tileKey);
       if (halcyonArtReady) tile.setAlpha(0);
@@ -158,7 +157,7 @@ export function buildEnvironment(
       sector.id === 'trade-isles' ? 'trade_isles_platform' :
       sector.id === 'heart-of-rift' ? 'heart_rift_platform' : '';
     const pngPlatforms = ['png_platform_a', 'png_platform_b', 'png_platform_c', 'png_platform_d'];
-    const pngKey = sector.id === 'halcyon' ? pngPlatforms[pi % pngPlatforms.length] : '';
+    const pngKey = sector.id === 'halcyon' ? pngPlatforms[index % pngPlatforms.length] : '';
     if (pngKey && scene.textures.exists(pngKey)) {
       const img = scene.add.image(p.x + (p.tiles * 32) / 2, p.y + 6, pngKey)
         .setDepth(2)
@@ -177,8 +176,7 @@ export function buildEnvironment(
     const cx = p.x + (p.tiles * 32) / 2;
     const crystalKey = sector.id === 'halcyon' ? 'halcyon_crystal_cluster' : sector.id === 'ashfall' ? 'ashfall_energy_cluster' : sector.id === 'ruins' ? 'ruins_energy_cluster' : sector.id === 'trade-isles' ? 'trade_isles_energy_cluster' : sector.id === 'heart-of-rift' ? 'heart_rift_energy_cluster' : '';
     if (crystalKey && scene.textures.exists(crystalKey)) {
-      const crystal = scene.add.image(cx, p.y - 20, crystalKey)
-        .setDepth(5);
+      const crystal = scene.add.image(cx, p.y - 20, crystalKey).setDepth(5);
       if (sector.id === 'halcyon') crystal.setScale(Math.min(38 / crystal.width, 42 / crystal.height));
       else crystal.setDisplaySize(38, 42);
       scene.tweens.add({ targets: crystal, y: crystal.y - 5, angle: { from: -3, to: 3 }, alpha: { from: 0.82, to: 1 }, duration: 1700 + (i * 137) % 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
@@ -194,14 +192,7 @@ export function buildEnvironment(
   }
 
   if (sector.id === 'halcyon') {
-    if (scene.textures.exists('halcyon_ancient_arch')) {
-      scene.add.image(1760, groundY - 92, 'halcyon_ancient_arch')
-        .setDisplaySize(132, 158)
-        .setDepth(4)
-        .setAlpha(0.95);
-    } else if (scene.textures.exists('halcyon_ancient_arch_prop')) {
-
-    // PNG parallax islands + trees + arches (non-colliding decoration)
+    // PNG parallax islands, trees, arches, and crystals are decorative only.
     if (scene.textures.exists('png_island_far')) {
       scene.add.image(worldW * 0.55, 160, 'png_island_far').setScale(0.35).setScrollFactor(0.25).setDepth(-8).setAlpha(0.9);
     }
@@ -209,31 +200,30 @@ export function buildEnvironment(
       scene.add.image(worldW * 0.22, 210, 'png_island_mid').setScale(0.28).setScrollFactor(0.4).setDepth(-5).setAlpha(0.95);
     }
     if (scene.textures.exists('png_tree_a')) {
-      scene.add.image(320, groundY - 8, 'png_tree_a').setOrigin(0.5, 1).setScale(0.22).setDepth(3).setScrollFactor(1);
+      scene.add.image(320, groundY - 8, 'png_tree_a').setOrigin(0.5, 1).setScale(0.22).setDepth(3);
     }
     if (scene.textures.exists('png_tree_b')) {
-      scene.add.image(worldW - 280, groundY - 8, 'png_tree_b').setOrigin(0.5, 1).setScale(0.2).setDepth(3).setScrollFactor(1);
+      scene.add.image(worldW - 280, groundY - 8, 'png_tree_b').setOrigin(0.5, 1).setScale(0.2).setDepth(3);
     }
     if (scene.textures.exists('png_arch_a')) {
       scene.add.image(980, groundY - 10, 'png_arch_a').setOrigin(0.5, 1).setScale(0.35).setDepth(4);
     }
     if (scene.textures.exists('png_crystal_a')) {
       for (const x of [520, 1180, 1680]) {
-        const c = scene.add.image(x, groundY - 18, 'png_crystal_a').setOrigin(0.5, 1).setScale(0.28).setDepth(5);
-        scene.tweens.add({ targets: c, y: c.y - 6, duration: 1600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+        const crystal = scene.add.image(x, groundY - 18, 'png_crystal_a').setOrigin(0.5, 1).setScale(0.28).setDepth(5);
+        scene.tweens.add({ targets: crystal, y: crystal.y - 6, duration: 1600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       }
     }
 
-    if (scene.textures.exists('halcyon_ancient_arch_prop')) {
+    if (scene.textures.exists('halcyon_ancient_arch')) {
+      scene.add.image(1760, groundY - 92, 'halcyon_ancient_arch')
+        .setDisplaySize(132, 158).setDepth(4).setAlpha(0.95);
+    } else if (scene.textures.exists('halcyon_ancient_arch_prop')) {
       scene.add.image(1760, groundY - 82, 'halcyon_ancient_arch_prop')
-        .setDisplaySize(96, 104)
-        .setDepth(4)
-        .setAlpha(0.94);
+        .setDisplaySize(96, 104).setDepth(4).setAlpha(0.94);
     } else if (scene.textures.exists('halcyon_fortress_arch')) {
       scene.add.image(1760, groundY - 92, 'halcyon_fortress_arch')
-        .setDisplaySize(164, 178)
-        .setDepth(4)
-        .setAlpha(0.95);
+        .setDisplaySize(164, 178).setDepth(4).setAlpha(0.95);
     }
 
     const crystalKey = scene.textures.exists('halcyon_sky_crystal_prop')
@@ -242,8 +232,7 @@ export function buildEnvironment(
     if (scene.textures.exists(crystalKey)) {
       [350, 890, 1460, 2050].forEach((x, i) => {
         const crystal = scene.add.image(x, groundY - 72 - (i % 2) * 22, crystalKey)
-          .setDisplaySize(30, 46)
-          .setDepth(5);
+          .setDisplaySize(30, 46).setDepth(5);
         scene.tweens.add({ targets: crystal, y: crystal.y - 5, angle: { from: -4, to: 4 }, duration: 1500 + i * 170, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       });
     }
