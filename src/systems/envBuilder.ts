@@ -94,21 +94,55 @@ export function buildEnvironment(
     });
   }
 
-  if (sector.id === 'halcyon' && scene.textures.exists('halcyon_fortress_skyline')) {
+  if (sector.id === 'halcyon') {
+    // Layer the existing fortress pack into a readable, cinematic vista.
     if (scene.textures.exists('halcyon_fortress_bridge')) {
-      scene.add.image(worldW * 0.4, worldH * 0.5, 'halcyon_fortress_bridge')
-        .setDisplaySize(540, 314)
-        .setScrollFactor(0.2)
-        .setDepth(-14)
-        .setAlpha(0.76);
+      scene.add.image(worldW * 0.44, worldH * 0.55, 'halcyon_fortress_bridge')
+        .setDisplaySize(Math.min(980, worldW * 0.62), 360)
+        .setScrollFactor(0.16, 0.22)
+        .setDepth(-15)
+        .setAlpha(0.84);
+    }
+    const skylineKey = scene.textures.exists('halcyon_fortress_skyline')
+      ? 'halcyon_fortress_skyline'
+      : scene.textures.exists('halcyon_fortress_skyline_layer')
+        ? 'halcyon_fortress_skyline_layer' : '';
+    if (skylineKey) {
+      const skyline = scene.add.image(worldW * 0.58, worldH * 0.43, skylineKey)
+        .setScrollFactor(0.22, 0.26)
+        .setDepth(-13)
+        .setAlpha(0.98);
+      skyline.setDisplaySize(Math.min(1120, worldW * 0.72), Math.min(390, worldH * 0.78));
     }
     if (scene.textures.exists('halcyon_fortress_clouds')) {
-      scene.add.image(worldW * 0.72, worldH * 0.48, 'halcyon_fortress_clouds')
-        .setDisplaySize(700, 203)
-        .setScrollFactor(0.3)
-        .setDepth(-12)
-        .setAlpha(0.66);
+      scene.add.image(worldW * 0.7, worldH * 0.42, 'halcyon_fortress_clouds')
+        .setDisplaySize(Math.min(1120, worldW * 0.74), 270)
+        .setScrollFactor(0.3, 0.34)
+        .setDepth(-11)
+        .setAlpha(0.62);
     }
+    if (scene.textures.exists('halcyon_fortress_arch_island')) {
+      scene.add.image(worldW * 0.78, groundY - 28, 'halcyon_fortress_arch_island')
+        .setDisplaySize(260, 220)
+        .setOrigin(0.5, 1)
+        .setScrollFactor(0.78, 1)
+        .setDepth(7)
+        .setAlpha(0.9);
+    }
+    if (scene.textures.exists('halcyon_fortress_aether_crystal')) {
+      [worldW * 0.24, worldW * 0.62, worldW * 0.91].forEach((x, i) => {
+        const crystal = scene.add.image(x, worldH * (0.57 + (i % 2) * 0.08), 'halcyon_fortress_aether_crystal')
+          .setDisplaySize(56, 82)
+          .setScrollFactor(0.52, 0.66)
+          .setDepth(6)
+          .setAlpha(0.88);
+        scene.tweens.add({ targets: crystal, y: crystal.y - 7, alpha: { from: 0.72, to: 1 }, duration: 1900 + i * 230, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      });
+    }
+    // A soft atmospheric veil separates the distant fortress from playable ground.
+    const haze = scene.add.graphics().setScrollFactor(0.35, 0.48).setDepth(-9);
+    haze.fillGradientStyle(0x24365b, 0.02, 0x24365b, 0.02, 0.02, 0.22, 0.22, 0.22);
+    haze.fillRect(0, worldH * 0.42, worldW, worldH * 0.26);
   }
 
   const motes = scene.add.graphics().setDepth(-8).setScrollFactor(0.6);
