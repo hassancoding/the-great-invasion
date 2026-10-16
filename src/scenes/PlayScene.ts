@@ -135,13 +135,18 @@ export class PlayScene extends Phaser.Scene {
 
     this.buildHud();
 
-    this.input.keyboard!.on('keydown-ESC', () => {
-      this.cleanup();
-      this.scene.start('Menu');
-    });
-    this.input.keyboard!.on('keydown-SPACE', () => this.tryJump());
-    this.input.keyboard!.on('keydown-J', () => this.tryAttack('light'));
-    this.input.keyboard!.on('keydown-K', () => this.tryAttack('heavy'));
+    const keyboard = this.input.keyboard!;
+    keyboard.on('keydown-ESC', this.onEscapeKey);
+    keyboard.on('keydown-SPACE', this.onJumpKey);
+    keyboard.on('keydown-W', this.onJumpKey);
+    keyboard.on('keydown-UP', this.onJumpKey);
+    keyboard.on('keydown-J', this.onLightAttackKey);
+    keyboard.on('keydown-K', this.onHeavyAttackKey);
+    keyboard.on('keydown-L', this.onDashAttackKey);
+    keyboard.on('keydown-E', this.onChargeStart);
+    keyboard.on('keyup-E', this.onChargeRelease);
+    keyboard.on('keydown-U', this.onSpinAttackKey);
+    keyboard.on('keydown-R', this.onComboAttackKey);
     // Sector advancement is intentionally locked: only Halcyon Spire is open in this build.
   }
 
@@ -381,72 +386,6 @@ export class PlayScene extends Phaser.Scene {
       return;
     }
     if (this.attacking) return;
-  private tryAttack(kind: 'light' | 'heavy' = 'light') {
-    if (this.attacking || this.ended) return;
-    this.attacking = true;
-    this.player.setTint(0xffffff);
-    this.time.delayedCall(80, () => {
-      if (!this.player?.active) return;
-      if (this.hero.id !== 'arin') this.player.setTint(this.hero.color);
-      else this.player.clearTint();
-    });
-    const facing = this.player.flipX ? -1 : 1;
-    const isHeavy = kind === 'heavy';
-    const reach = isHeavy ? 70 : 48;
-    const dmg = isHeavy ? (this.hero.id === 'varkhul' ? 3 : 2) : (this.hero.id === 'varkhul' ? 2 : 1);
-    // Active hit slightly delayed to match swing
-    this.time.delayedCall(isHeavy ? 140 : 60, () => {
-      if (!this.player?.active || this.ended) return;
-      const kills = this.threat.damageAt(
-        this.player.x + facing * reach,
-        this.player.y - 40,
-        isHeavy ? 72 : 56,
-        dmg
-      );
-      this.kills += kills;
-      this.refreshHud();
-    });
-
-    const animKey =
-      this.hero.id === 'arin'
-        ? isHeavy && this.anims.exists('arin_attack_heavy')
-          ? 'arin_attack_heavy'
-          : this.anims.exists('arin_attack_light')
-            ? 'arin_attack_light'
-            : this.anims.exists('arin_attack')
-              ? 'arin_attack'
-              : ''
-        : '';
-
-    if (animKey) {
-      // Multi-texture attack frames: keep feet anchored
-      this.player.setOrigin(0.5, 1);
-      this.player.play(animKey);
-      this.player.once('animationcomplete', () => {
-        this.attacking = false;
-        // Restore locomotion atlas frame if available
-        if (this.textures.exists('arin') && this.textures.get('arin').has('arin_idle_0')) {
-          this.player.setTexture('arin', 'arin_idle_0');
-          this.player.setOrigin(0.5, 1);
-          this.player.setScale(this.hero.scale);
-          const body = this.player.body as Phaser.Physics.Arcade.Body;
-          body.setSize(this.hero.bodyW, this.hero.bodyH);
-          body.setOffset((this.player.width - this.hero.bodyW) / 2, this.player.height - this.hero.bodyH - 4);
-        }
-        if (this.anims.exists('arin_idle')) this.player.play('arin_idle');
-      });
-    } else {
-      this.tweens.add({
-        targets: this.player,
-        scaleX: this.player.scaleX * 1.12,
-        scaleY: this.player.scaleY * 0.92,
-        duration: 80,
-        yoyo: true,
-      });
-      this.time.delayedCall(isHeavy ? 320 : 220, () => {
-        this.attacking = false;
-      });
-    }
   }
 
   private onPlayerHit: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback = (_p, enemyObj) => {
@@ -586,6 +525,8 @@ export class PlayScene extends Phaser.Scene {
     this.resourcesCleaned = true;
     this.input.keyboard?.off('keydown-ESC', this.onEscapeKey);
     this.input.keyboard?.off('keydown-SPACE', this.onJumpKey);
+    this.input.keyboard?.off('keydown-W', this.onJumpKey);
+    this.input.keyboard?.off('keydown-UP', this.onJumpKey);
     this.input.keyboard?.off('keydown-J', this.onLightAttackKey);
     this.input.keyboard?.off('keydown-K', this.onHeavyAttackKey);
     this.input.keyboard?.off('keydown-L', this.onDashAttackKey);
