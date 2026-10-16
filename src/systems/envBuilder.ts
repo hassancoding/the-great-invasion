@@ -119,7 +119,7 @@ export function buildEnvironment(
     platforms.create(x, groundY, tileKey);
   }
 
-  for (const p of sector.platforms) {
+  sector.platforms.forEach((p, pi) => {
     for (let i = 0; i < p.tiles; i++) {
       platforms.create(p.x + i * 32, p.y, tileKey);
     }
@@ -131,12 +131,20 @@ export function buildEnvironment(
       sector.id === 'ruins' ? 'ruins_platform' :
       sector.id === 'trade-isles' ? 'trade_isles_platform' :
       sector.id === 'heart-of-rift' ? 'heart_rift_platform' : '';
-    if (platformKey && scene.textures.exists(platformKey)) {
+    const pngPlatforms = ['png_platform_a', 'png_platform_b', 'png_platform_c', 'png_platform_d'];
+    const pngKey = sector.id === 'halcyon' ? pngPlatforms[pi % pngPlatforms.length] : '';
+    if (pngKey && scene.textures.exists(pngKey)) {
+      const img = scene.add.image(p.x + (p.tiles * 32) / 2, p.y + 6, pngKey)
+        .setDepth(2)
+        .setOrigin(0.5, 0.15);
+      const targetW = Math.max(p.tiles * 32, 80);
+      img.setScale(targetW / Math.max(img.width, 1));
+    } else if (platformKey && scene.textures.exists(platformKey)) {
       scene.add.image(p.x + (p.tiles * 32) / 2, p.y + 4, platformKey)
         .setDisplaySize(p.tiles * 32, 48)
         .setDepth(2);
     }
-  }
+  });
 
   for (let i = 0; i < sector.platforms.length; i += 2) {
     const p = sector.platforms[i];
@@ -159,6 +167,30 @@ export function buildEnvironment(
   }
 
   if (sector.id === 'halcyon') {
+
+    // PNG parallax islands + trees + arches (non-colliding decoration)
+    if (scene.textures.exists('png_island_far')) {
+      scene.add.image(worldW * 0.55, 160, 'png_island_far').setScale(0.35).setScrollFactor(0.25).setDepth(-8).setAlpha(0.9);
+    }
+    if (scene.textures.exists('png_island_mid')) {
+      scene.add.image(worldW * 0.22, 210, 'png_island_mid').setScale(0.28).setScrollFactor(0.4).setDepth(-5).setAlpha(0.95);
+    }
+    if (scene.textures.exists('png_tree_a')) {
+      scene.add.image(320, groundY - 8, 'png_tree_a').setOrigin(0.5, 1).setScale(0.22).setDepth(3).setScrollFactor(1);
+    }
+    if (scene.textures.exists('png_tree_b')) {
+      scene.add.image(worldW - 280, groundY - 8, 'png_tree_b').setOrigin(0.5, 1).setScale(0.2).setDepth(3).setScrollFactor(1);
+    }
+    if (scene.textures.exists('png_arch_a')) {
+      scene.add.image(980, groundY - 10, 'png_arch_a').setOrigin(0.5, 1).setScale(0.35).setDepth(4);
+    }
+    if (scene.textures.exists('png_crystal_a')) {
+      for (const x of [520, 1180, 1680]) {
+        const c = scene.add.image(x, groundY - 18, 'png_crystal_a').setOrigin(0.5, 1).setScale(0.28).setDepth(5);
+        scene.tweens.add({ targets: c, y: c.y - 6, duration: 1600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      }
+    }
+
     if (scene.textures.exists('halcyon_ancient_arch_prop')) {
       scene.add.image(1760, groundY - 82, 'halcyon_ancient_arch_prop')
         .setDisplaySize(96, 104)
