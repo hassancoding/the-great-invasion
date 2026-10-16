@@ -7,6 +7,7 @@ This directory contains individually authored SVG environment assets for the fir
 - `sky.svg`, `far-islands.svg`, `distant-citadel.svg`, `midground-ruins.svg`, `foreground-crystals.svg`: independent scene layers.
 - `platform-top.svg`, `platform-middle.svg`, `platform-edge-left.svg`, `platform-edge-right.svg`, `cliff-face.svg`: modular visual terrain pieces.
 - `crystal-cluster.svg`, `ancient-arch.svg`, `aether-well.svg`: standalone props/objective artwork.
+- `backgrounds/fortress/` and `props/fortress/`: selected transparent PNG scenery from the Fortress pack, used only as Halcyon visuals; collision remains defined by gameplay data.
 - `manifest.json`: dimensions, intended parallax values, depth order, and collision guidance.
 
 ## Integration requirements

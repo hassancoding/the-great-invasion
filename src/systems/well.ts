@@ -26,7 +26,7 @@ export class AetherWell {
   constructor(scene: Phaser.Scene, sector: SectorDef, groundY: number) {
     this.scene = scene;
     this.sector = sector;
-    this.x = Math.floor(sector.worldW * 0.72);
+    this.x = sector.id === 'halcyon' ? sector.worldW - 140 : Math.floor(sector.worldW * 0.72);
     this.y = groundY;
     this.buildVisuals();
   }
@@ -63,16 +63,18 @@ export class AetherWell {
     const accent = this.sector.accent;
     const fog = this.sector.fog;
     const artworkKey =
-      this.sector.id === 'halcyon' ? 'halcyon_aether_well' :
+      this.sector.id === 'halcyon'
+        ? 'halcyon_aether_well_prop' :
       this.sector.id === 'ashfall' ? 'ashfall_energy_cluster' :
       this.sector.id === 'ruins' ? 'ruins_energy_cluster' :
       this.sector.id === 'trade-isles' ? 'trade_isles_energy_cluster' :
       this.sector.id === 'heart-of-rift' ? 'heart_rift_energy_cluster' : '';
     if (artworkKey && this.scene.textures.exists(artworkKey)) {
       this.artwork = this.scene.add.image(this.x, this.y - 42, artworkKey)
-        .setDisplaySize(this.sector.id === 'halcyon' ? 94 : 76, this.sector.id === 'halcyon' ? 94 : 76)
         .setDepth(5)
         .setAlpha(0.88);
+      const size = this.sector.id === 'halcyon' ? 100 : 76;
+      this.artwork.setScale(Math.min(size / this.artwork.width, size / this.artwork.height));
     }
 
     this.beacon = this.scene.add.graphics().setDepth(6);

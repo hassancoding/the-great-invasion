@@ -97,6 +97,65 @@
       "width": 320,
       "height": 400,
       "description": "Varkhul, Riftbound champion illustration"
+    },
+    {
+      "key": "fortressSkyline",
+      "path": "/assets/env/halcyon/backgrounds/fortress/skyline.png",
+      "type": "parallax-background",
+      "width": 1672,
+      "height": 475,
+      "description": "Transparent fortress skyline from the Fortress asset pack"
+    },
+    {
+      "key": "fortressIslandBridge",
+      "path": "/assets/env/halcyon/backgrounds/fortress/island-bridge.png",
+      "type": "parallax-background",
+      "width": 381,
+      "height": 221,
+      "description": "Floating island bridge used as non-colliding distant scenery"
+    },
+    {
+      "key": "fortressCloudBank",
+      "path": "/assets/env/halcyon/backgrounds/fortress/cloud-bank.png",
+      "type": "parallax-background",
+      "width": 389,
+      "height": 113,
+      "description": "Cloud bank used as non-colliding atmospheric scenery"
+    },
+    {
+      "key": "fortressArchIsland",
+      "path": "/assets/env/halcyon/props/fortress/arch-island.png",
+      "type": "environment-prop",
+      "width": 161,
+      "height": 175,
+      "description": "Floating fortress arch island used as a non-colliding prop"
+    },
+    {
+      "key": "fortressAetherCrystal",
+      "path": "/assets/env/halcyon/props/fortress/aether-crystal.png",
+      "type": "environment-prop",
+      "width": 91,
+      "height": 138,
+      "description": "Fortress-pack crystal used as a non-colliding environment prop"
+    },
+    {
+      "key": "halcyonRiftHoundWalk",
+      "path": "/assets/env/halcyon/sprites/crystal-wolf-walk.png",
+      "type": "enemy-spritesheet",
+      "width": 576,
+      "height": 160,
+      "frameWidth": 192,
+      "frameHeight": 160,
+      "frameCount": 3,
+      "frameOrder": ["f0", "f1", "f2"],
+      "frameRate": 8,
+      "origin": "bottom-center",
+      "feetBaselineY": 160,
+      "facing": "faces right; flipped toward player",
+      "hitbox": "48x36 world pixels at bottom-center, configured separately from sprite art",
+      "source": "hassancoding/the-great-invasion@bb1bc6028edaf236edc355b2338406dc7fe0fbf0",
+      "license": "Not specified by the upstream repository; distribution clearance remains unverified.",
+      "description": "Three transparent, bottom-aligned crystal-wolf walk frames used by the Halcyon Rift Hounds wave"
     }
   ]
 }

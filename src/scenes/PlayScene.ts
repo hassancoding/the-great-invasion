@@ -3,7 +3,12 @@ import { getHero, type HeroDef } from '../data/heroes';
 import { getSector, nextSector, type SectorDef, type SectorId } from '../data/environments';
 import { buildEnvironment } from '../systems/envBuilder';
 import { ThreatDirector } from '../systems/threatDirector';
+import { type ThreatEvent } from '../systems/threatDirector';
 import { AetherWell } from '../systems/well';
+import { ObjectiveProgression, type ObjectiveEvent } from '../systems/objectiveProgression';
+import { type ArinAttackId } from '../data/arinAttacks';
+import { ArinCombatController } from '../systems/arinCombat';
+import { ChampionCombatController, isChampionHero } from '../systems/championCombat';
 
 /** Play — sector runner with Well claim + Threat Director surges. */
 export class PlayScene extends Phaser.Scene {
@@ -15,6 +20,9 @@ export class PlayScene extends Phaser.Scene {
   private sector!: SectorDef;
   private threat!: ThreatDirector;
   private well!: AetherWell;
+  private objectives?: ObjectiveProgression;
+  private arinCombat?: ArinCombatController;
+  private championCombat?: ChampionCombatController;
   private platforms!: Phaser.Physics.Arcade.StaticGroup;
   private groundY = 524;
   private lives = 3;
@@ -26,18 +34,41 @@ export class PlayScene extends Phaser.Scene {
   private hudWaves!: Phaser.GameObjects.Text;
   private hudBoss!: Phaser.GameObjects.Text;
   private waveClearAnnounced = false;
+  private objectiveNotices: string[] = [];
+  private objectiveNoticeShowing = false;
   private ended = false;
+  private resourcesCleaned = true;
+  private readonly onEscapeKey = () => {
+    this.cleanup();
+    this.scene.start('Menu');
+  };
+  private readonly onJumpKey = () => this.tryJump();
+  private readonly onLightAttackKey = () => this.tryAttack('light');
+  private readonly onHeavyAttackKey = () => this.tryAttack('heavy');
+  private readonly onDashAttackKey = () => this.tryAttack('dash');
+  private readonly onSpinAttackKey = () => this.tryAttack('spin');
+  private readonly onComboAttackKey = () => this.tryAttack('combo');
+  private readonly onChargeStart = () => {
+    if (!this.arinCombat?.beginCharge()) this.championCombat?.beginCharge();
+  };
+  private readonly onChargeRelease = () => {
+    if (!this.arinCombat?.releaseCharge()) this.championCombat?.releaseCharge();
+  };
 
   constructor() {
     super('Play');
   }
 
   create(data?: { hero?: string; sector?: string }) {
+    this.resourcesCleaned = false;
     this.ended = false;
     this.lives = 3;
     this.kills = 0;
     this.invulnUntil = 0;
     this.attacking = false;
+    this.waveClearAnnounced = false;
+    this.objectiveNotices = [];
+    this.objectiveNoticeShowing = false;
 
     const heroId = data?.hero || this.registry.get('hero') || 'arin';
     const sectorId = data?.sector || this.registry.get('sector') || 'halcyon';
@@ -51,9 +82,36 @@ export class PlayScene extends Phaser.Scene {
     this.groundY = built.groundY;
 
     this.well = new AetherWell(this, this.sector, this.groundY);
-    this.threat = new ThreatDirector(this, this.sector);
+    this.threat = new ThreatDirector(this, this.sector, this.handleThreatEvent);
+    this.objectives = this.hero.id === 'arin' && this.sector.id === 'halcyon'
+      ? new ObjectiveProgression(this.threat.waveProgress.total)
+      : undefined;
 
     this.spawnPlayer(120, this.groundY - 4);
+    if (this.hero.id === 'arin' && this.sector.id === 'halcyon') {
+      this.arinCombat = new ArinCombatController(
+        this,
+        this.player,
+        this.threat,
+        (kills) => {
+          this.kills += kills;
+          this.refreshHud();
+        },
+        (busy) => { this.attacking = busy; }
+      );
+    } else if (isChampionHero(this.hero)) {
+      this.championCombat = new ChampionCombatController(
+        this,
+        this.player,
+        this.hero,
+        this.threat,
+        (kills) => {
+          this.kills += kills;
+          this.refreshHud();
+        },
+        (busy) => { this.attacking = busy; }
+      );
+    }
     this.physics.add.collider(this.player, this.platforms);
     this.physics.add.collider(this.threat.enemyGroup, this.platforms);
     this.physics.add.overlap(
@@ -67,7 +125,6 @@ export class PlayScene extends Phaser.Scene {
     if (this.sector.id === 'halcyon') this.buildHalcyonChallenges();
 
     this.cameras.main.startFollow(this.player, true, 0.12, 0.12);
-    this.cameras.main.setZoom(1.12);
 
     this.cursors = this.input.keyboard!.createCursorKeys();
     this.wasd = {
@@ -93,9 +150,9 @@ export class PlayScene extends Phaser.Scene {
     for (const x of spikeXs) {
       const spikeKey = this.textures.exists('halcyon_spike_trap_prop') ? 'halcyon_spike_trap_prop' : 'shared_spike_hazard';
       if (!this.textures.exists(spikeKey)) continue;
-      const spike = this.physics.add.staticImage(x, this.groundY - 30, spikeKey)
-        .setDisplaySize(112, 42)
-        .setDepth(6);
+        const spike = this.physics.add.staticImage(x, this.groundY - 30, spikeKey)
+          .setScale(Math.min(112 / this.textures.get(spikeKey).getSourceImage().width, 42 / this.textures.get(spikeKey).getSourceImage().height))
+          .setDepth(6);
       const body = spike.body as Phaser.Physics.Arcade.StaticBody;
       body.setSize(100, 30);
       body.updateFromGameObject();
@@ -161,6 +218,7 @@ export class PlayScene extends Phaser.Scene {
         color: '#94a3b8',
         backgroundColor: '#02061788',
         padding: { x: 8, y: 3 },
+        wordWrap: { width: Math.min(this.scale.width - 24, 520) },
       })
       .setScrollFactor(0)
       .setDepth(100);
@@ -174,7 +232,7 @@ export class PlayScene extends Phaser.Scene {
       fontStyle: 'bold', backgroundColor: '#450a0acc', padding: { x: 12, y: 5 },
     }).setOrigin(0.5).setScrollFactor(0).setDepth(110).setVisible(false);
     this.add
-      .text(this.scale.width - 12, 12, 'MOVE: A/D or ←/→   JUMP: W/↑/SPACE   ATTACK: J/K   MENU: ESC', {
+      .text(this.scale.width - 12, 12, 'MOVE: A/D or ARROWS  JUMP: W/UP/SPACE  J: LIGHT/AIR  K: HEAVY  L: DASH  E: CHARGE  U: SPIN  R: COMBO  ESC: MENU', {
         fontFamily: 'system-ui,sans-serif',
         fontSize: '11px',
         color: '#94a3b8',
@@ -201,56 +259,71 @@ export class PlayScene extends Phaser.Scene {
     } else {
       this.hudBoss.setVisible(false);
     }
-    if (!this.threat.isClear) {
+    if (this.objectives?.currentStatus === 'complete') {
+      this.hudObjective.setText('SECTOR I OBJECTIVES COMPLETE  ·  WELL STABILIZED');
+      this.hudObjective.setColor('#86efac');
+    } else if (this.objectives?.currentStatus === 'failed') {
+      this.hudObjective.setText(`OBJECTIVE FAILED  ·  ${this.objectives.failureObjective?.title ?? 'Run over'}`);
+      this.hudObjective.setColor('#fca5a5');
+    } else if (this.objectives?.currentObjective) {
+      const objective = this.objectives.currentObjective;
+      this.hudObjective.setText(`OBJECTIVE ${this.objectives.currentObjectiveIndex + 1}/${this.objectives.objectiveCount}  ·  ${objective.title}\n${objective.detail}  ${this.objectives.currentProgressLabel}`);
+      this.hudObjective.setColor('#fde68a');
+    } else if (!this.threat.isClear) {
       this.hudObjective.setText(`${this.sector.name} · Defeat every siege wave before claiming the Well`);
       this.hudObjective.setColor('#fcd34d');
     } else if (this.well.isStabilized) {
       this.hudObjective.setText(`${this.sector.name}  ·  WELL STABILIZED`);
       this.hudObjective.setColor('#86efac');
     } else {
-      this.hudObjective.setText(`${this.sector.name}  ·  Claim Well ${pct}%  ·  Threat rising`);
+      this.hudObjective.setText(`${this.sector.name}  ·  Claim Well ${pct}%  ·  Hold inside the ring`);
       this.hudObjective.setColor('#94a3b8');
     }
   }
 
   private spawnPlayer(x: number, y: number) {
-    // Use the illustrated Sector I champion art when available. Keep physics bodies
-    // independent from artwork dimensions so detailed sprites remain controllable.
+    // Keep physics bodies independent from artwork dimensions.
     const customKeys: Record<string, string> = {
       arin: 'halcyon_arin_hero',
       kaela: 'halcyon_kaela_hero',
       varkhul: 'halcyon_varkhul_hero',
     };
     const customKey = customKeys[this.hero.id];
-    if (customKey && this.textures.exists(customKey)) {
+    const useArinAtlas = this.hero.id === 'arin'
+      && this.textures.exists('arin')
+      && this.textures.get('arin').has('arin_idle_0');
+    let bodyWidth = this.hero.bodyW;
+    let bodyHeight = this.hero.bodyH;
+    let bodyBottomInset = 0;
+    if (useArinAtlas) {
+      this.player = this.physics.add.sprite(x, y, 'arin', 'arin_idle_0');
+      this.player.setOrigin(0.5, 1);
+      this.player.setScale(0.43);
+      bodyBottomInset = 4;
+      if (this.anims.exists('arin_idle')) this.player.play('arin_idle');
+    } else if (customKey && this.textures.exists(customKey)) {
       this.player = this.physics.add.sprite(x, y, customKey);
       this.player.setOrigin(0.5, 1);
-      this.player.setScale(this.hero.id === 'arin' ? 0.43 : 0.31);
-      const body = this.player.body as Phaser.Physics.Arcade.Body;
-      body.setSize(this.hero.bodyW, this.hero.bodyH);
-      body.setOffset((this.player.width - this.hero.bodyW) / 2, this.player.height - this.hero.bodyH);
+      this.player.setScale(0.31);
     } else {
-      const useArin =
-        this.hero.id === 'arin' &&
-        this.textures.exists('arin') &&
-        this.textures.get('arin').has('arin_idle_0');
-      if (useArin) {
-        this.player = this.physics.add.sprite(x, y, 'arin', 'arin_idle_0');
-        this.player.setOrigin(0.5, 1);
-        this.player.setScale(this.hero.scale);
-        const body = this.player.body as Phaser.Physics.Arcade.Body;
+      const tex =
+        this.hero.id === 'kaela' ? 'hero_kaela' : this.hero.id === 'varkhul' ? 'hero_varkhul' : 'hero_arin_fb';
+      const key = this.textures.exists(tex) ? tex : 'player';
+      this.player = this.physics.add.sprite(x, y, key);
+      this.player.setOrigin(0.5, 1);
+      this.player.setScale(this.hero.scale * 1.35);
+      this.player.setTint(this.hero.color);
+      bodyWidth *= 0.7;
+      bodyHeight *= 0.75;
+    }
+    if (this.sector.id === 'halcyon') {
+      this.setPlayerBodySize(bodyWidth, bodyHeight, bodyBottomInset);
+    } else {
+      const body = this.player.body as Phaser.Physics.Arcade.Body;
+      if (useArinAtlas || (customKey && this.textures.exists(customKey))) {
         body.setSize(this.hero.bodyW, this.hero.bodyH);
-        body.setOffset((this.player.width - this.hero.bodyW) / 2, this.player.height - this.hero.bodyH - 4);
-        if (this.anims.exists('arin_idle')) this.player.play('arin_idle');
+        body.setOffset((this.player.width - this.hero.bodyW) / 2, this.player.height - this.hero.bodyH - bodyBottomInset);
       } else {
-        const tex =
-          this.hero.id === 'kaela' ? 'hero_kaela' : this.hero.id === 'varkhul' ? 'hero_varkhul' : 'hero_arin_fb';
-        const key = this.textures.exists(tex) ? tex : 'player';
-        this.player = this.physics.add.sprite(x, y, key);
-        this.player.setOrigin(0.5, 1);
-        this.player.setScale(this.hero.scale * 1.35);
-        this.player.setTint(this.hero.color);
-        const body = this.player.body as Phaser.Physics.Arcade.Body;
         body.setSize(this.hero.bodyW * 0.7, this.hero.bodyH * 0.75);
         body.setOffset((this.player.width - body.width) / 2, this.player.height - body.height);
       }
@@ -258,6 +331,19 @@ export class PlayScene extends Phaser.Scene {
     this.player.setCollideWorldBounds(true);
     this.player.setBounce(0.02);
     this.player.setDepth(10);
+  }
+
+  private setPlayerBodySize(worldWidth: number, worldHeight: number, bottomInset = 0) {
+    const body = this.player.body as Phaser.Physics.Arcade.Body;
+    const scaleX = Math.abs(this.player.scaleX) || 1;
+    const scaleY = Math.abs(this.player.scaleY) || 1;
+    const sourceWidth = worldWidth / scaleX;
+    const sourceHeight = worldHeight / scaleY;
+    body.setSize(sourceWidth, sourceHeight, false);
+    body.setOffset(
+      (this.player.width - sourceWidth) / 2,
+      this.player.height - sourceHeight - bottomInset / scaleY
+    );
   }
 
   private cycleSector() {
@@ -280,6 +366,21 @@ export class PlayScene extends Phaser.Scene {
     }
   }
 
+  private tryAttack(attackId: ArinAttackId = 'light') {
+    if (this.ended) return;
+    if (this.championCombat) {
+      const body = this.player.body as Phaser.Physics.Arcade.Body;
+      const grounded = body.blocked.down || body.touching.down;
+      this.championCombat.start(attackId === 'light' && !grounded ? 'air' : attackId);
+      return;
+    }
+    if (this.arinCombat) {
+      const body = this.player.body as Phaser.Physics.Arcade.Body;
+      const grounded = body.blocked.down || body.touching.down;
+      this.arinCombat.start(attackId === 'light' && !grounded ? 'air' : attackId);
+      return;
+    }
+    if (this.attacking) return;
   private tryAttack(kind: 'light' | 'heavy' = 'light') {
     if (this.attacking || this.ended) return;
     this.attacking = true;
@@ -351,7 +452,9 @@ export class PlayScene extends Phaser.Scene {
   private onPlayerHit: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback = (_p, enemyObj) => {
     if (this.ended || this.time.now < this.invulnUntil) return;
     const enemy = enemyObj as Phaser.Physics.Arcade.Sprite;
-    if (!enemy.active) return;
+    if (!enemy.active || (this.threat.isEnemySprite(enemy) && !this.threat.isContactThreat(enemy))) return;
+    this.arinCombat?.interrupt();
+    this.championCombat?.interrupt();
     this.lives -= 1;
     this.invulnUntil = this.time.now + 1200;
     this.refreshHud();
@@ -388,6 +491,8 @@ export class PlayScene extends Phaser.Scene {
 
   private failRun() {
     if (this.ended) return;
+    this.arinCombat?.interrupt();
+    this.objectives?.fail();
     this.ended = true;
     this.showEndCard(false);
   }
@@ -400,9 +505,10 @@ export class PlayScene extends Phaser.Scene {
 
   private showEndCard(won: boolean) {
     const { width: w, height: h } = this.scale;
+    const failureObjective = won ? undefined : this.objectives?.failureObjective;
     this.add.rectangle(w / 2, h / 2, w, h, 0x020617, 0.72).setScrollFactor(0).setDepth(200);
     this.add
-      .text(w / 2, h * 0.32, won ? 'WELL STABILIZED' : 'OVERRUN', {
+      .text(w / 2, h * 0.32, won ? (this.objectives ? 'SECTOR I COMPLETE' : 'WELL STABILIZED') : failureObjective ? 'OBJECTIVE FAILED' : 'OVERRUN', {
         fontFamily: 'system-ui,sans-serif',
         fontSize: '28px',
         color: won ? '#86efac' : '#fca5a5',
@@ -412,7 +518,7 @@ export class PlayScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setDepth(201);
     this.add
-      .text(w / 2, h * 0.44, `${this.sector.name}\n${this.kills} kills  ·  ${this.hero.name}`, {
+      .text(w / 2, h * 0.44, `${this.sector.name}${failureObjective ? `\nFailed at: ${failureObjective.title}` : ''}\n${this.kills} kills  ·  ${this.hero.name}`, {
         fontFamily: 'system-ui,sans-serif',
         fontSize: '14px',
         color: '#cbd5e1',
@@ -476,12 +582,80 @@ export class PlayScene extends Phaser.Scene {
   }
 
   private cleanup() {
+    if (this.resourcesCleaned) return;
+    this.resourcesCleaned = true;
+    this.input.keyboard?.off('keydown-ESC', this.onEscapeKey);
+    this.input.keyboard?.off('keydown-SPACE', this.onJumpKey);
+    this.input.keyboard?.off('keydown-J', this.onLightAttackKey);
+    this.input.keyboard?.off('keydown-K', this.onHeavyAttackKey);
+    this.input.keyboard?.off('keydown-L', this.onDashAttackKey);
+    this.input.keyboard?.off('keydown-U', this.onSpinAttackKey);
+    this.input.keyboard?.off('keydown-R', this.onComboAttackKey);
+    this.input.keyboard?.off('keydown-E', this.onChargeStart);
+    this.input.keyboard?.off('keyup-E', this.onChargeRelease);
+    this.arinCombat?.destroy();
+    this.arinCombat = undefined;
+    this.championCombat?.destroy();
+    this.championCombat = undefined;
     this.threat?.destroy();
     this.well?.destroy();
   }
 
+  private handleThreatEvent = (event: ThreatEvent) => {
+    if (!this.objectives) return;
+    if (event.type === 'wave-cleared') {
+      this.recordObjectiveEvent({ type: 'wave-cleared', waveIndex: event.waveIndex });
+    } else if (event.kind === 'ORUN') {
+      this.recordObjectiveEvent({ type: 'enemy-defeated', enemyKind: event.kind });
+    }
+  };
+
+  private recordObjectiveEvent(event: ObjectiveEvent) {
+    if (!this.objectives) return;
+    const completed = this.objectives.record(event);
+    if (!completed.length) return;
+    for (const objective of completed) {
+      this.queueObjectiveNotice(`OBJECTIVE COMPLETE\n${objective.title}`);
+    }
+    const next = this.objectives.currentObjective;
+    this.queueObjectiveNotice(next ? `NEXT OBJECTIVE\n${next.title}` : 'SECTOR I OBJECTIVES COMPLETE');
+    this.refreshHud();
+  }
+
+  private queueObjectiveNotice(message: string) {
+    this.objectiveNotices.push(message);
+    if (!this.objectiveNoticeShowing) this.showNextObjectiveNotice();
+  }
+
+  private showNextObjectiveNotice() {
+    const message = this.objectiveNotices.shift();
+    if (!message) {
+      this.objectiveNoticeShowing = false;
+      return;
+    }
+    this.objectiveNoticeShowing = true;
+    const text = this.add.text(this.scale.width / 2, 130, message, {
+      fontFamily: 'system-ui,sans-serif', fontSize: '15px', color: '#e0f2fe',
+      fontStyle: 'bold', backgroundColor: '#082f49ee', padding: { x: 16, y: 9 }, align: 'center',
+    }).setOrigin(0.5).setScrollFactor(0).setDepth(155).setAlpha(0);
+    this.tweens.add({
+      targets: text,
+      alpha: 1,
+      y: 112,
+      duration: 260,
+      hold: 1500,
+      yoyo: true,
+      onComplete: () => {
+        text.destroy();
+        this.objectiveNoticeShowing = false;
+        this.showNextObjectiveNotice();
+      },
+    });
+  }
+
   update(_time: number, delta: number) {
     if (this.ended || !this.player?.body) return;
+    this.arinCombat?.update(delta);
     this.threat.update(delta, this.player.x, this.groundY);
     const siegeClear = this.threat.isClear;
     this.threat.setClaimPressure(siegeClear ? this.well.claimProgress : 0);
@@ -489,8 +663,13 @@ export class PlayScene extends Phaser.Scene {
       this.well.update(delta, this.player.x, this.player.y);
       if (!this.waveClearAnnounced) {
         this.waveClearAnnounced = true;
+        this.recordObjectiveEvent({ type: 'all-waves-cleared' });
         this.cameras.main.flash(450, 90, 210, 255, false);
-        this.showBanner('ALL WAVES DEFEATED — STABILIZE THE AETHER WELL');
+        if (!this.objectives) this.showBanner('ALL WAVES DEFEATED — STABILIZE THE AETHER WELL');
+      }
+      this.recordObjectiveEvent({ type: 'well-progress', progress: this.well.claimProgress });
+      if (this.well.isStabilized && this.objectives?.currentStatus === 'active') {
+        this.recordObjectiveEvent({ type: 'well-stabilized' });
       }
     }
     if (this.well.isStabilized && siegeClear) this.winRun();

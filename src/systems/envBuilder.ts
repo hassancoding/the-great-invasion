@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import type { SectorDef } from '../data/environments';
+import type { PlatformSpec, SectorDef } from '../data/environments';
 
 export interface BuiltEnvironment {
   platforms: Phaser.Physics.Arcade.StaticGroup;
@@ -57,15 +57,16 @@ export function buildEnvironment(
   };
   const layerKeys = themedLayers[sector.id];
   if (layerKeys && scene.textures.exists(layerKeys.far)) {
-    const addLayer = (key: string, scroll: number, depth: number, alpha = 1) => {
-      scene.add.image(worldW / 2, worldH / 2, key)
-        .setDisplaySize(worldW, worldH)
-        .setScrollFactor(scroll, scroll)
-        .setDepth(depth)
-        .setAlpha(alpha);
+    const addLayer = (key: string, scroll: number, depth: number, alpha = 1, preserveAspect = false) => {
+      const image = scene.add.image(worldW / 2, worldH / 2, key);
+      if (preserveAspect) image.setDisplaySize(worldW, worldW * image.height / image.width);
+      else image.setDisplaySize(worldW, worldH);
+      image.setScrollFactor(scroll, scroll).setDepth(depth).setAlpha(alpha);
     };
     addLayer(layerKeys.far, 0.12, -16, 0.9);
-    if (layerKeys.architecture && scene.textures.exists(layerKeys.architecture)) addLayer(layerKeys.architecture, 0.24, -13, 0.94);
+    if (layerKeys.architecture && scene.textures.exists(layerKeys.architecture)) {
+      addLayer(layerKeys.architecture, 0.24, -13, 0.94, sector.id === 'halcyon');
+    }
     if (scene.textures.exists(layerKeys.mid)) addLayer(layerKeys.mid, 0.42, -11, 0.95);
     if (scene.textures.exists(layerKeys.foreground)) addLayer(layerKeys.foreground, 0.72, 8, 0.55);
   } else {
@@ -93,6 +94,23 @@ export function buildEnvironment(
     });
   }
 
+  if (sector.id === 'halcyon' && scene.textures.exists('halcyon_fortress_skyline')) {
+    if (scene.textures.exists('halcyon_fortress_bridge')) {
+      scene.add.image(worldW * 0.4, worldH * 0.5, 'halcyon_fortress_bridge')
+        .setDisplaySize(540, 314)
+        .setScrollFactor(0.2)
+        .setDepth(-14)
+        .setAlpha(0.76);
+    }
+    if (scene.textures.exists('halcyon_fortress_clouds')) {
+      scene.add.image(worldW * 0.72, worldH * 0.48, 'halcyon_fortress_clouds')
+        .setDisplaySize(700, 203)
+        .setScrollFactor(0.3)
+        .setDepth(-12)
+        .setAlpha(0.66);
+    }
+  }
+
   const motes = scene.add.graphics().setDepth(-8).setScrollFactor(0.6);
   for (let i = 0; i < 28; i++) {
     const mx = ((i * 97 + 13) % worldW) + (i % 5) * 17;
@@ -114,19 +132,27 @@ export function buildEnvironment(
 
   const platforms = scene.physics.add.staticGroup();
   const tileKey = ensureSectorTile(scene, sector);
+  const halcyonArtReady = sector.id === 'halcyon' && scene.textures.exists('halcyon_platform_top');
 
   for (let x = 16; x < worldW + 32; x += 32) {
-    platforms.create(x, groundY, tileKey);
+    const tile = platforms.create(x, groundY, tileKey);
+    if (halcyonArtReady) tile.setAlpha(0);
   }
+  if (halcyonArtReady) addHalcyonGround(scene, worldW, groundY);
 
+  sector.platforms.forEach((p, index) => {
   sector.platforms.forEach((p, pi) => {
     for (let i = 0; i < p.tiles; i++) {
-      platforms.create(p.x + i * 32, p.y, tileKey);
+      const tile = platforms.create(p.x + i * 32, p.y, tileKey);
+      if (halcyonArtReady) tile.setAlpha(0);
     }
 
-    // Decorative surface artwork is independent of the static collision tiles above.
+    if (halcyonArtReady) {
+      addHalcyonLedge(scene, p, index);
+      return;
+    }
+
     const platformKey =
-      sector.id === 'halcyon' ? 'halcyon_platform_top' :
       sector.id === 'ashfall' ? 'ashfall_platform' :
       sector.id === 'ruins' ? 'ruins_platform' :
       sector.id === 'trade-isles' ? 'trade_isles_platform' :
@@ -152,8 +178,9 @@ export function buildEnvironment(
     const crystalKey = sector.id === 'halcyon' ? 'halcyon_crystal_cluster' : sector.id === 'ashfall' ? 'ashfall_energy_cluster' : sector.id === 'ruins' ? 'ruins_energy_cluster' : sector.id === 'trade-isles' ? 'trade_isles_energy_cluster' : sector.id === 'heart-of-rift' ? 'heart_rift_energy_cluster' : '';
     if (crystalKey && scene.textures.exists(crystalKey)) {
       const crystal = scene.add.image(cx, p.y - 20, crystalKey)
-        .setDisplaySize(38, 42)
         .setDepth(5);
+      if (sector.id === 'halcyon') crystal.setScale(Math.min(38 / crystal.width, 42 / crystal.height));
+      else crystal.setDisplaySize(38, 42);
       scene.tweens.add({ targets: crystal, y: crystal.y - 5, angle: { from: -3, to: 3 }, alpha: { from: 0.82, to: 1 }, duration: 1700 + (i * 137) % 900, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       const aura = scene.add.circle(cx, p.y - 14, 17, sector.accent, 0.12).setDepth(4);
       scene.tweens.add({ targets: aura, scaleX: { from: 0.75, to: 1.35 }, scaleY: { from: 0.75, to: 1.35 }, alpha: { from: 0.06, to: 0.22 }, duration: 1900 + (i * 113) % 700, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
@@ -167,6 +194,12 @@ export function buildEnvironment(
   }
 
   if (sector.id === 'halcyon') {
+    if (scene.textures.exists('halcyon_ancient_arch')) {
+      scene.add.image(1760, groundY - 92, 'halcyon_ancient_arch')
+        .setDisplaySize(132, 158)
+        .setDepth(4)
+        .setAlpha(0.95);
+    } else if (scene.textures.exists('halcyon_ancient_arch_prop')) {
 
     // PNG parallax islands + trees + arches (non-colliding decoration)
     if (scene.textures.exists('png_island_far')) {
@@ -196,28 +229,23 @@ export function buildEnvironment(
         .setDisplaySize(96, 104)
         .setDepth(4)
         .setAlpha(0.94);
-    } else if (scene.textures.exists('halcyon_ancient_arch')) {
-      scene.add.image(1760, groundY - 88, 'halcyon_ancient_arch')
-        .setDisplaySize(92, 112)
+    } else if (scene.textures.exists('halcyon_fortress_arch')) {
+      scene.add.image(1760, groundY - 92, 'halcyon_fortress_arch')
+        .setDisplaySize(164, 178)
         .setDepth(4)
-        .setAlpha(0.82);
+        .setAlpha(0.95);
     }
 
-    // New standalone crystals and aether well are decorative until the objective
-    // interaction system claims the well; collision remains controlled separately.
-    if (scene.textures.exists('halcyon_sky_crystal_prop')) {
+    const crystalKey = scene.textures.exists('halcyon_sky_crystal_prop')
+      ? 'halcyon_sky_crystal_prop'
+      : 'halcyon_fortress_crystal';
+    if (scene.textures.exists(crystalKey)) {
       [350, 890, 1460, 2050].forEach((x, i) => {
-        const crystal = scene.add.image(x, groundY - 72 - (i % 2) * 22, 'halcyon_sky_crystal_prop')
-          .setDisplaySize(26, 34)
+        const crystal = scene.add.image(x, groundY - 72 - (i % 2) * 22, crystalKey)
+          .setDisplaySize(30, 46)
           .setDepth(5);
         scene.tweens.add({ targets: crystal, y: crystal.y - 5, angle: { from: -4, to: 4 }, duration: 1500 + i * 170, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
       });
-    }
-    if (scene.textures.exists('halcyon_aether_well_prop')) {
-      scene.add.image(2260, groundY - 92, 'halcyon_aether_well_prop')
-        .setDisplaySize(76, 84)
-        .setDepth(5)
-        .setAlpha(0.9);
     }
   }
 
@@ -289,6 +317,50 @@ function drawSilhouetteBand(
   g.lineTo(0, opts.baseY + opts.amp + 80);
   g.closePath();
   g.fillPath();
+}
+
+function addHalcyonGround(scene: Phaser.Scene, worldW: number, groundY: number) {
+  for (let x = 128; x < worldW + 128; x += 256) {
+    if (scene.textures.exists('halcyon_platform_middle')) {
+      scene.add.image(x, groundY + 50, 'halcyon_platform_middle')
+        .setDisplaySize(256, 80)
+        .setDepth(1);
+    }
+    scene.add.image(x, groundY + 4, 'halcyon_platform_top')
+      .setDisplaySize(256, 48)
+      .setDepth(2);
+  }
+}
+
+function addHalcyonLedge(scene: Phaser.Scene, platform: PlatformSpec, index: number) {
+  const width = platform.tiles * 32;
+  const centerX = platform.x + width / 2;
+
+  if (index % 2 === 0 && scene.textures.exists('halcyon_cliff_face')) {
+    scene.add.image(centerX, platform.y + 92, 'halcyon_cliff_face')
+      .setDisplaySize(width, 144)
+      .setDepth(1);
+  }
+  if (scene.textures.exists('halcyon_platform_middle')) {
+    scene.add.image(centerX, platform.y + 48, 'halcyon_platform_middle')
+      .setDisplaySize(width, 48)
+      .setDepth(2);
+  }
+  scene.add.image(centerX, platform.y + 4, 'halcyon_platform_top')
+    .setDisplaySize(width, 48)
+    .setDepth(3);
+
+  const edgeWidth = Math.min(58, width / 2);
+  if (scene.textures.exists('halcyon_platform_edge_left')) {
+    scene.add.image(platform.x + edgeWidth / 2, platform.y + 4, 'halcyon_platform_edge_left')
+      .setDisplaySize(edgeWidth, 48)
+      .setDepth(4);
+  }
+  if (scene.textures.exists('halcyon_platform_edge_right')) {
+    scene.add.image(platform.x + width - edgeWidth / 2, platform.y + 4, 'halcyon_platform_edge_right')
+      .setDisplaySize(edgeWidth, 48)
+      .setDepth(4);
+  }
 }
 
 function ensureSectorTile(scene: Phaser.Scene, sector: SectorDef): string {
