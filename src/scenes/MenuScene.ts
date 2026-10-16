@@ -164,7 +164,6 @@ export class MenuScene extends Phaser.Scene {
         fontSize: `${Math.max(14, Math.min(18, 18 * unit))}px`,
         color: '#f5c96a',
         fontStyle: 'bold',
-        letterSpacing: 5,
       })
       .setOrigin(0.5)
       .setDepth(10);

@@ -375,7 +375,16 @@ export class PlayScene extends Phaser.Scene {
       this.arinCombat.start(attackId === 'light' && !grounded ? 'air' : attackId);
       return;
     }
+    // Fallback when combat controllers are unavailable
     if (this.attacking) return;
+    this.attacking = true;
+    const facing = this.player.flipX ? -1 : 1;
+    const kills = this.threat.damageAt(this.player.x + facing * 48, this.player.y - 40, 56, 1);
+    this.kills += kills;
+    this.refreshHud();
+    this.time.delayedCall(220, () => {
+      this.attacking = false;
+    });
   }
 
   private onPlayerHit: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback = (_p, enemyObj) => {
