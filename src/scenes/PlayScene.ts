@@ -196,57 +196,46 @@ export class PlayScene extends Phaser.Scene {
   }
 
   private buildHud() {
-    this.hudHero = this.add
-      .text(12, 12, `${this.hero.name}  ·  ${this.hero.title}`, {
-        fontFamily: 'system-ui,sans-serif',
-        fontSize: '13px',
-        color: '#e0f2fe',
-        backgroundColor: '#02061799',
-        padding: { x: 8, y: 4 },
-      })
-      .setScrollFactor(0)
-      .setDepth(100);
-    this.hudLives = this.add
-      .text(12, 36, '', {
-        fontFamily: 'system-ui,sans-serif',
-        fontSize: '12px',
-        color: '#fca5a5',
-        backgroundColor: '#02061788',
-        padding: { x: 8, y: 3 },
-      })
-      .setScrollFactor(0)
-      .setDepth(100);
-    this.hudObjective = this.add
-      .text(12, 58, '', {
-        fontFamily: 'system-ui,sans-serif',
-        fontSize: '12px',
-        color: '#94a3b8',
-        backgroundColor: '#02061788',
-        padding: { x: 8, y: 3 },
-        wordWrap: { width: Math.min(this.scale.width - 24, 520) },
-      })
-      .setScrollFactor(0)
-      .setDepth(100);
-    this.hudWaves = this.add
-      .text(this.scale.width - 12, 40, '', {
-        fontFamily: 'system-ui,sans-serif', fontSize: '12px', color: '#fde68a',
-        backgroundColor: '#020617aa', padding: { x: 8, y: 4 },
-      }).setOrigin(1, 0).setScrollFactor(0).setDepth(100);
-    this.hudBoss = this.add.text(this.scale.width / 2, 82, '', {
-      fontFamily: 'system-ui,sans-serif', fontSize: '13px', color: '#fda4af',
-      fontStyle: 'bold', backgroundColor: '#450a0acc', padding: { x: 12, y: 5 },
-    }).setOrigin(0.5).setScrollFactor(0).setDepth(110).setVisible(false);
-    this.add
-      .text(this.scale.width - 12, 12, 'MOVE: A/D or ARROWS  JUMP: W/UP/SPACE  J: LIGHT/AIR  K: HEAVY  L: DASH  E: CHARGE  U: SPIN  R: COMBO  ESC: MENU', {
-        fontFamily: 'system-ui,sans-serif',
-        fontSize: '11px',
-        color: '#94a3b8',
-        backgroundColor: '#02061788',
-        padding: { x: 6, y: 3 },
-      })
-      .setOrigin(1, 0)
-      .setScrollFactor(0)
-      .setDepth(100);
+    const { width, height } = this.scale;
+    const panel = (x: number, y: number, w: number, h: number, alpha = 0.78) =>
+      this.add.rectangle(x, y, w, h, 0x07111f, alpha)
+        .setOrigin(0, 0).setScrollFactor(0).setDepth(98)
+        .setStrokeStyle(1, 0x8bb4c9, 0.24);
+
+    // Compact diegetic panels preserve the view of the level.
+    panel(12, 12, 254, 76);
+    this.add.rectangle(12, 12, 3, 76, 0x62d8e8, 0.95)
+      .setOrigin(0, 0).setScrollFactor(0).setDepth(99);
+    this.hudHero = this.add.text(24, 19, `${this.hero.name.toUpperCase()}  /  ${this.hero.title}`, {
+      fontFamily: 'system-ui,sans-serif', fontSize: '12px', color: '#e8f4ff',
+      fontStyle: 'bold', maxLines: 1,
+    }).setScrollFactor(0).setDepth(100);
+    this.hudLives = this.add.text(24, 42, '', {
+      fontFamily: 'system-ui,sans-serif', fontSize: '13px', color: '#ffb4aa',
+    }).setScrollFactor(0).setDepth(100);
+    this.hudObjective = this.add.text(24, 63, '', {
+      fontFamily: 'system-ui,sans-serif', fontSize: '10px', color: '#c4d4e4',
+      wordWrap: { width: 226 }, maxLines: 2,
+    }).setScrollFactor(0).setDepth(100);
+
+    panel(width - 218, 12, 206, 48, 0.72);
+    this.hudWaves = this.add.text(width - 24, 23, '', {
+      fontFamily: 'system-ui,sans-serif', fontSize: '11px', color: '#f6d78b',
+      fontStyle: 'bold', align: 'right',
+    }).setOrigin(1, 0).setScrollFactor(0).setDepth(100);
+
+    this.hudBoss = this.add.text(width / 2, 24, '', {
+      fontFamily: 'system-ui,sans-serif', fontSize: '12px', color: '#ffd0cb',
+      fontStyle: 'bold', backgroundColor: '#270f19dd', padding: { x: 14, y: 7 },
+    }).setOrigin(0.5, 0).setScrollFactor(0).setDepth(110).setVisible(false);
+
+    // Controls are a discreet footer instead of a line competing with the world.
+    this.add.rectangle(width / 2, height - 12, Math.min(width - 24, 760), 22, 0x07111f, 0.62)
+      .setScrollFactor(0).setDepth(98).setStrokeStyle(1, 0x8bb4c9, 0.16);
+    this.add.text(width / 2, height - 12, 'MOVE A/D  ·  JUMP SPACE/W/↑  ·  ATTACK J/K  ·  DASH L  ·  CHARGE E  ·  SPIN U  ·  COMBO R  ·  ESC MENU', {
+      fontFamily: 'system-ui,sans-serif', fontSize: width < 700 ? '8px' : '10px',
+      color: '#b7c8d8', align: 'center',
+    }).setOrigin(0.5).setScrollFactor(0).setDepth(100);
     this.refreshHud();
   }
 
