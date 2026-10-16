@@ -66,7 +66,7 @@ export class BootScene extends Phaser.Scene {
     // Halcyon Spire layered vector environment pack (standalone assets)
     this.load.svg('halcyon_sky', 'assets/env/halcyon/sky.svg', { width: 2400, height: 540 });
     this.load.svg('halcyon_far_islands', 'assets/env/halcyon/far-islands.svg', { width: 2400, height: 540 });
-    this.load.image('halcyon_distant_citadel', 'assets/env/halcyon/backgrounds/fortress/skyline-layer.png');
+    this.load.svg('halcyon_distant_citadel', 'assets/env/halcyon/distant-citadel.svg', { width: 2400, height: 540 });
     this.load.svg('halcyon_midground_ruins', 'assets/env/halcyon/midground-ruins.svg', { width: 2400, height: 540 });
     this.load.svg('halcyon_foreground_crystals', 'assets/env/halcyon/foreground-crystals.svg', { width: 2400, height: 540 });
     this.load.svg('halcyon_platform_top', 'assets/env/halcyon/platform-top.svg', { width: 256, height: 96 });
