@@ -35,16 +35,21 @@ export class MenuScene extends Phaser.Scene {
     if (this.reducedMotion) this.cameras.main.setAlpha(1);
     else this.cameras.main.fadeIn(500, 2, 6, 18);
 
-    // Background
-    if (this.textures.exists('menu_bg')) {
-      const bg = this.add.image(w / 2, h / 2, 'menu_bg').setDepth(0);
-      const scale = Math.max(w / bg.width, h / bg.height) * 1.05;
+    // Background — prefer citadel vista (matches target floating-kingdom plate)
+    const bgKey = this.textures.exists('sky_citadel')
+      ? 'sky_citadel'
+      : this.textures.exists('menu_bg')
+        ? 'menu_bg'
+        : '';
+    if (bgKey) {
+      const bg = this.add.image(w / 2, h / 2, bgKey).setDepth(0);
+      const scale = Math.max(w / bg.width, h / bg.height) * 1.08;
       bg.setScale(scale);
       if (!this.reducedMotion) {
         this.tweens.add({
           targets: bg,
-          x: w / 2 + 12,
-          duration: 18000,
+          x: w / 2 + 14,
+          duration: 20000,
           yoyo: true,
           repeat: -1,
           ease: 'Sine.easeInOut',
@@ -57,9 +62,9 @@ export class MenuScene extends Phaser.Scene {
     }
 
     if (this.textures.exists('halcyon_fortress_skyline')) {
-      const skyline = this.add.image(w / 2, h / 2, 'halcyon_fortress_skyline').setDepth(1);
-      skyline.setScale(Math.max(w / skyline.width, h / skyline.height));
-      skyline.setAlpha(0.48);
+      const skyline = this.add.image(w * 0.62, h * 0.42, 'halcyon_fortress_skyline').setDepth(1).setOrigin(0.5, 1);
+      skyline.setScale(Math.min(w / skyline.width, h / skyline.height) * 0.95);
+      skyline.setAlpha(0.55);
     }
 
     // Vignette

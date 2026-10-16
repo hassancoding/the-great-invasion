@@ -95,25 +95,7 @@ export function buildEnvironment(
   }
 
   if (sector.id === 'halcyon') {
-    // Use one art direction: vector sky, distant citadel, and painted-in-code silhouettes.
-    // Do not stack the separate PNG cloud/bridge pack over the SVG landscape; its hard
-    // rectangular edges caused the visible collage seams in gameplay.
-    const horizon = scene.add.graphics().setDepth(-9).setScrollFactor(0.3, 0.42);
-    horizon.fillGradientStyle(0xf4a27f, 0.02, 0x754b66, 0.16, 0x754b66, 0.16, 0x754b66, 0.16);
-    horizon.fillRect(0, worldH * 0.36, worldW, worldH * 0.28);
-
-    // Small, atmospheric silhouettes support the main citadel without competing with it.
-    const distantBirds = scene.add.graphics().setDepth(-8).setScrollFactor(0.18, 0.24);
-    distantBirds.lineStyle(2, 0x492f4b, 0.35);
-    for (let i = 0; i < 12; i++) {
-      const x = 170 + i * 183;
-      const y = 115 + (i % 4) * 17;
-      distantBirds.beginPath();
-      distantBirds.moveTo(x - 7, y);
-      distantBirds.lineTo(x, y + 4);
-      distantBirds.lineTo(x + 7, y);
-      distantBirds.strokePath();
-    }
+    composeHalcyonSky(scene, worldW, worldH);
   }
 
   const motes = scene.add.graphics().setDepth(-8).setScrollFactor(0.6);
@@ -197,50 +179,7 @@ export function buildEnvironment(
   }
 
   if (sector.id === 'halcyon') {
-    // PNG parallax islands, trees, arches, and crystals are decorative only.
-    if (scene.textures.exists('png_island_far')) {
-      scene.add.image(worldW * 0.55, 160, 'png_island_far').setScale(0.35).setScrollFactor(0.25).setDepth(-8).setAlpha(0.9);
-    }
-    if (scene.textures.exists('png_island_mid')) {
-      scene.add.image(worldW * 0.22, 210, 'png_island_mid').setScale(0.28).setScrollFactor(0.4).setDepth(-5).setAlpha(0.95);
-    }
-    if (scene.textures.exists('png_tree_a')) {
-      scene.add.image(320, groundY - 8, 'png_tree_a').setOrigin(0.5, 1).setScale(0.22).setDepth(3);
-    }
-    if (scene.textures.exists('png_tree_b')) {
-      scene.add.image(worldW - 280, groundY - 8, 'png_tree_b').setOrigin(0.5, 1).setScale(0.2).setDepth(3);
-    }
-    if (scene.textures.exists('png_arch_a')) {
-      scene.add.image(980, groundY - 10, 'png_arch_a').setOrigin(0.5, 1).setScale(0.35).setDepth(4);
-    }
-    if (scene.textures.exists('png_crystal_a')) {
-      for (const x of [520, 1180, 1680]) {
-        const crystal = scene.add.image(x, groundY - 18, 'png_crystal_a').setOrigin(0.5, 1).setScale(0.28).setDepth(5);
-        scene.tweens.add({ targets: crystal, y: crystal.y - 6, duration: 1600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-      }
-    }
-
-    if (scene.textures.exists('halcyon_ancient_arch')) {
-      scene.add.image(1760, groundY - 92, 'halcyon_ancient_arch')
-        .setDisplaySize(132, 158).setDepth(4).setAlpha(0.95);
-    } else if (scene.textures.exists('halcyon_ancient_arch_prop')) {
-      scene.add.image(1760, groundY - 82, 'halcyon_ancient_arch_prop')
-        .setDisplaySize(96, 104).setDepth(4).setAlpha(0.94);
-    } else if (scene.textures.exists('halcyon_fortress_arch')) {
-      scene.add.image(1760, groundY - 92, 'halcyon_fortress_arch')
-        .setDisplaySize(164, 178).setDepth(4).setAlpha(0.95);
-    }
-
-    const crystalKey = scene.textures.exists('halcyon_sky_crystal_prop')
-      ? 'halcyon_sky_crystal_prop'
-      : 'halcyon_fortress_crystal';
-    if (scene.textures.exists(crystalKey)) {
-      [350, 890, 1460, 2050].forEach((x, i) => {
-        const crystal = scene.add.image(x, groundY - 72 - (i % 2) * 22, crystalKey)
-          .setDisplaySize(30, 46).setDepth(5);
-        scene.tweens.add({ targets: crystal, y: crystal.y - 5, angle: { from: -4, to: 4 }, duration: 1500 + i * 170, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-      });
-    }
+    composeHalcyonForeground(scene, worldW, groundY);
   }
 
   const label = scene.add
@@ -279,6 +218,109 @@ export function buildEnvironment(
   });
 
   return { platforms, groundY };
+}
+
+
+/** Far sky + citadel + floating islands (parallax, no collision). */
+function composeHalcyonSky(scene: Phaser.Scene, worldW: number, worldH: number) {
+  // Prefer painted citadel sky when available for the target floating-kingdom look.
+  if (scene.textures.exists('sky_citadel')) {
+    const sky = scene.add.image(worldW * 0.45, worldH * 0.42, 'sky_citadel').setDepth(-21).setScrollFactor(0.08, 0.12).setAlpha(0.88);
+    const scale = Math.max(worldW / sky.width, worldH / sky.height) * 0.55;
+    sky.setScale(scale);
+  }
+
+  if (scene.textures.exists('halcyon_fortress_skyline')) {
+    scene.add
+      .image(worldW * 0.62, worldH * 0.28, 'halcyon_fortress_skyline')
+      .setOrigin(0.5, 1)
+      .setScale(0.42)
+      .setScrollFactor(0.18, 0.22)
+      .setDepth(-16)
+      .setAlpha(0.92);
+  }
+  if (scene.textures.exists('halcyon_fortress_skyline_layer')) {
+    scene.add
+      .image(worldW * 0.7, worldH * 0.34, 'halcyon_fortress_skyline_layer')
+      .setOrigin(0.5, 1)
+      .setScale(0.38)
+      .setScrollFactor(0.22, 0.26)
+      .setDepth(-15)
+      .setAlpha(0.75);
+  }
+
+  // Soft aether-sea band (no dedicated water asset yet)
+  const sea = scene.add.graphics().setDepth(-10).setScrollFactor(0.35, 0.4);
+  sea.fillGradientStyle(0x0c4a6e, 0.0, 0x0ea5e9, 0.22, 0x38bdf8, 0.18, 0x0c4a6e, 0.0);
+  sea.fillRect(0, worldH * 0.55, worldW, worldH * 0.35);
+
+  const placeIsland = (key: string, x: number, y: number, scale: number, scroll: number, depth: number, alpha = 0.95) => {
+    if (!scene.textures.exists(key)) return;
+    scene.add.image(x, y, key).setOrigin(0.5, 1).setScale(scale).setScrollFactor(scroll, scroll * 0.9).setDepth(depth).setAlpha(alpha);
+  };
+
+  placeIsland('halcyon_island_c', worldW * 0.18, worldH * 0.38, 0.22, 0.2, -14);
+  placeIsland('halcyon_island_a', worldW * 0.38, worldH * 0.32, 0.18, 0.24, -13, 0.9);
+  placeIsland('halcyon_island_d', worldW * 0.82, worldH * 0.4, 0.2, 0.28, -12);
+  placeIsland('halcyon_island_b', worldW * 0.55, worldH * 0.48, 0.16, 0.32, -11);
+  placeIsland('halcyon_island_f', worldW * 0.28, worldH * 0.5, 0.2, 0.34, -11, 0.85);
+  placeIsland('halcyon_fortress_bridge', worldW * 0.48, worldH * 0.36, 0.28, 0.3, -12, 0.8);
+  placeIsland('halcyon_fortress_cloud', worldW * 0.75, worldH * 0.22, 0.45, 0.15, -17, 0.55);
+
+  // Horizon haze
+  const haze = scene.add.graphics().setDepth(-9).setScrollFactor(0.3, 0.35);
+  haze.fillStyle(0x7dd3fc, 0.08);
+  haze.fillRect(0, worldH * 0.4, worldW, worldH * 0.2);
+}
+
+/** Near-ground trees, arches, plants, crystals — framing the play space. */
+function composeHalcyonForeground(scene: Phaser.Scene, worldW: number, groundY: number) {
+  const tree = (key: string, x: number, scale: number) => {
+    if (!scene.textures.exists(key)) return;
+    scene.add.image(x, groundY - 4, key).setOrigin(0.5, 1).setScale(scale).setDepth(3).setScrollFactor(1);
+  };
+  tree('png_tree_a', 140, 0.2);
+  tree('png_tree_b', worldW - 160, 0.18);
+  tree('png_tree_c', 620, 0.16);
+  tree('png_tree_a', 1480, 0.17);
+
+  if (scene.textures.exists('png_arch_a')) {
+    scene.add.image(980, groundY - 6, 'png_arch_a').setOrigin(0.5, 1).setScale(0.32).setDepth(4);
+  }
+  if (scene.textures.exists('halcyon_fortress_arch')) {
+    scene.add.image(1760, groundY - 8, 'halcyon_fortress_arch').setOrigin(0.5, 1).setScale(0.28).setDepth(4).setAlpha(0.95);
+  } else if (scene.textures.exists('halcyon_ancient_arch_prop')) {
+    scene.add.image(1760, groundY - 82, 'halcyon_ancient_arch_prop').setDisplaySize(96, 104).setDepth(4).setAlpha(0.94);
+  }
+
+  // Edge plants on ground
+  const plantKeys = ['png_plant_a', 'png_plant_b', 'png_plant_c'];
+  for (let i = 0; i < 14; i++) {
+    const key = plantKeys[i % plantKeys.length];
+    if (!scene.textures.exists(key)) continue;
+    const x = 80 + i * 165 + (i % 3) * 20;
+    scene.add.image(x, groundY - 2, key).setOrigin(0.5, 1).setScale(0.55 + (i % 3) * 0.08).setDepth(5);
+  }
+
+  // Blue crystals along route
+  const crystalKeys = ['halcyon_fortress_crystal', 'png_crystal_a', 'png_crystal_b', 'halcyon_sky_crystal_prop'];
+  const crystalXs = [350, 720, 1100, 1460, 1880, 2150];
+  crystalXs.forEach((x, i) => {
+    const key = crystalKeys[i % crystalKeys.length];
+    if (!scene.textures.exists(key)) return;
+    const c = scene.add.image(x, groundY - 14, key).setOrigin(0.5, 1).setDepth(5);
+    if (key.startsWith('png_') || key === 'halcyon_fortress_crystal') c.setScale(0.22 + (i % 3) * 0.04);
+    else c.setDisplaySize(28, 42);
+    scene.tweens.add({
+      targets: c,
+      y: c.y - 5,
+      angle: { from: -3, to: 3 },
+      duration: 1500 + i * 160,
+      yoyo: true,
+      repeat: -1,
+      ease: 'Sine.easeInOut',
+    });
+  });
 }
 
 function drawSilhouetteBand(

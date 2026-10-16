@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { ARIN_ATTACKS, ARIN_ATTACK_FRAME_FILES, getArinAttackTextureKey } from '../data/arinAttacks';
 import { ensureHeroTextures } from '../systems/envBuilder';
+import { HALCYON_COMPOSITION } from '../data/halcyonAssets';
 
 /** Boot — preload menu + skies + Arin production atlas, enter Menu. */
 export class BootScene extends Phaser.Scene {
@@ -109,20 +110,13 @@ export class BootScene extends Phaser.Scene {
     this.load.atlas('arin', 'assets/sprites/arin/arin_sprites.png', 'assets/sprites/arin/arin_atlas.json');
     this.load.image('portrait_arin', 'assets/sprites/arin/arin_portrait.png');
 
-    // === PNG environment pack (Halcyon) — prefer these over SVGs when present ===
-    this.load.image('png_platform_a', 'assets/env/platforms/plat_03.png');
-    this.load.image('png_platform_b', 'assets/env/platforms/plat_05.png');
-    this.load.image('png_platform_c', 'assets/env/platforms/plat_07.png');
-    this.load.image('png_platform_d', 'assets/env/platforms/plat_13.png');
-    this.load.image('png_arch_a', 'assets/env/arches/foliage_06.png');
-    this.load.image('png_arch_b', 'assets/env/arches/foliage_07.png');
-    this.load.image('png_tree_a', 'assets/env/trees/foliage_00.png');
-    this.load.image('png_tree_b', 'assets/env/trees/foliage_01.png');
-    this.load.image('png_crystal_a', 'assets/env/props/cel_03.png');
-    this.load.image('png_crystal_b', 'assets/env/props/cel_04.png');
-    this.load.image('png_island_far', 'assets/env/cel_00.png');
-    this.load.image('png_island_mid', 'assets/env/cel_01.png');
-    this.load.image('png_prop_crate', 'assets/env/props/cel_20.png');
+    // Curated Halcyon composition pack (roles defined in data/halcyonAssets.ts)
+    for (const asset of HALCYON_COMPOSITION) {
+      if (!this.textures.exists(asset.key)) {
+        this.load.image(asset.key, asset.path);
+      }
+    }
+
 
     // Arin attack frame images (individual PNGs) — only existing files
     const loadAtk = (cat: string, ids: number[]) => {
